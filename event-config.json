@@ -1,7 +1,3 @@
----
-layout: null
----
-
  { "list" : [
     {"url":"/",
     "name":"home-event-coll-ext.json"
@@ -9,8 +5,8 @@ layout: null
   ],
   "config" :
   {
-    "class_invisible_item": "{{site.data.coll_ext.config.display_list-items.config.class_invisible }}",
-    "class_event_today": "{{site.data.coll_ext.config.display_list-items.config.class_event_today }}"
+    "class_invisible_item": "invItem",
+    "class_event_today": "warningItem"
    }
 
 }

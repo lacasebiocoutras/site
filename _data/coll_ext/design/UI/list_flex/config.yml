@@ -1,9 +1,0 @@
-default_model_selected: 'items-default'
-
-extra_class_list_unresize: 'case-list-unresize'
-
-default_grid: 'Grid'
-default_grid_cell: 'Grid-cell'
-
-default_miniature_original: 'lacasebio.png'
-

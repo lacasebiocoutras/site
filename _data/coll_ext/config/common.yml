@@ -1,7 +1,0 @@
-delimitator:
-  array: '!$'
-  url: '/'
-
-empty_string: ''
-space_string: ' '
-underscore_string: '_'

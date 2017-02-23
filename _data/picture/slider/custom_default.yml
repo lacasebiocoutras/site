@@ -1,5 +1,0 @@
-config:
-  define-background: false
-  background-color: 'secondary-color-light'
-  define-color-header: true
-  header-color: 'secondary-color'
