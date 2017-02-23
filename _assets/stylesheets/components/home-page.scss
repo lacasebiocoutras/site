@@ -1,0 +1,216 @@
+.main-presentation {
+
+  .presentation {
+     
+  } 
+  .part-welcome-img {
+    // width: 100%;
+    padding: $spacing-v/2 0 0;
+    @include breakpoint($break-md-max){
+      padding:0;        
+    }  
+  }
+
+  /**
+   * custom li part
+   */
+  .li-img-primdark {
+    
+    .description {
+      background: $primary-color;//$primary-color-dark; //hsla(31, 15%, 50%, 0.1);
+      border: 0.2em solid $primary-color;
+      // box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+      border-radius: 0 0 $border-radius-site $border-radius-site;
+      color: $primary-text-color; //$secondary-color-light;
+    }
+  }
+
+  .li-nav-info-utils {
+    border-radius: $border-radius-site;
+    
+  }
+
+  .li-message {
+    p {
+      padding: $spacing-v $spacing-h;
+      color: $primary-color-text;
+      font-weight: 600;
+      box-shadow: 0 0 $border-shadow rgba($shadow-color , 0.5);
+      border-radius: $border-radius-site;
+      background: $warning-color;
+    }
+
+    .Error {
+      background: $danger-color;
+    }
+  }
+  
+
+  .li-horaire {
+    background: $accent-color-ab; //hsla(31, 15%, 50%, 0.1);
+    border: 0.2em solid $primary-color-text;
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+    border-radius: $border-radius-site;
+    color: $primary-color-text;
+
+    ul {
+      list-style: none;
+      padding: 0 $spacing-h;
+
+      li {
+        font-size: 1.1em;
+        line-height: 1.7em;
+        // display: inline;
+        font-weight: bold;
+      }
+      li:first-of-type  {
+        font-size: 1.3em;
+      }
+    }
+  }
+
+  .li-contact {
+    background: none; //hsla(31, 15%, 50%, 0.1);
+    // color: $primary-color-dark;
+    // border: 0.3em solid $primary-color-dark;
+    // box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+    // border-radius: $border-radius-site;
+    // color: $primary-color-text;
+
+    //maj margin right à 0, on sm
+    // @include breakpoint($break-sm-max) {
+    //   margin-right: 0em;
+    // }
+
+    ul {
+      // background-color: $primary-color-light;
+      list-style: none;
+      padding: 0 ;//$spacing-h;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: flex-start;
+
+      @include breakpoint($break-sm-max){
+        flex-flow: row wrap;
+        // 
+        
+      }
+
+      li {
+        position: relative;
+        display: inline-block;
+        margin-right: $spacing-h/2;
+        margin-bottom: $spacing-v/2;
+        padding: 0.2em;
+
+        color: $secondary-text-color;
+        // border:px solid #f8fb1e;
+        background-color: $primary-color-light; 
+        background-image: linear-gradient(to bottom, $primary-color-light, darken($primary-color-light, 20%));// #f9fc50);
+
+        font-size: 1.1em;
+        line-height: 1.7em;
+        font-weight: bold;
+        
+
+      }
+
+      li:hover {
+        color: $secondary-color;
+        background-image: linear-gradient(to bottom, lighten($primary-color-light,10%), $primary-color-light);
+      }
+      // li:first-of-type  {
+      //   font-size: 1.3em;
+      // }
+    }
+  }
+
+  .li-slider {    
+  }  
+
+
+  .presentation {
+
+    padding: $spacing-v/2 0 0 0; 
+
+    .li-presentation {
+      background: $secondary-color; //$secondary-color; //hsla(31, 15%, 50%, 0.1);
+      // border: 0.2em solid $primary-color-dark;
+      // box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+      border-radius: $border-radius-site;
+      color: $primary-text-color;
+      // padding: 0 5em;
+      //gestion padding responsive
+      padding: 0 $spacing-h;
+      // @include breakpoint($break-sm) {
+      //   padding-right: 5em;
+      // }
+      @include breakpoint($break-sm) {
+       padding-right: 5em;
+      }
+      @include breakpoint($break-md) {
+        padding: 0 $spacing-h;
+      }
+      // // @include breakpoint(900px) {
+      // //   padding: 0 5em;
+      // // }
+      // @include breakpoint($break-lg) {
+      //   padding: 0 $spacing-h;
+      // }
+      @include breakpoint($break-xlg) {
+        padding-right: 5em;
+      }
+
+      p {
+
+        font-size:1.5em;
+          line-height: 1.7em;
+          font-weight: bold;
+
+        @include breakpoint($break-md) {
+          font-size:1.3em;
+          line-height: 1.8em;
+        }
+      }
+    }
+    .presentation-text {
+     
+       h1:first-of-type  {
+        text-indent: 0.3em;
+
+        span {
+          font-size: 1.8em;
+         }
+       }
+    }
+
+    
+  }
+  //end details .presentation
+
+  .img-right-home-image {
+    width: 100%;
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+  }
+
+
+
+
+}
+
+
+
+
+// .logo-intergrid-home-image {
+//   width: 45%;
+//   margin: auto;
+//   @include breakpoint($break-ssm) {
+//     width: 100%;
+//   }
+//   @include breakpoint($break-sm) {
+//     width: 7em;
+//   }
+// }
+
+
+

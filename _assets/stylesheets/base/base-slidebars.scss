@@ -1,0 +1,266 @@
+/*
+ * Intégre Slidebars !
+ * Slidebars - A jQuery Framework for Off-Canvas Menus and Sidebars
+ * Version: 2.0.2
+ * Url: http://www.adchsm.com/slidebars/
+ * Author: Adam Charles Smith
+ * Author url: http://www.adchsm.com/
+ * License: MIT
+ * License url: http://www.adchsm.com/slidebars/license/
+ */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-size: 0.9em;
+  //ajust responsive
+  @include breakpoint($break-ssm-max){font-size: 0.7em;}
+  font-family: $serif ; //$base-font-family;
+  -webkit-font-smoothing: antialiased;
+  &.overflow--hidden {
+    /* when primary navigation is visible, the content in the background won't scroll */
+    overflow: hidden;
+  } 
+}
+
+[canvas=container], [off-canvas] {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/**
+ * Canvas
+ */
+
+[canvas] {
+  z-index: 1;
+}
+
+[canvas=container] {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll; //auto; //scroll
+  // position: relative;
+  // background-color: white; /* Basic background color, overwrite this in your own css. */
+  // report background from base/base.scss
+  background-attachment: fixed;
+  background-color: $secondary-color-light;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+  background-size: 50px 50px;
+  -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS devices, may be removed by setting to 'auto' in your own CSS. */
+
+  &.overflow--hidden {
+      /* when primary navigation is visible, the content in the background won't scroll */
+      overflow: hidden;
+    }
+}
+
+[canvas=container]:before, [canvas=container]:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/**
+ * Off-Canavs
+ */
+
+[off-canvas] {
+  display: none;
+  position: fixed;
+  overflow: hidden;
+  overflow-y: auto;
+  background-color: $primary-color-light; /* Basic background color, overwrite this in your own css. */
+  color: white; /* Basic colors, overwrite this in your own css. */
+  -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS devices, may be removed by setting to 'auto' in your own CSS. */
+}
+
+// [off-canvas*=top] {
+//  width: 100%;
+//  height: 255px;
+//  top: 0;
+// }
+
+// [off-canvas*=right] {
+//  width: 255px;
+//  height: 100%;
+//  top: 0;
+//  right: 0;
+// }
+
+// [off-canvas*=bottom] {
+//  width: 100%;
+//  height: 255px;
+//  bottom: 0;
+// }
+
+[off-canvas*=left] {
+  width: 155px;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+[off-canvas*=reveal] {
+  z-index: 0;
+}
+
+[off-canvas*=push] {
+  z-index: 1;
+}
+
+[off-canvas*=overlay] {
+  z-index: 9999;
+}
+
+[off-canvas*=shift] {
+  z-index: 0;
+}
+
+/**
+ * Animation
+ */
+
+[canvas], [off-canvas] {  
+  transform: translate( 0px, 0px );  
+  transition: transform 300ms;
+  -webkit-backface-visibility: hidden; /* Prevents flickering, may be removed if experiencing problems with fixed background images in Chrome. */
+}
+
+// [off-canvas*=shift][off-canvas*=top] {
+//  -webkit-transform: translate( 0px, 50% );
+//          transform: translate( 0px, 50% );
+// }
+
+// [off-canvas*=shift][off-canvas*=right] {
+//  -webkit-transform: translate( -50%, 0px );
+//          transform: translate( -50%, 0px );
+// }
+
+// [off-canvas*=shift][off-canvas*=bottom] {
+//  -webkit-transform: translate( 0px, -50% );
+//          transform: translate( 0px, -50% );
+// }
+
+[off-canvas*=shift][off-canvas*=left] {
+  transform: translate( 50%, 0px );
+}
+
+/**
+ * Print
+ */
+
+@media print {
+  [canvas] {
+    transform: translate( 0px, 0px ) !important;
+  }
+
+  [off-canvas] {
+    display: none !important;
+  }
+}
+
+
+
+
+
+
+
+
+p {
+  font-size: 1em;
+  line-height: 1.25em;
+  // margin-bottom: 1.5em;
+  font-weight: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+  font-weight: normal;
+  line-height: 1em;
+  // margin-bottom: .5em;
+}
+
+h1 {
+  font-size: 1.3em;
+  line-height: 1.2em;
+  // margin-bottom: .5em;
+  // letter-spacing: -.015em;
+  // margin: .25em 0 .75em;
+
+}
+
+h2 {
+  font-size: 1.2em;
+  margin: $spacing-v/3 0;
+  font-weight: 600;
+  // line-height: 1em;
+  // margin-top: .6em;
+  // margin-bottom: .6em;
+  // font-weight: 600;
+  // font-family: KievitWebPro-Bold;
+  // margin: 0 0 calc(1.5em/1.333);
+}
+
+h3 {
+  font-size: 1.35em;
+  line-height: 1.3em;
+  // line-height: 1em;
+  // margin-top: 1em;
+  // margin-bottom: .4em;
+  // text-align: left;
+  // font-weight: 600;
+  // margin: 0 0 1.5em;
+}
+
+h4 {
+  font-size: 1em;
+  // line-height: 1.5em;
+
+}
+h5 {
+    font-size: 1em;
+    // line-height: 1.6em;
+    // margin-bottom: 1.5em;
+    // text-align: left;
+}
+h6 {
+    font-size: 1em;
+    // font-weight: bold;
+    // line-height: 1.5em;
+    // margin-bottom: .4em;
+    // color: #818c97;
+    // text-align: left;
+    // margin-left: .5em;
+    // margin-top: 1em !important;
+}
+
+/* Links */
+a {
+    text-decoration: none;    
+    &:hover {
+        color: inherit; //$primary-color;
+        text-decoration: none;
+    }
+
+    // &:focus,&:visited {}
+}
+
+.invisible {
+  display:none;
+}
+
+.invItem {
+  display:none;
+}
+
+.warningItem {
+  border: $spacing-h/2 solid $warning-color;
+}
+

@@ -1,0 +1,28 @@
+config:
+  # period for each subsection in list, array info
+  period_info_subsection: 4
+  #detail offset for each period
+  offset_index_subsection: 0
+  offset_dist_subsection: 1
+  offset_nbitems_subsection: 2
+  offset_tab_offset_subsection: 3
+
+  # period for items in section in list, array info
+  period_info_items_section: 4
+  #detail offset for each period
+  offset_index_items_section: 0
+  offset_dist_items_section: 1
+  offset_nbitems_items_section: 2
+  offset_tab_offset_items_section: 3
+
+  # value in info when no child detected on a section
+  no_child: 0
+  #index main section in tab in info_section_subsection_part
+  index_main_section: 0
+
+  nb_max_items_per_section: 999
+  class_invisible: 'invItem'
+  class_event_today: 'warningItem'
+
+  dist_force_del_empty_section_default : 0
+

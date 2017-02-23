@@ -1,0 +1,23 @@
+{%comment%}<!--
+  param in:
+    model
+    item_is_section
+
+
+  param out :
+    current_detail_model
+
+
+
+ -->
+ {%endcomment%}
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% if include.item_is_section == true %}
+  {% assign type_design = include.model.type_subsection_item %}
+{% else %}
+  {% assign type_design = include.model.type_detail_item %}
+{% endif %}
+{% assign current_detail_model = type_design.detail_model %}

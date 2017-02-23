@@ -1,0 +1,10 @@
+# period for each subsection in list, array info
+period_info_css: 5
+#detail offset for each period
+offset_dist_info_css: 0
+offset_url_info_css: 1
+offset_type_info_css: 2
+offset_nbitems_info_css: 3
+offset_custom_model_info_css: 4
+
+trunc_url_part: 2

@@ -1,0 +1,88 @@
+{%comment%}<!--
+  param in:
+    include
+      model
+      currentdist
+      type_items
+
+
+  var globale
+    site.data.coll_ext.config.display-design.config.default_model_selected
+
+    site.data.coll_ext.config.display-design.config.default_type_mix_items_selected
+
+  param out :
+    design_model_ref
+
+
+class data.coll_ext.design.list-model_page
+
+todo : design_model a virer
+
+ -->
+ {%endcomment%}
+
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% assign model_selected = site.data.coll_ext.config.display-design.config.default_master_model_selected %}
+{% if include.model != null %}
+  {% for model_tmp in site.data.coll_ext.design.list-model_page %}
+    {% if model_tmp[1].model == include.model %}
+      {% assign model_selected = model_tmp[1].model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% for model_tmp in site.data.coll_ext.design.list-model_page %}
+  {% if model_tmp[1].model == model_selected %}
+    {% assign list_dist = model_tmp[1].list-model-dist %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+
+{% comment %}
+  <!-- filter with current dist -->
+{% endcomment %}
+{% assign list_type = null %}
+{% assign currentdist = include.currentdist | plus: 0 %}
+{% for iter_tmp in list_dist %}
+  {% assign dist_tmp = iter_tmp.dist | plus: 0 %}
+  {% if dist_tmp == currentdist %}
+    {% assign list_type = iter_tmp.list-model-type %}
+  {% endif %}
+  {% assign list_type_dist_max = iter_tmp.list-model-type %}
+{% endfor %}
+{% if list_type == null %}
+  {% assign list_type = list_type_dist_max %}
+  {%comment%}
+    <!-- if current_dist > max dist, take model type at max dist -->
+  {%endcomment%}
+{% endif %}
+
+
+{% comment %}
+  <!-- filter with current type items -->
+{% endcomment %}
+{% assign type_items_selected = site.data.coll_ext.config.display-design.config.default_type_mix_items_selected %}
+
+{% assign type_items_local = include.type_items | remove: '"'  %}
+
+{% if type_items_local != null %}
+  {% for list_tmp in list_type %}
+    {% if list_tmp.type contains  type_items_local %}
+      {% assign type_items_selected = type_items_local %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for list_tmp in list_type %}
+  {% assign type_tmp = list_tmp.type %}
+  {% if list_tmp.type contains type_items_selected %}
+    {% assign design_model = list_tmp.design %}
+    {% assign design_model_ref = list_tmp.design_model %}
+  {% endif %}
+{% endfor %}

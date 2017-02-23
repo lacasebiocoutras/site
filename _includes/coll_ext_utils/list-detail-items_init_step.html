@@ -1,0 +1,64 @@
+{%comment%}
+<!--
+  param-in :
+    model _data/custom/home-page/list-detail-items.yml
+    force_display_coll_ext == true
+
+  param out:
+    page_ref_model
+    page_ref_sort_items
+    collection_name
+    page_ref_url
+    page_ref_title
+    page_ref_title_last_section
+
+
+{%endcomment%}
+
+{% include coll_ext/config/common-param.html %}
+
+
+{% comment %}<!-- extract info element in list_detail_items -->{% endcomment %}
+
+{% if list.force_display_coll_ext == true %}
+
+  {% assign page_ref_model = list.force_display_coll_ext_model %}
+  {% assign page_ref_model_original = null %}
+  {% assign page_ref_sort_items = list.sort.filter %}
+  {% assign collection_name = list.collection %}
+  {% assign page_ref_title = list.title %}
+  {% assign page_ref_title_last_section = '' %}
+
+  {% assign name_section = list.force_display_coll_ext_section  %}
+  {% assign name_section = name_section | append: extension_section %}
+
+  {% assign page_ref_url = page.url %}
+  {% for collection in site.collections %}
+    {% if collection.label == collection_name %}
+      {% assign raw_items_coll_tmp = collection.docs %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  {% for item_coll_tmp in raw_items_coll_tmp  %}
+    {% if item_coll_tmp.url contains name_section %}
+      {% assign page_ref_url = item_coll_tmp.url %}
+      {% assign page_ref_model_original = item_coll_tmp.model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% comment %}{% if list.force_url_title != null and list.force_url_title == true %}
+    {% assign page_ref_url = list.url_title %}
+  {% endif %}{% endcomment %}
+
+  {% comment %}<!-- extra -->{% endcomment %}
+
+  {% assign page_ref_model_nb_max_item_per_section = site.data.coll_ext.config.display_list-items.config.nb_max_items_per_section %}
+  {% if list.sort.nb-max-item-per-section != null %}
+    {% assign page_ref_model_nb_max_item_per_section = list.sort.nb-max-item-per-section %}
+  {% endif %}
+
+  {% assign page_ref_choose_subsections = list.sort.choose-subsections %}
+  {% assign page_ref_filter_subsections = list.sort.filter-subsections %}
+
+{% endif %}

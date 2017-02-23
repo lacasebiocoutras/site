@@ -1,0 +1,58 @@
+{%comment%}<!--
+  param in:
+    include
+      model
+      currentdist
+
+
+  var globale
+    site.data.coll_ext.config.display-design.config.default_model_selected
+
+    site.data.coll_ext.config.display-design.config.default_type_mix_items_selected
+
+  param out :
+    detail_design_ref
+
+
+ -->
+ {%endcomment%}
+
+{% assign detail_design_ref = null %}
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% assign model_selected = site.data.coll_ext.config.display-design.config.default_detail_items_selected %}
+{% if include.model != null %}
+  {% for model_tmp in site.data.coll_ext.design.list-model_detail_items %}
+    {% if model_tmp[0] == include.model %}
+      {% assign model_selected = model_tmp[0] %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% for model_tmp in site.data.coll_ext.design.list-model_detail_items %}
+  {% if model_tmp[0] == model_selected %}
+    {% assign list_dist = model_tmp[1].list-model-dist %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% comment %}
+  <!-- filter with current dist -->
+{% endcomment %}
+{% assign currentdist = include.currentdist | plus: 0 %}
+{% for iter_tmp in list_dist %}
+  {% assign dist_tmp = iter_tmp.dist | plus: 0 %}
+  {% if dist_tmp == currentdist %}
+    {% assign detail_design_ref = iter_tmp.design %}
+  {% endif %}
+  {% assign design_dist_max = iter_tmp.design %}
+{% endfor %}
+{% if detail_design_ref == null %}
+  {% assign detail_design_ref = design_dist_max %}
+  {%comment%}
+    <!-- if current_dist > max dist, take model type at max dist -->
+  {%endcomment%}
+{% endif %}
+

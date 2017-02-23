@@ -1,0 +1,22 @@
+{%comment%}
+<!--
+  param in :
+    include.name_attribute
+    include.value_attribute
+
+  var global :
+   design_model
+
+
+-->
+{%endcomment%}
+
+{% assign add_attr = '' %}
+
+{% if include.name_attribute != null %}
+  {% assign add_attr = include.name_attribute %}
+{% endif %}
+
+{% if include.value_attribute != null %}
+  {% assign add_attr = add_attr | append: '="' | append: include.value_attribute | append: '"'  %}
+{% endif %}

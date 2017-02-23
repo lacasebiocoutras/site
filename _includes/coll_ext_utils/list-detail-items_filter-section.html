@@ -1,0 +1,52 @@
+{%comment%}
+<!--
+  param in:
+    include.filter_name_section
+    include.array_name_section
+    include.url_item
+
+  global
+    common-param
+      extension_section
+
+  param out :
+
+     filtering_name_item
+
+-->
+{%endcomment%}
+
+{% assign delim_url = site.data.coll_ext.config.common.delimitator.url %}
+
+{% assign filtering_name_item = false %}
+{% assign i_max = include.array_name_section.size | minus: 1 %}
+
+{% if include.filter_name_section == site.data.coll_ext.model_list-detail-items..config.display_some_section  %}
+
+  {% comment %}<div><p>filter_name_section</p></div>{% endcomment %}
+  {%comment%}
+    <!-- case display items of a or some sections from a collection -->
+  {%endcomment%}
+  {% assign filtering_name_item = true %}
+  {% for i in (0..i_max) %}
+    {% assign name_section_to_comp = include.array_name_section[i] | append: delim_url | prepend: delim_url %}
+    {% assign name_last_section_to_comp = include.array_name_section[i] | append: extension_section | prepend: delim_url %}
+    {% if include.url_item contains name_section_to_comp or include.url_item contains name_last_section_to_comp %}
+      {% assign filtering_name_item = false %}
+    {% endif %}
+  {% endfor %}
+
+{% elsif include.filter_name_section == site.data.coll_ext.model_list-detail-items..config.display_all_except_one  %}
+
+  {% comment %}<div><p>filter_name_section</p></div>{% endcomment %}
+
+  {% assign filtering_name_item = false %}
+  {% for i in (0..i_max) %}
+    {% assign name_section_to_comp = include.array_name_section[i] | append: delim_url | prepend: delim_url %}
+    {% assign name_last_section_to_comp = include.array_name_section[i] | append: extension_section | prepend: delim_url %}
+    {% comment %}<div><p>i : {{i}}, name_section_to_comp: {{name_section_to_comp}}, url_item : {{include.url_item}} </p></div>{% endcomment %}
+    {% if include.url_item contains name_section_to_comp or include.url_item contains name_last_section_to_comp %}
+      {% assign filtering_name_item = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}

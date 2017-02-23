@@ -1,0 +1,86 @@
+{%comment%}
+  <!-- specific sort on date-debut-promotion, coming soon, or past -->
+  <!-- info : http://stackoverflow.com/questions/7087376/comparing-dates-in-liquid -->
+  <!--  default date on jekyll, futur dates -->
+{%endcomment%}
+
+{%comment%}
+  <!--
+  param in :
+    include.array_index_part
+    include.array_index_size
+
+  var global:
+    raw_items
+
+
+  param out :
+    array_index_sort_date_event   with sort_filter : date_evenement, in fr
+  -->
+{%endcomment%}
+
+{% include coll_ext/config/common-param.html %}
+
+{% assign array_index_sort_date_event = include.array_index_part %}
+{% assign array_index_size = include.array_index_size %}
+
+
+{% capture nowunix %}{{'now' | date: '%s'}}{% endcapture %}
+
+{% assign array_diffdate = delim %}
+{% assign array_diffdate_size = -1 %}
+{% assign new_array_index = delim %}
+
+
+{%comment%}
+  <!-- step 1 : conversion date to unix timestamp and construct array diff time with nowunix-->
+{%endcomment%}
+
+{% for index_item_subsection in (0..array_index_size) %}
+
+  {% assign index_array_part = array_index_sort_date_event[index_item_subsection] | plus: 0 %}
+  {% assign  item_tmp = raw_items[index_array_part] %}
+
+  {%comment%}
+    <!-- filtering item if date-debut-promotion is missing date-fin-promotion-->
+  {%endcomment%}
+  {% if item_tmp.date-fin-promotion != null %}
+
+    {%comment%}<!-- conversion fr2en -->{%endcomment%}
+    {% include coll_ext_utils/date/convert-date-fr-en2en_unix.html
+      date=item_tmp.date-fin-promotion
+    %}
+    {% assign date_event = new_date_convert %}
+    {% assign date_event_unix = new_date_convert_unix %}
+
+    {% assign new_array_index = new_array_index | append : index_array_part | append: delim %}
+
+    {% assign diff_date = date_event_unix | minus: nowunix %}
+    {% assign array_diffdate = array_diffdate | append : diff_date | append: delim %}
+
+
+    {% comment %}
+      {% if date_event > nowunix %}upcoming event  at generation time, to see with CI daily {% else %} past event {% endif %}
+    {% endcomment %}
+
+
+  {% endif %}
+
+
+{% endfor %}
+
+{% if new_array_index != delim %}
+  {% assign new_array_index_part = new_array_index | remove_first: delim | split: delim %}
+  {% assign array_diffdate_part = array_diffdate | remove_first: delim | split: delim %}
+{% endif %}
+
+{%comment%}
+  <!-- step 2 : sort index items array_index_sort_date_event, by sorting the array of diff time-->
+{%endcomment%}
+{% include coll_ext/utils/array/sort_array_2tab_max2min.html
+  tab1ref=array_diffdate_part
+  tab2=new_array_index_part
+%}
+{% assign array_diffdate_part = tab1_sort%}
+{% assign array_index_sort_date_event = tab2_sort%}
+

@@ -1,0 +1,38 @@
+{% if array_index_tmp != delim %}
+
+  {% include coll_ext/sort_collections/date_publi_filter/sort-index-date-publi.html
+    array_index=array_index_tmp
+    array_dist_children=array_dist_children_tmp
+    array_is_section=array_is_section_tmp
+    array_time_tosort=array_time_tosort_tmp
+    array_time_uniq=include.array_time_uniq
+    sort_revfilter=include.sort_rev_subfilter
+    output_temp=true
+  %}
+
+  {%comment%}
+    <!-- update output -->
+  {%endcomment%}
+  {% assign array_index_item_tmp = array_index_item_tmp | remove_first: delim  %}
+  {% assign array_dist_children_item_tmp = array_dist_children_item_tmp | remove_first: delim %}
+  {% assign array_is_section_item_tmp = array_is_section_item_tmp | remove_first: delim %}
+
+  {% assign array_index_out = array_index_out | append: array_index_item_tmp %}
+  {% assign array_dist_children_out =  array_dist_children_out | append: array_dist_children_item_tmp %}
+  {% assign array_is_section_out =  array_is_section_out | append: array_is_section_item_tmp %}
+
+  {%comment%}
+    <!-- init for next value -->
+  {%endcomment%}
+  {% assign array_index_tmp = delim %}
+  {% assign array_dist_children_tmp =  delim %}
+  {% assign array_is_section_tmp =  delim %}
+
+  {% assign array_time_tosort_tmp = delim %}
+
+  {% assign array_index_item_tmp = delim %}
+  {% assign array_dist_children_item_tmp =  delim %}
+  {% assign array_is_section_item_tmp =  delim %}
+
+
+{% endif %}

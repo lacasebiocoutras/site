@@ -1,0 +1,220 @@
+{% comment %}<!-- param in  :
+  include
+    model_parent
+    current_dist
+    item_url
+    last_part_url_current_item
+    current_item_url_size
+    collection_name
+    list_index_ref
+    extension_section
+    delim
+
+  global
+    raw_items
+    site.collections
+
+
+  param out  :
+    url_add_to_container
+    current_model_detail_design
+    current_dist_parent
+
+-->{% endcomment %}
+
+{% assign url_add_to_container = include.item_url  %}
+
+
+{% assign current_model_detail_design = include.model_parent.design_detail_items  %}
+{% assign current_dist_parent = include.current_dist | plus: 0 %}
+{% assign update_current_model_detail = include.model_parent.activate_current_model_detail_on_child %}
+
+
+{% assign current_item_url_size = include.current_item_url_size | minus: 1 %}
+
+
+
+{% assign array_index_ref = include.list_index_ref | remove_first: delim | split: delim  %}
+{% assign array_index_size = array_index_ref.size | minus: 1 %}
+
+{% assign extension_section = include.extension_section  %}
+{% assign delim = include.delim  %}
+
+
+{% assign array_subsection_filter = delim %}
+{% comment %}{% assign size_max_items_on_parent = -1 %}{% endcomment %}
+
+
+{% for iter_array in (0..array_index_size) %}
+
+  {%comment%}<!-- pointer to item -->{%endcomment%}
+  {% assign index_array_tmp = array_index_ref[iter_array] | plus: 0  %}
+  {% assign item_tmp = raw_items[index_array_tmp] %}
+
+  {%comment%}<!-- filtering section item -->{%endcomment%}
+  {% if item_tmp.url contains extension_section %}
+
+    {% assign url_tmp = item_tmp.url | remove_first: extension_section %}
+
+    {% if url_add_to_container contains url_tmp %}
+
+      {% assign url_tmp_part = url_tmp | split: '/' %}
+      {% assign size_url_tmp_part = url_tmp_part.size | minus: 1 %}
+      {% assign url_part_item = url_tmp_part[size_url_tmp_part] | prepend: '/' | append : '/'  %}
+
+      {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+
+      {% if model_subsection.display_items_on_parent == true %}
+
+        {% assign array_subsection_filter = array_subsection_filter | append: url_part_item | append: delim %}
+
+      {% else %}
+      {% endif %}
+        {% comment %}{% assign dist_display_children = model_subsection.dist_display_children  %}
+
+        {% if size_url_tmp_part > size_max_items_on_parent %}
+          {% assign size_max_items_on_parent = size_url_tmp_part %}
+          {% assign index_size_max_items_on_parent = index_array_tmp %}
+          {% assign dist_size_max_items_on_parent = dist_display_children %}
+        {% endif %}{% endcomment %}
+
+
+
+
+    {% endif %}{%comment%}<!-- end url_add_to_container contains url_tmp -->{%endcomment%}
+  {% endif %}{%comment%}<!-- end item_tmp is section -->{%endcomment%}
+{% endfor %}
+
+
+
+
+
+
+
+{% comment %}<!-- parsing collection to extract direct section of detail item-->{% endcomment %}
+{% assign url_main_section = include.item_url  | remove_first: include.last_part_url_current_item | append: extension_section | append: '' %}
+{% for collection in site.collections %}
+  {% if collection.label == include.collection_name %}
+    {% assign raw_items_coll_tmp = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for item_coll_tmp in raw_items_coll_tmp  %}
+  {% if item_coll_tmp.url == url_main_section %}
+
+    {% include coll_ext/config/model-subsections.html modelSubsection=item_coll_tmp.model %}
+
+    {% if update_current_model_detail == true and model_subsection.force_current_model_detail_on_parent == true %}
+      {% assign current_model_detail_design = model_subsection.design_detail_items %}
+      {% assign current_dist_parent = 0 %}
+    {% endif %}
+
+
+   {% comment %} <div style="color: green;">
+      <p > url section direct parent  : {{ item_coll_tmp.url }}</p>
+      <p> model_subsection.model : {{model_subsection.model}}</p>
+      <p > model_subsection.force_current_model_detail_on_parent  : {{  model_subsection.force_current_model_detail_on_parent  }}</p>
+      <p>current_model_detail_design : {{current_model_detail_design}}</p>
+      <p>current_dist_parent : {{current_dist_parent}}</p>
+    </div>{% endcomment %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+
+
+
+{% if array_subsection_filter != delim %}
+  <!-- display on parent, hide in url, intermediate section-->
+  {% assign array_subsection_filter_part = array_subsection_filter | remove_first: delim | split: delim %}
+  {% assign array_subsection_filter_size = array_subsection_filter_part.size | minus: 1 %}
+  {% for index_tmp in (0..array_subsection_filter_size) %}
+    {% assign array_subsection_filter = array_subsection_filter_part[index_tmp] %}
+    {% assign url_add_to_container = url_add_to_container | replace: array_subsection_filter_part[index_tmp], '/' %}
+  {% endfor%}
+{% endif %}
+
+
+
+
+{% comment %}<div><p>size_max_no_items_on_parent : {{size_max_no_items_on_parent}}</p></div>{% endcomment %}
+{% comment %}
+{% if size_max_no_items_on_parent > -1 %}
+  {% assign  item_tmp = raw_items[index_size_max_no_items_on_parent] %}
+
+  {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+  {% assign current_model_detail_design = model_subsection.design_detail_items  %}
+
+  {% assign flag_force_current_model_detail_on_parent = model_subsection.force_current_model_detail_on_parent  %}
+
+
+
+  {% assign current_dist_parent = current_item_url_size | minus: size_max_no_items_on_parent %}
+
+  <div style="color: white;">
+    <p> no items parent: item_tmp.url : {{item_tmp.url}}</p>
+    <p > model_subsection.force_current_model_detail_on_parent  : {{  model_subsection.force_current_model_detail_on_parent  }}; model_subsection.model : {{model_subsection.model}}</p>
+    <p>current_dist_parent : {{current_dist_parent}}</p>
+  </div>
+
+{% endif %}
+{% endcomment %}
+
+{% comment %}
+<div><p>size_max_items_on_parent : {{size_max_items_on_parent}}, dist_size_max_items_on_parent : {{dist_size_max_items_on_parent}}</p></div>
+
+{% assign flag_display_on_parent_section = true %}
+{% if size_max_items_on_parent > -1 %}
+
+  {% assign dist_on_parent =  size_max_items_on_parent | plus: dist_size_max_items_on_parent | plus: 0 %}
+
+
+  {% assign  item_tmp = raw_items[index_size_max_items_on_parent] %}
+  {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+
+  <div style="color: black;">
+    <p > url parent section last  : {{ item_tmp.url }}</p>
+    <p> model_subsection.model : {{model_subsection.model}}</p>
+    <p > model_subsection.force_current_model_detail_on_parent  : {{  model_subsection.force_current_model_detail_on_parent  }}</p>
+    <p>current_item_url_size : {{current_item_url_size}}, dist_on_parent : {{dist_on_parent}}</p>
+  </div>
+
+
+  {% if current_item_url_size > dist_on_parent %}
+    {% assign flag_display_on_parent_section = false  %}
+    {% assign current_model_detail_design = current_model_detail_design %}
+
+    {% assign current_dist_parent = 0 %}
+
+  {% else %}
+
+    {% assign  item_tmp = raw_items[index_size_max_items_on_parent] %}
+    {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+
+    {% if model_subsection.activate_current_model_detail_on_child == true and flag_force_current_model_detail_on_parent == true %}
+
+      {% assign current_model_detail_design = current_model_detail_design %}
+    {% else %}
+      {% assign current_model_detail_design = model_subsection.design_detail_items %}
+
+    {% endif %}
+
+    {% assign current_dist_parent = current_item_url_size | minus: size_max_items_on_parent %}
+
+
+  {% endif %}
+
+{% endif %}{% endcomment %}
+
+{% comment %}
+{% if flag_display_on_parent_section == true and array_subsection_filter != delim %}
+  <!-- display on parent, hide in url, intermediate section-->
+  {% assign array_subsection_filter_part = array_subsection_filter | remove_first: delim | split: delim %}
+  {% assign array_subsection_filter_size = array_subsection_filter_part.size | minus: 1 %}
+  {% for index_tmp in (0..array_subsection_filter_size) %}
+    {% assign array_subsection_filter = array_subsection_filter_part[index_tmp] %}
+    {% assign url_add_to_container = url_add_to_container | replace: array_subsection_filter_part[index_tmp], '/' %}
+  {% endfor%}
+{% endif %}
+{% endcomment %}

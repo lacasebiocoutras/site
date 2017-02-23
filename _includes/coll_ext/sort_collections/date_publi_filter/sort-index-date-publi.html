@@ -1,0 +1,117 @@
+{%comment%}
+<!--
+  param in:
+    include.array_index
+    include.array_dist_children
+    include.array_is_section
+    include.array_time_tosort
+    include.array_time_uniq
+    include.sort_revfilter
+    include.output_temp
+  param out :
+    mode output_temp=false
+      array_index_item
+      array_dist_children_item
+      array_is_section_item
+    mode output_temp=true
+      array_index_item_tmp
+      array_dist_children_item_tmp
+      array_is_section_item_tmp
+
+-->
+{%endcomment%}
+
+
+
+{% if include.array_index != delim %}
+  {% assign array_index_loc = include.array_index | remove_first: delim | split: delim %}
+  {% assign array_dist_children_loc = include.array_dist_children | remove_first: delim | split: delim %}
+  {% assign array_is_section_loc = include.array_is_section | remove_first: delim | split: delim %}
+
+  {% assign array_time_tosort_loc = include.array_time_tosort | remove_first: delim | split: delim %}
+  {% assign array_index_size = array_index_loc.size | minus: 1 %}
+{% endif %}
+
+{% if include.array_time_uniq != '' %}
+  {% assign array_time_uniq_loc = include.array_time_uniq %}
+  {% assign array_time_uniq_part = array_time_uniq_loc | remove_first: delim | split: delim %}
+  {% assign array_time_uniq_size = array_time_uniq_part.size | minus: 1 %}
+{% endif %}
+
+{% if include.sort_revfilter == false %}
+  {%comment%}<!-- transformation array_time, adaptation min/max time -->{%endcomment%}
+  {% assign tab_transfo = delim%}
+  {% for i in (0..array_index_size) %}
+    {% assign val_time = array_time_tosort_loc[i] | plus: 0 %}
+    {% assign transfo = min_time | minus: val_time %}
+    {% assign tab_transfo = tab_transfo | append: transfo | append: delim %}
+  {% endfor %}
+  {% assign array_time_tosort_loc = tab_transfo %}
+  {% assign array_time_tosort_loc = array_time_tosort_loc | remove_first: delim | split: delim %}
+
+  {% assign tab_transfo = delim %}
+  {% for i in (0..array_time_uniq_size) %}
+    {% assign val_time = array_time_uniq_part[i] | plus: 0 %}
+    {% assign transfo = min_time | minus: val_time %}
+    {% assign tab_transfo = tab_transfo | append: transfo | append: delim %}
+  {% endfor %}
+  {% assign array_time_uniq_loc = tab_transfo %}
+  {% assign array_time_uniq_part = array_time_uniq_loc | remove_first: delim | split: delim %}
+
+  {% assign tmp = min_time | minus: max_time %}
+  {% assign min_time = tmp %}
+  {% assign max_time = 0 %}
+
+{% endif %}
+
+
+
+{%comment%}<!-- sort index on date-publication -->{%endcomment%}
+{% if array_index_size > -1 %}
+  {% assign array_time_uniq_tmp =  array_time_uniq_loc %}
+  {%comment%}<!-- 1st iteration -->{%endcomment%}
+  {% for i in (0..array_time_uniq_size) %}
+    {% assign val_time = array_time_uniq_part[i] | plus: 0 %}
+    {% if val_time == max_time %}
+      {% assign val_time_str = val_time | prepend: delim | append: delim %}
+      {% assign array_time_uniq_tmp = array_time_uniq_tmp | replace: val_time_str,delim %}
+      {% assign array_time_uniq_tmp_part = array_time_uniq_tmp | remove_first: delim | split: delim %}
+      {%comment%}<!-- sort index output, use array_time_tosort -->{%endcomment%}
+      {% include coll_ext/sort_collections/date_publi_filter/sort-index-ouput.html
+        output_temp=include.output_temp
+      %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  {%comment%}<!-- end 1st iteration -->{%endcomment%}
+
+  {%comment%}<!-- next iterations -->{%endcomment%}
+  {% assign array_time_uniq_size = array_time_uniq_size | minus: 1 %}
+  {% assign nb_tosort = array_time_uniq_size %}
+  {% assign min_time_ref = min_time | minus: 1 %}
+
+  {% for i in (0..array_time_uniq_size) %}
+    {%comment%}<!-- loop, determine max -->{%endcomment%}
+    {% assign max_time_tmp = min_time_ref %}
+    {% for j in (0..nb_tosort) %}
+      {% assign val_time = array_time_uniq_tmp_part[j] | plus: 0 %}
+      {% if val_time > max_time_tmp %}
+        {% assign max_time_tmp = val_time %}
+        {% assign index_max_time_tmp = j %}
+      {% endif %}
+    {% endfor %}
+    {% assign nb_tosort = nb_tosort | minus: 1 %}
+
+    {% assign val_time = array_time_uniq_tmp_part[index_max_time_tmp] | plus: 0 %}
+    {% assign val_time_str = val_time | prepend: delim | append: delim %}
+
+    {% assign array_time_uniq_tmp = array_time_uniq_tmp | replace: val_time_str,delim %}
+    {% assign array_time_uniq_tmp_part = array_time_uniq_tmp | remove_first: delim | split: delim %}
+
+    {%comment%}<!-- sort index output -->{%endcomment%}
+    {% include coll_ext/sort_collections/date_publi_filter/sort-index-ouput.html
+      output_temp=include.output_temp
+    %}
+
+  {% endfor %}
+{% endif %}

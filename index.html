@@ -1,0 +1,159 @@
+---
+layout: master
+---
+
+{% comment %} extract information from collection nos_informations{% endcomment %}
+{% include coll_ext_utils/extract_info-collection_home-page.html %}
+
+<div class="main-presentation">
+
+  <ul class="Grid Grid--gutters-m u-spaceVN">
+
+    
+    <li class="li-message Grid-cell u-full u-spaceVN on-xlg-only">      
+      {% if textMessageImportant %}
+        {{textMessageImportant}}
+      {% else %}
+        <p></p>
+      {% endif %}    
+    </li>
+    
+
+    <li class=" Grid-cell u-full u-med-2of3-m u-spaceBN">
+      <div class="presentation">
+        <ul class="Grid Grid--gutters-m u-spaceVN">
+
+          <li class="li-message Grid-cell u-full not-inf-xlg">      
+            {% if textMessageImportant %}
+              {{textMessageImportant}}
+            {% else %}
+              <p></p>
+            {% endif %}    
+          </li>
+         
+          {% if textBienvenue != null and textBienvenue != '' %}          
+          <li class="li-presentation Grid-cell u-full ">
+            <div class="presentation-text">
+              {{textBienvenue}}              
+            </div>
+          </li>
+          {% endif %}
+
+          <li class="li-nav-info-utils Grid-cell u-full u-spaceVN  " >
+            <!-- add one level imbrication -->
+            <ul class="Grid  Grid--gutters-m u-spaceVN">
+              <li class="li-horaire Grid-cell Grid-cell--center ">
+                  {{textHoraires}}                 
+              </li>
+              <li class="li-contact Grid-cell--autoSize not-inf-sm">
+                  {{textContact}}                 
+              </li>
+            </ul>
+          </li> <!-- fin .li-nav-info-utils-->         
+        </ul>
+      </div>
+    </li>
+
+
+    <!-- image-acceuil, part right on lg screen -->
+    <li class="Grid-cell u-full u-med-1of3-m u-spaceVN">
+      <div class="part-welcome-img">
+        <ul class="Grid Grid--gutters-m u-spaceVN">
+
+          <li class="li-contact Grid-cell Grid-cell--center  u-full  on-sm-only" >
+            {{textContact}}                 
+          </li>
+
+          {% assign cpt_images_acceuil = cpt_images_acceuil | minus: 1 %}
+          {% for iter_array in (0..cpt_images_acceuil) %}
+            {% comment %}limit 2 images !{% endcomment %}
+
+            {% if iter_array == 0 %}
+              {% assign item_image_acceuil = item_image_acceuil1 %}
+              {% assign class_resp = 'li-img-primdark Grid-cell u-full u-small-1of2-m u-med-full' %}
+            {% elsif iter_array == 1 %}
+              {% assign item_image_acceuil = item_image_acceuil2 %}
+              {% assign class_resp = 'li-img-primdark Grid-cell u-full u-small-1of2-m on-md-only' %}
+            {% comment %}{% elsif iter_array == 2 %}
+              {% assign item_image_acceuil = item_image_acceuil3 %}
+              class_resp = 'li-img-primdark Grid-cell u-full u-small-1of2-m u-med-full' %}{% endcomment %}
+            {% else %}
+              {% break %}
+            {% endif %}
+
+            {% assign url_image = item_image_acceuil.link %}
+            {% assign add_target = '_blank' %}
+            {% unless url_image contains 'http' %}
+              {% assign url_image = url_image | prepend: site.baseurl %}
+              {% assign add_target = '' %}              
+            {% endunless %}
+
+            <li class="{{class_resp}}">
+              {% if item_image_acceuil.link %}
+                <a href="{{url_image}}" target="{{add_target}}" title="{{item_image_acceuil.description-link}}">
+              {% endif %}
+              {% picture img-right-home {{item_image_acceuil.image}} alt="{{item_image_acceuil.description-image}}" %}
+              {% if item_image_acceuil.description %}
+                <div class="u-textCenter description">{{item_image_acceuil.description}}</div>
+              {% endif %}
+              {% if item_image_acceuil.link %}</a>{% endif %}
+            </li>
+          {% endfor %}  
+
+           
+        </ul>
+      </div>
+    </li>
+    <!-- fin image-acceuil, part right on lg screen -->
+
+
+    <li class="Grid-cell u-full">
+      <div class="part-welcome-img">
+        <ul class="Grid Grid--gutters-m ">
+          <li class="li-slider Grid-cell  u-full  u-med-2of3-m ">
+            {% include picture/slider-standard.html
+              input_slider='t-acc'
+              list_image=list_car_image_acceuil
+              list_description_image=list_car_description_img_acceuil
+              list_link=list_car_link_acceuil
+              list_description_link=list_car_description_link_acceuil
+              header = heading_description
+            %}            
+          </li>
+          <li class="Grid-cell u-full u-med-1of3-m ">
+            <!-- list actu recentes -->
+            {% for list in site.data.coll_ext.model_list-detail-items.list-detail-items %}
+
+              {% if list.force_display_coll_ext == true %}
+                {% if list.force_display_coll_ext_model == 'acceuil_list_actu-recentes' %}    
+                  {% include coll_ext_utils/list-detail-items_init_step.html %}
+                  {% include coll_ext/main.html
+                    force_page_ref_input=true
+                  %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}                  
+          </li>
+        </ul>
+      </div>  
+    </li>
+
+  </ul>
+</div>
+
+
+
+<!-- list items -->
+{% for list in site.data.coll_ext.model_list-detail-items.list-detail-items %}
+
+  {% if list.force_display_coll_ext_model != 'acceuil_list_actu-recentes' %} 
+    {% if list.force_display_coll_ext == true %}
+      {% include coll_ext_utils/list-detail-items_init_step.html %}
+      {% include coll_ext/main.html
+        force_page_ref_input=true
+      %}
+
+    {% endif %}
+  {% endif %}
+
+{% endfor %}

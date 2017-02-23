@@ -1,0 +1,33 @@
+{%comment%}
+<!--
+  param in :
+    include
+      array_part
+      search_value
+      nbElt
+      period_array_nbElt
+      offsetDeb
+
+  para out : iter_search_value
+
+ -->
+{%endcomment%}
+
+{% assign iter_search_value = include.offsetDeb | plus: 0 %}
+{% assign search_value_detected = false  %}
+
+{% for iter_tmp in (1..include.nbElt) %}
+
+  {% assign index_tmp = include.array_part[iter_search_value] | plus: 0 %}
+  {% if index_tmp ==  include.search_value %}
+    {% assign search_value_detected = true  %}
+    {% break %}
+  {% endif %}
+  {% assign iter_search_value = iter_search_value | plus : include.period_array_nbElt %}
+
+{% endfor %}
+
+{% if search_value_detected == false %}
+  {% assign iter_search_value = -1  %}
+
+{% endif %}

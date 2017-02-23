@@ -1,0 +1,61 @@
+
+list_class:
+    #no space
+  - name: 'containerSlider_gl'
+    default: 'containerSlider'
+    compress: 'cs'
+
+  - name: 'slider_gl'
+    default: 'slider'
+    compress: 'sr'
+
+  - name: 'slides_gl'
+    default: 'slides'
+    compress: 'sl'
+
+  - name: 'inner__item_gl'
+    default: 'inner__item'
+    compress: 'it'
+
+  - name: 'overflow_gl'
+    default: 'overflow'
+    compress: 'ov'
+
+  - name: 'inner_gl'
+    default: 'inner'
+    compress: 'in'
+
+  - name: 'info_gl'
+    default: 'info'
+    compress: 'if'
+
+  - name: 'controls_gl'
+    default: 'controls'
+    compress: 'co'
+
+  - name: 'active_gl'
+    default: 'active'
+    compress: 'ac'
+
+
+extra:
+  - default : 'picture'
+    compress: 'pi'
+  - default : 'coll_ext'
+    compress: 'ce'
+
+  - default : 'translate'
+    compress: 'tr'
+  - default : 'opacity'
+    compress: 'op'
+  - default : 'infinite'
+    compress: 'ie'
+
+  - default : '"detail_items"'
+    compress: 'di'
+  - default : '"subsection_items"'
+    compress: 'si'
+  - default : '"mix_items"'
+    compress: 'mi'
+  - default : '"subsections"'
+    compress: 'su'

@@ -1,0 +1,26 @@
+
+
+<ul class="main-menu">                  
+  {% for iter_array in (0..array_title_item_acceuil_size) %}
+    {% assign title_tmp = array_title_item_acceuil[iter_array]  %}
+    {% assign link_tmp = array_link_article_item_acceuil[iter_array] %}   
+
+    {% assign add_class = 'menu-item u-textTruncate ' %}
+    
+    {% if page.url ==  link_tmp%}
+    	{% assign add_class = add_class | append: "nav-active" %}
+    	{% assign detect_url_page = true %}
+    {% else %}
+    	{% assign add_class = add_class | append: "nav-not-active" %}
+    {% endif %}
+
+    <li> <a class="{{add_class}}" href="{{site.baseurl}}{{link_tmp}}">
+        {% if page.url == link_tmp and page.url != '/' and page.model %}
+            <h1>{{title_tmp}}</h1></a>
+        {% else %}
+            <h5>{{title_tmp}}</h5></a>
+        {% endif %}        
+    </li>
+  {% endfor %}
+</ul>
+

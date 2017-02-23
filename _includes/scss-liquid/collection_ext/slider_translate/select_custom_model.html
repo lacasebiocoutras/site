@@ -1,0 +1,40 @@
+{%comment%}
+  param in:
+    include
+      custom_model
+
+
+  var globale
+
+  param out :
+    type_custom_model
+    styling_model
+
+
+
+
+ {%endcomment%}
+
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% assign custom_model_selected = site.data.coll_ext.design.UI.slider.config.default_model_selected %}
+
+
+{% if include.custom_model != null %}
+  {% for model_tmp in site.data.coll_ext.design.UI.slider.models %}
+    {% if model_tmp.model == include.custom_model %}
+      {% assign custom_model_selected = model_tmp.model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for model_tmp in site.data.coll_ext.design.UI.slider.models %}
+  {% if model_tmp.model == custom_model_selected %}
+    {% assign type_custom_model = model_tmp.type_custom %}
+    {% assign styling_model = model_tmp.styling %}
+    {% break %}
+  {% endif %}
+{% endfor %}

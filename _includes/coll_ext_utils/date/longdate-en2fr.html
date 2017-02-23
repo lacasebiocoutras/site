@@ -1,0 +1,22 @@
+{%comment%}<!--
+param in :
+  include.date : '9 may 2016'
+param out :
+  new_date_convert : 'lundi 9 mai 2016'
+-->{%endcomment%}
+
+{% capture day %}
+{% assign j = include.date | date: "%w" %}{% case j %}{% when '0' %}dimanche{% when '1' %}lundi{% when '2' %}mardi{% when '3' %}mercredi{% when '4' %}jeudi{% when '5' %}vendredi{% when '6' %}samedi{% endcase %}
+{% endcapture %}
+
+{% assign d = include.date | date: "%-d" %}
+
+{% capture month %}
+{% assign m = include.date | date: "%-m" %}{% case m %}{% when '1' %}janvier{% when '2' %}février{% when '3' %}mars{% when '4' %}avril{% when '5' %}mai{% when '6' %}juin{% when '7' %}juillet{% when '8' %}août{% when '9' %}septembre{% when '10' %}octobre{% when '11' %}novembre{% when '12' %}décembre{% endcase %}
+{% endcapture %}
+
+{% assign y = include.date | date: '%Y' %}
+
+{% assign space = ' ' %}
+
+{% assign new_date_convert = day | append: space | append: d | append: space | append: month | append: space | append: y %}

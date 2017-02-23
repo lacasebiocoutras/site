@@ -1,0 +1,9 @@
+- model: 'detail-default'
+  config_modal:
+    custom_class: 'modal_type1'
+  config_action:
+    add_text_action_modal: 'afficher les détails'
+  styling:
+    container:
+    container_color:
+    article:

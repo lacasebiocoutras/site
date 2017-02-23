@@ -1,0 +1,48 @@
+{%comment%}
+<!--
+  param in:
+    include.type_filter
+
+
+  param out :
+    sort_items
+    is_extra_sort_type
+
+-->
+{%endcomment%}
+
+
+
+
+{% assign sort_items = include.type_filter %}
+{% assign is_extra_sort_type =  null %}
+
+
+{% if include.type_filter  != null %}
+  {% for model_tmp in site.data.coll_ext.config.sort_site-documents.list-type-sort %}
+    {% if model_tmp.type == include.type_filter  %}
+      {% if model_tmp.extra_sort_type == true and model_tmp.based_on_type != null %}
+        {% assign sort_items = model_tmp.based_on_type %}
+        {% assign is_extra_sort_type =  include.type_filter %}
+      {% endif %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% comment %}
+{% assign sort_items = include.type_filter %}
+{% assign is_extra_sort_type =  null %}
+
+{% assign name_filters = site.data.coll_ext.config.sort_site-documents.config.filters_force_to_default %}
+{% assign i_max = name_filters.size | minus: 1 %}
+
+
+{% for i in (0..i_max) %}
+  {% if sort_items == name_filters[i] %}
+    {% assign filtering_name_item = 1 %}
+    {% assign sort_items = site.data.coll_ext.config.sort_site-documents.config.default_sort %}
+    {% assign is_extra_sort_type =  include.type_filter %}
+  {% endif %}
+{% endfor %}
+{% endcomment %}

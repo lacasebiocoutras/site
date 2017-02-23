@@ -1,0 +1,136 @@
+{%comment%}
+<!--
+param in :
+
+  include.array_dist_part
+  include.array_index_part
+  include.current_subsection
+  include.url_ref
+  include.max_dist_children
+
+variable globale
+
+  raw_items
+  extension_section
+  delim
+  dist_direct_desc
+
+param out:
+  section_display_subsection
+  info_section_subsection
+  items_display_subsection
+  info_items_subsection
+
+-->
+{%endcomment%}
+
+
+
+
+{%comment%}
+  <!-- init first loop -->
+{%endcomment%}
+{% if info_section_subsection == delim %}
+  {% assign index_deb_subsection = 0 %}
+  {% assign index_deb_items = 0 %}
+{% endif %}
+
+
+{%comment%}
+  <!-- init each loop -->
+{%endcomment%}
+{% assign nb_subsection_max = 1 %}
+{% assign current_subsection = include.current_subsection %}
+{% assign url_ref_section = include.url_ref | remove_first: extension_section %}
+
+{% assign next_dist_children = dist_direct_desc | plus: 1 %}
+
+{% assign dist_adapt_subsection = dist_direct_desc | plus: 1 %}
+{% assign index_subsection = index_deb_subsection %}
+
+
+
+{% for index_dist in (1..include.max_dist_children) %}
+
+  {% assign current_dist_children =  next_dist_children %}
+  {% assign nb_subsection_filtered = 0 %}
+
+  {% for nb_subsection in (1..nb_subsection_max) %}
+
+    {%comment%}
+      <!-- adapt current_subsection, url_ref_section parent at dist > dist_direct_desc -->
+    {%endcomment%}
+    {% if current_dist_children > dist_adapt_subsection %}
+
+      {% assign subsection_part = section_display_subsection | remove_first: delim | split: delim %}
+      {% assign current_subsection = subsection_part[index_subsection] | plus: 0 %}
+      {% assign index_subsection = index_subsection | plus: 1 %}
+      {% assign item_loop_tmp = raw_items[current_subsection] %}
+      {% assign url_ref_section = item_loop_tmp.url | remove_first: extension_section %}
+    {% endif %}
+
+
+    {%comment%}
+      <!-- encap loop  -->
+    {%endcomment%}
+    {% assign items_display_loop = delim %}
+    {% assign section_display_loop = delim %}
+    {% include coll_ext/extract-sort-items/extract_items/subsection-loop.html
+      url_ref_parent=url_ref_section
+      dist_ref=current_dist_children
+      tab_index=include.array_index_part
+      tab_dist=include.array_dist_part
+      max_dist_children=include.max_dist_children%}
+
+    {%comment%}
+      <!-- extract info from loop -->
+    {%endcomment%}
+
+
+      {% assign  items_display_loop = items_display_loop | remove_first: delim %}
+      {% assign items_display_loop_part = items_display_loop | split: delim %}
+      {% assign items_display_loop_size = items_display_loop_part.size %}
+
+      {% assign dist_display = next_dist_children | minus: 1 %}
+
+      {% assign info_items_subsection = info_items_subsection | append: current_subsection | append: delim |
+          append: dist_display | append: delim | append: items_display_loop_size | append: delim | append: index_deb_items  | append: delim %}
+
+      {% assign items_display_subsection = items_display_subsection | append : items_display_loop %}
+
+      {% assign index_deb_items = index_deb_items | plus: items_display_loop_size %}
+
+
+
+      {% assign  section_display_loop = section_display_loop | remove_first: delim %}
+      {% assign section_display_loop_part = section_display_loop | split: delim %}
+      {% assign section_display_loop_size = section_display_loop_part.size %}
+      {% assign nb_subsection_filtered = nb_subsection_filtered | plus: section_display_loop_size %}
+
+      {% assign info_section_subsection = info_section_subsection | append: current_subsection | append: delim |
+          append: dist_display | append: delim | append: section_display_loop_size | append: delim |  append: index_deb_subsection  | append: delim %}
+
+      {% assign section_display_subsection = section_display_subsection | append : section_display_loop %}
+
+      {% assign index_deb_subsection = index_deb_subsection | plus: section_display_loop_size %}
+
+  {% endfor %} {%comment%}<!-- end loop nb_subsection -->{%endcomment%}
+
+
+  {%comment%}
+    <!-- ? new iteration to extract items on the next dist_children -->
+  {%endcomment%}
+  {% if nb_subsection_filtered > 0 %}
+    {% assign next_dist_children = next_dist_children | plus: 1 %}
+
+    {% assign nb_subsection_max = nb_subsection_filtered %}
+
+  {% endif %}
+
+
+  {% if next_dist_children == current_dist_children %}
+    {% break %}
+  {% endif %}
+
+
+{% endfor%}

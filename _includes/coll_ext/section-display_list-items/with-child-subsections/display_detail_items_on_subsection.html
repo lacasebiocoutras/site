@@ -1,0 +1,79 @@
+{%comment%}
+<!--
+  param in :
+    include
+      bornedeb
+      nb_items
+      tab_items
+      display_with_subsections
+      current_dist
+      subsection_ref_url
+      header
+      model_parent
+      model_current_section
+      current_extra_sort_type
+
+
+
+  var globale
+    array_index_item
+    raw_items
+    delim
+    no_child
+    info_section_subsection
+    nb_max_subsection
+
+  param out:
+
+
+bornedeb=deb_index_items
+nb_items=nb_items_at_dist
+tab_items=items_display_subsection_part
+
+ -->
+{%endcomment%}
+
+
+
+{% if include.nb_items > 0%}
+
+  {% assign list_items_extract = delim %}
+
+  {% assign bornedeb = include.bornedeb | plus: 0 %}
+  {% assign bornefin = include.nb_items | plus: 0 %}
+  {% assign iter_detail_max  = bornedeb | plus:bornefin | minus: 1  %}
+  {% for iter_detail in (bornedeb..iter_detail_max) %}
+    {% assign index_detail = include.tab_items[iter_detail] | plus: 0  %}
+    {% assign list_items_extract = list_items_extract | append: index_detail | append: delim %}
+  {% endfor %}
+
+
+  {% if include.display_with_subsections == true %}
+
+    {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+      header=null
+      list_items=list_items_extract
+      currentdist=include.current_dist
+      type_items=site.data.coll_ext.design.config.param.name_ref.detail_items
+      page_ref_url=include.subsection_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+
+  {% else %}
+
+    {% include coll_ext/section-display_list-items/direct-desc/main.html
+      list_index_extract=list_items_extract
+      page_ref_url=include.subsection_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+      currentdist=include.current_dist
+      title_detail_items=include.header
+    %}
+
+
+  {% endif %}
+
+{% endif %}

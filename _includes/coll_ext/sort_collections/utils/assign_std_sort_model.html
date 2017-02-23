@@ -1,0 +1,27 @@
+{%comment%}
+<!--
+  param in :
+    include.model_sort_type
+
+  param out: model_sort; voir /_data/param-config/sort_site-documents.yml
+
+-->
+ {%endcomment%}
+
+{% assign give_model_sort_type = site.data.coll_ext.config.sort_site-documents.config.default_sort %}
+
+{% if include.model_sort_type != null %}
+  {% for model_tmp in site.data.coll_ext.config.sort_site-documents.list-type-sort %}
+    {% if model_tmp.type == include.model_sort_type %}
+      {% assign give_model_sort_type = model_tmp.type %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for model_tmp in site.data.coll_ext.config.sort_site-documents.list-type-sort %}
+  {% if model_tmp.type == give_model_sort_type %}
+    {% assign model_sort = model_tmp %}
+    {% break %}
+  {% endif %}
+{% endfor %}

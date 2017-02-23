@@ -1,0 +1,75 @@
+---
+layout: post
+permalink: /newsletter/index.html
+title: "Newsletter La Case Bio"
+description : Formulaire pour s'abonner à la newsletter.
+model: 
+---
+
+
+{% comment %} extract information-utiles from collection nos_informations{% endcomment %}
+{% include coll_ext_utils/extract_info-collection_newsletter-page.html %}
+
+<div class="list-items case-list-unresize li-unresize-nobg-secondarycolor">
+  <ul class="Grid Grid--gutters-m">
+    {% if textIntroNewsletter != null and textIntroNewsletter != '' %}
+      <li class="item_list Grid-cell u-full u-med-1of2-m u-large-1of3-m force-bg-2color">
+          {{textIntroNewsletter}}
+      </li>
+    {% endif %}
+      
+    <li class="item_list Grid-cell u-full u-med-1of2-m u-large-1of3-m force-bg-2color">    
+
+      <form name="sentMessage" id="contactForm" >
+
+          <input type="hidden" name="options[gotcha]" id="gotcha" value="">
+          
+          <div class="row control-group">
+              <div class="form-group col-xs-12 form-group controls">
+                  <input name="fields[email]" type="email" class="form-control" placeholder="Email*" id="email" aria-describedby="email_help" required data-validation-required-message="Renseigner votre adresse mail">
+                  {% comment %}<small id="email_Help" class="form-text text-muted help-block text-danger">* Required. We'll never share your email with anyone else.</small>{% endcomment %}
+                  <small id="emailHelp" class="form-text text-muted help-block text-danger">En aucun cas, vos données personnelles ne sont divulguées.</small>
+              </div>
+          </div>
+          <div class="row control-group">
+              <div class="form-group col-xs-12 form-group controls">
+                  <input name="fields[name]" type="text" class="form-control" placeholder="Nom de contact" id="name">          
+              </div>
+          </div>
+          <div class="row control-group">
+              <div class="form-group col-xs-12 form-group controls">
+                  <textarea name="fields[message]" rows="2" class="form-control" placeholder="Message" id="message" ></textarea>
+              </div>        
+          </div>
+          <div class="row control-group">
+              <div class="form-group col-xs-12 form-group controls">
+                <div class="radio">
+                  <label><input type="radio" name="fields[subscribe]" checked="checked" id="subscribe">S'abonner</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" name="fields[subscribe]" >Se désinscrire</label>
+                </div>                
+              </div>        
+          </div>
+           <div class="row control-group">
+              <div class="form-group col-xs-12 form-group controls">
+                <div class="g-recaptcha" id="recaptcha" data-theme="light" data-sitekey="6Ld_tRYUAAAAAHUpMCnZd2i0yiYm-tC1LiY_gsg1"></div>
+              </div>
+          </div>    
+
+          <!-- <br> -->
+          <div id="success"></div>
+          <div class="row">
+              <div class="form-group col-xs-12">
+                  <button type="submit" class="btn btn-default">Envoyer</button>
+                  <!-- <button type="submit" class="btn btn-default">Je m'abonne</button> -->
+              </div>
+          </div>
+      </form>
+
+    </li>
+  </ul>
+</div>
+
+
+<script src='https://www.google.com/recaptcha/api.js?hl=fr'></script>

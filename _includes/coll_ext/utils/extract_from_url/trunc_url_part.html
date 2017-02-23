@@ -1,0 +1,81 @@
+{%comment%}
+<!--
+  param in :
+    include
+      url
+      delim_id
+      trunc_url_part
+
+  var global:
+    extension_item
+    extension_section
+
+ param out : id_url_trunc
+-->
+<!-- each id, extract from url section (uniq), need to be uniq on each page, and compress! -->
+
+<!--
+V0.1 : some limit but..
+sante-bien-etre : sante-bien-etre/index.html
+alonmaue29 : /alimentation/marche-biologique/index.html
+alonmauefresfrtsleon73 : /alimentation/marche-biologique/fruits-et-legumes/fruits/les-fraises-de-saison/index.html
+
+-->
+{%endcomment%}
+
+{% assign id_url_trunc = '' %}
+
+{% assign extension_item = site.collections_ext.path_extension_item %}
+{% assign extension_section = site.collections_ext.path_extension_section %}
+
+
+{% assign url_item_tmp = include.url | remove_first: extension_section | remove_first: extension_item  %}
+{% assign url_item_part_tmp = url_item_tmp | remove_first: '/' | split: '/' %}
+{% assign url_item_size_tmp = url_item_part_tmp.size | minus: 1  %}
+
+{% comment %}
+{% assign url_item_tmp = url_item_tmp | remove: '/' | remove: '-' %}
+{% assign md5_url = url_item_tmp | md5 }}  %}
+{% endcomment %}
+
+{% if url_item_size_tmp == 0  %}
+  {% assign id_url_trunc = url_item_part_tmp[url_item_size_tmp] %}
+
+{% else %}
+
+  {% assign url_part_size_sum = 0  %}
+
+  {% for iter_url_item in (0..url_item_size_tmp)  %}
+
+    {% assign url_part = url_item_part_tmp[iter_url_item] %}
+    {% assign url_part_size = url_part.size %}
+
+    {% assign url_part_size_sum = url_part_size_sum | plus: url_part_size  %}
+
+
+    {% assign url_part_trunc_deb = url_part | slice: 0, include.trunc_url_part %}
+    {% assign slice_end_inf = url_part_size | minus: include.trunc_url_part %}
+    {% assign url_part_trunc_end = url_part | slice: slice_end_inf, include.trunc_url_part %}
+
+
+    {% comment %}
+      {% assign url_trunc_part = url_part_trunc_deb | append: url_part_size | append: url_part_trunc_end %}
+    {% endcomment %}
+    {% comment %}<!-- !! add url_part_size_sum at the end --> {% endcomment %}
+    {% assign url_trunc_part = url_part_trunc_deb | append: url_part_trunc_end %}
+
+    {% if id_url_trunc == '' %}
+      {% assign id_url_trunc = url_trunc_part %}
+    {% else %}
+      {% comment %}{% assign id_url_trunc = id_url_trunc | append: include.delim_id | append: url_trunc_part %}{% endcomment %}
+      {% comment %}<!-- !! don't add delim_id betwwen iter--> {% endcomment %}
+      {% assign id_url_trunc = id_url_trunc | append: url_trunc_part %}
+    {% endif %}
+  {% endfor %}
+
+  {% if url_part_size_sum > 0 %}
+    {% assign id_url_trunc = id_url_trunc | append: url_part_size_sum %}
+  {% endif %}
+
+
+{% endif %}

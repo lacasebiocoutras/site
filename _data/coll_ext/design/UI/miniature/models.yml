@@ -1,0 +1,34 @@
+- model: 'container-default'
+  config_display:
+    model: 'default'
+    add_url_section_in_container: false
+    add_text_section_in_container: 'visiter le rayon'
+    add_url_detail_item_in_container: false
+    add_text_detail_item_in_container: 'article complet'
+  styling:
+    container: 'min_container'
+    container_color:
+    article: 'min_body'
+
+- model: 'container-selection_produits'
+  config_display:
+    model: 'default'
+    add_url_section_in_container: false
+    add_text_section_in_container: 'visiter le rayon'
+    add_url_detail_item_in_container: false
+    add_text_detail_item_in_container: 'article complet'
+  styling:
+    container: 'min_container_selection_produits'
+    container_color:
+    article: 'min_body'
+
+- model: 'container-sub-default'
+  config_display:
+    model: 'default'
+    add_url_section_in_container: false
+    add_text_section_in_container:
+  styling:
+    container: 'min_container'
+    container_color:
+    article: 'min_body'
+

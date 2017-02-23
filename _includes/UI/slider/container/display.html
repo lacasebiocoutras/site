@@ -1,0 +1,226 @@
+{%comment%}
+<!--
+  param in :
+    include
+      before
+      container_slider_display
+      container_slider_ref
+      type_slider
+      id_slider
+      nb_items
+      share-container-betw-car
+      delim_id
+      page_ref_url
+      display_header
+      add_url_to_header
+      header
+      list_items_sub , specific subsections, coll_ext
+
+  var global :
+    site.data.scss_liquid
+    site.data.coll_ext.config
+    include/scss-liquid
+    raw_items
+
+  param out :
+
+
+
+-->
+{%endcomment%}
+
+{% assign delim_array = site.data.coll_ext.config.common.delimitator.array %}
+
+{% comment %}
+  <!-- init optim html scss liquid class, global -->
+{% endcomment %}
+{% include scss-liquid/optim/list-class.html
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+  delim_array=delim_array
+%}
+
+{% assign nb_items = include.nb_items | plus: 0 %}
+
+{% assign type_id_slider = include.type_slider | append: include.delim_id | append: include.id_slider %}
+
+
+{% if include.before == true %}
+
+  {% include scss-liquid/optim/class.html class_gl='containerSlider_gl' %}
+  {% assign class_container = class_gl %}
+
+  {% assign class_container = class_container | append: include.delim_id | append: include.container_slider_display | append: include.delim_id | append: include.type_slider %}
+  {% if include.share-container-betw-car != true %}
+    {% assign class_container = class_container | append: include.delim_id | append: include.id_slider %}
+  {% endif %}
+  {% comment %}
+    <!-- note : with opacity, common class container for n-max slider with specific ids, add class class_extra_slider for each case -->
+  {% endcomment %}
+  {% include scss-liquid/optim/class.html class_gl='slider_gl' %}
+  {% assign class_slider = class_gl  %}
+
+  {% assign class_extra_slider = '' %}
+  {% if include.share-container-betw-car == true %}
+    {% assign class_extra_slider = class_slider | append: include.delim_id| append: type_id_slider %}
+  {% endif %}
+
+
+  {% assign add_class_loop = "toogle-switch slider-loop loop-" | append: include.id_slider %}
+
+  <div class="{{class_container}}">   
+
+    <div class="heading">
+      {% if include.display_header == true %}        
+
+        <h3>
+          {% if include.add_url_to_header == true %}
+            <a  href="{{site.baseurl}}{{include.page_ref_url}}">
+              {{include.header}} 
+            </a>
+          {% else %}
+            {{include.header}} 
+          {% endif %} 
+
+          <label class="{{add_class_loop}}">
+            <input type="checkbox">
+            <div class="slider round"></div>
+          </label>
+        </h3>
+        
+      {% else %}
+        <label class="{{add_class_loop}}">
+          <input type="checkbox">
+          <div class="slider round"></div>
+        </label>
+      {% endif %}  
+    </div> <!-- end class "heading" -->
+    
+
+    <div class="{{class_slider}} {{class_extra_slider}}">
+
+
+      {% for num_slider in (1..nb_items)  %}
+        <input type="radio" id="{{type_id_slider}}-{{num_slider}}" name="{{type_id_slider}}[]" {% if forloop.first %} checked {% endif %} >
+      {% endfor %}
+
+
+
+      {% if include.container_slider_ref == site.data.scss_liquid.UI.slider.config.container.coll_ext %}
+
+        {% assign flag_miniature_sub = false  %}
+        {% if include.list_items_sub != null and include.list_items_sub != delim_array %}
+          {% assign flag_miniature_sub = true  %}
+          {% assign array_items_sub = include.list_items_sub | remove_first: delim_array | split: delim_array  %}
+        {% endif%}
+
+        {% include scss-liquid/optim/class.html class_gl='active_gl' %}
+        <ul class="{{class_gl}} Grid">
+        {% for num_slider in (1..nb_items)  %}
+          <li class=" Grid-cell Grid-cell--autoSize">
+            <label for="{{type_id_slider}}-{{num_slider}}">
+
+
+              {% if flag_miniature_sub == true %}
+
+                {% assign index_item_sub =  array_items_sub[forloop.index0] | plus: 0 %}
+                {% assign item_sub = raw_items[index_item_sub] %}
+
+                {% comment %}add background-color if defined in meta style, border-color{% endcomment %}
+                {% assign style_custom = '' %}               
+                {% if item_sub.border-color %}
+                  {% assign style_custom = style_custom | append: 'background-color:' | append: item_sub.border-color | append: ';'  %}
+                  {% assign style_custom = style_custom | append: 'border-color:' | append: item_sub.border-color | append: ';'  %}
+                  {% comment %}add background-image gradient{% endcomment %}
+                  {% assign lighten_color_hex = ''%}
+                  {% include coll_ext_utils/color/lighten.html
+                    color_hex=item_sub.border-color 
+                    pourcent=50
+                  %}
+                  {% comment %}
+                  {% assign darken_color_hex = ''%}
+                  {% include coll_ext_utils/color/darken.html
+                    color_hex=item_sub.border-color 
+                    pourcent=50
+                  %}
+                  {% endcomment %}
+                  {% assign style_custom = style_custom | append: 'background-image: linear-gradient(to bottom,' | append: item_sub.border-color | append: ',' | append: lighten_color_hex | append: ');'  %}
+                {% endif %}
+               
+                {% comment %}<button class="miniature" ">
+                  <p>{{item_sub.title}}x5</p>
+                </button>{% endcomment %}               
+
+                <div class="miniature" style="{{style_custom}}">
+                  <p><strong>{{item_sub.title}}</strong></p>
+                </div>
+
+              {% else %}
+                <div class="radius"></div>
+              {% endif %}
+
+              {% comment %}
+              {% if item.miniature %}
+                {% picture miniature {{item.miniature}} alt="image {{item.title}}"  %}
+              {% endif %}
+              {% endcomment %}
+
+            </label>
+          </li>
+        {% endfor %}
+        </ul>
+
+      {% endif %}
+
+
+
+
+      {% include scss-liquid/optim/class.html class_gl='slides_gl' %}
+      <ul class="{{class_gl}}">
+
+        {% include scss-liquid/optim/class.html class_gl='overflow_gl' %}
+        <div class="{{class_gl}}">
+
+          {% include scss-liquid/optim/class.html class_gl='inner_gl' %}
+          <div class="{{class_gl}}">
+
+
+{% else %}
+
+
+          </div><!-- .inner -->
+        </div> <!-- .overflow -->
+      </ul> <!-- .slides -->
+
+
+
+      {% include scss-liquid/optim/class.html class_gl='controls_gl' %}
+      <div class="{{class_gl}}">
+
+        {% for num_slider in (1..nb_items)  %}
+
+          <label for="{{type_id_slider}}-{{num_slider}}" style="{{include.style_prev_next}}" ></label>
+        {% endfor %}
+      </div>
+
+
+      {% if include.container_slider_ref != site.data.scss_liquid.UI.slider.config.container.coll_ext %}
+
+        {% include scss-liquid/optim/class.html class_gl='active_gl' %}
+        <div class="{{class_gl}}">
+
+          {% for num_slider in (1..nb_items)  %}
+
+            <label for="{{type_id_slider}}-{{num_slider}}">
+
+            </label>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div> <!-- .slider  -->
+  </div> <!-- .container  -->
+
+
+
+{% endif %}

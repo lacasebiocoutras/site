@@ -1,0 +1,40 @@
+
+{%comment%}<!--
+param in :
+  include.day_toconvert : 'lundi', 'monday', ... (invariant fr, en)
+param out :
+  new_day_convert
+  new_date_convert_num
+-->{%endcomment%}
+
+{% assign new_date = include.day_toconvert | strip | downcase %}
+
+{% if new_date contains 'dim' or new_date contains 'sun' %}
+  {% assign new_day_convert = 'sunday' %}
+  {% assign new_date_convert_num = 0 %}
+
+{% elsif new_date contains 'lun' or new_date contains 'mon' %}
+  {% assign new_day_convert = 'monday' %}
+  {% assign new_date_convert_num = 1 %}
+
+{% elsif new_date contains 'mar' or new_date contains 'tue' %}
+  {% assign new_day_convert = 'tuesday' %}
+  {% assign new_date_convert_num = 2 %}
+
+{% elsif new_date contains 'mer' or new_date contains 'we' %}
+  {% assign new_day_convert = 'wednesday' %}
+  {% assign new_date_convert_num = 3 %}
+
+{% elsif new_date contains 'je' or new_date contains 'th' %}
+  {% assign new_day_convert = 'thursday' %}
+  {% assign new_date_convert_num = 4 %}
+
+{% elsif new_date contains 'ven' or new_date contains 'fr' %}
+  {% assign new_day_convert = 'friday' %}
+  {% assign new_date_convert_num = 5 %}
+
+{% elsif new_date contains 'sa' %}
+  {% assign new_day_convert = 'saturday' %}
+  {% assign new_date_convert_num = 6 %}
+{% endif %}
+

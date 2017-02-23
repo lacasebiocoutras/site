@@ -1,0 +1,45 @@
+{%comment%}
+<!--
+  param in :
+    include
+      name_extra
+      optim_class_css
+      config_optim_css
+      force_compress (optional, true or false)
+
+  var global :
+
+  param out :
+    extra_compress
+
+-->
+{%endcomment%}
+
+{% assign config = include.config_optim_css %}
+{% assign mode_compress = config.list_mode.compress %}
+
+
+{% assign name_extra = include.name_extra | append: '' %}
+{% assign extra_compress = name_extra %}
+
+
+{% assign list_extra = include.optim_class_css.extra %}
+
+{% assign do_compress = false %}
+{% if config.mode == mode_compress %}
+  {% assign do_compress = true  %}
+{% endif %}
+
+{% if include.force_compress == true  %}
+  {% assign do_compress = include.force_compress  %}
+{% endif %}
+
+{% if do_compress == true %}
+  {% for i_name_extra in list_extra %}
+    {% if i_name_extra.default == name_extra %}
+      {% assign extra_compress = i_name_extra.compress %}
+      {% break %}
+
+    {% endif %}
+  {% endfor %}
+{% endif %}

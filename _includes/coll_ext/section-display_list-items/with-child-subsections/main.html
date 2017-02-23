@@ -1,0 +1,91 @@
+{%comment%}
+<!--
+  param in :
+    include
+      model_parent
+      model_current_section
+      current_extra_sort_type
+      page_ref_url
+      page_ref_title
+      page_ref_title_last_section
+
+
+
+
+    todo : page.title-last-section
+
+  var globale
+    config/common-param
+    raw_items
+    items_display_current_section
+    section_display_subsection
+    info_section_subsection
+    items_display_subsection
+    info_items_subsection
+
+  param out:
+
+ -->
+{%endcomment%}
+
+
+
+{% assign sub_first = include.model_parent.subsections_first %}
+
+
+{%comment%}
+  <!-- step1 : display detail items at dist 0, before subsections, or could be after  -->
+{%endcomment%}
+{% unless sub_first != null and sub_first != false %}
+  {% if items_display_current_section != delim %}
+    {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+      header=include.page_ref_title_last_section
+      list_items=items_display_current_section
+      currentdist=0
+      diff_dist_section=0
+      type_items=site.data.coll_ext.design.config.param.name_ref.detail_items
+      page_ref_url=include.page_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+  {% endif %}
+{% endunless %}
+
+
+
+
+{%comment%}
+  <!-- step2 : display subsections  -->
+{%endcomment%}
+
+{% if info_section_subsection != delim %}
+  {% include coll_ext/section-display_list-items/with-child-subsections/subsections.html
+    model_parent=include.model_parent
+    model_current_section=include.model_current_section
+    current_extra_sort_type=include.current_extra_sort_type
+    page_ref_url=include.page_ref_url
+    page_ref_title=include.page_ref_title
+  %}
+{% endif %}
+
+
+{%comment%}
+  <!-- step1 bis : display detail items of the current page/section, after subsections -->
+{%endcomment%}
+
+{% if sub_first != null and sub_first != false %}
+  {% if items_display_current_section != delim %}
+    {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+      header=include.page_ref_title_last_section
+      list_items=items_display_current_section
+      currentdist=0
+      diff_dist_section=0
+      type_items=site.data.coll_ext.design.config.param.name_ref.detail_items
+      page_ref_url=include.page_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+  {% endif %}
+{% endif %}

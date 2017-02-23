@@ -1,0 +1,23 @@
+{% comment %} recup content from collection nos_informations/page-acceuil{% endcomment %}
+{% include coll_ext/config/common-param.html %}
+
+
+{% for collection in site.collections %}
+  {% if collection.label == 'nos-informations' %}
+    {% assign raw_items = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign items_tmp = raw_items | sort: 'order' %}
+
+{% assign cpt_images_acceuil = 0 %}
+
+{% for item_tmp in items_tmp %}
+
+  {% if item_tmp.path contains '/informations-utiles/introduction-newsletter.md' %} 
+    {% if item_tmp.order < 100 %}
+      {% assign textIntroNewsletter = item_tmp.content %} 
+    {% endif %}
+  {% endif %}  
+
+{% endfor %}

@@ -1,0 +1,63 @@
+{%comment%}<!-- filtering file extension -->{%endcomment%}
+{% assign extension_item = site.collections_ext.path_extension_item %}
+{% assign extension_section = site.collections_ext.path_extension_section %}
+
+{% assign collection_name_navig = page.path | split: '/' %}
+{% assign collection_name_navig = collection_name_navig[0] | remove_first: '_' %}
+{% for collection in site.collections %}
+  {% if collection.label == collection_name_navig %}
+    {% assign raw_items_navig = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% comment %}<div class="path-navig">
+{% endcomment %}{% comment %}<ul class="Grid Grid--gutters-m u-spaceVN">{% endcomment %}
+<ul class="path-navig Grid">
+  <li class="Grid-cell--autoSize">
+    <span><a href="{{site.baseurl}}/" title="{{include.title}}"><div class="{{include.class_logo}}"></div></a></span>
+    {% assign url_item_part = page.url | remove_first: extension_section | split: '/' %}
+
+    {% assign url_item_size = url_item_part.size | minus: 2 %}
+
+    {% if url_item_size > 0 %}
+      {% assign url_tmp = '' %}
+      {% for i in (1..url_item_size) %}
+        {% assign url_tmp = url_tmp | append: '/' | append: url_item_part[i] %}
+        {% assign url_item_tmp = url_tmp | append: extension_section %}
+
+        {% assign items_tmp = raw_items_navig %}
+        {% for item_tmp in items_tmp %}
+          {% if item_tmp.url == url_item_tmp %}
+            {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+            {% if model_subsection.hide-page == null or  model_subsection.hide-page == false %}
+              {% assign title_no_space = item_tmp.title | replace: ' ','&nbsp;' %}
+
+              <span>&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"><a href="{{site.baseurl}}{{item_tmp.url}}">&nbsp;{{title_no_space}}</a></i></span>
+
+            {% endif %}
+           {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    {% endif %}
+  </li>
+  {% if page.title %}
+    <li class="Grid-cell Grid-cell--bottom">
+      {% assign title_no_space = page.title | replace: ' ','&nbsp;' %}
+      {% if include.force_title_h2 == true %} 
+        <h2>
+      {% else %}
+        <h1>
+      {% endif %}
+      
+        &nbsp;<i class="fa fa-chevron-right" aria-hidden="true">&nbsp;{{title_no_space}}</i>
+        
+      {% if include.force_title_h2 == true %} 
+        </h2>
+      {% else %}
+        </h1>
+      {% endif %}
+    </li>
+  {% endif %}
+</ul>

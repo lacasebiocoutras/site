@@ -1,0 +1,54 @@
+{%comment%}<!--
+param in :
+  include.color_hex
+  include.pourcent
+param out :
+  lighten_color_hex
+ -->{%endcomment%}
+
+{% assign color_hex =  include.color_hex | replace:'#','' %}
+{% assign rgb = color_hex | hex_to_rgb %}
+
+{% assign red_raw =  rgb[0] | plus: 0 %}
+{% assign green_raw =  rgb[1] | plus: 0 %}
+{% assign blue_raw =  rgb[2] | plus: 0 %}
+
+
+{% comment %}add lumin on each component rgb{% endcomment %}
+{% assign pourcent =  include.pourcent | plus: 100 %}
+{% assign red = red_raw | times : pourcent | divided_by: 100 %}
+{% if red > 255 %}
+	{% assign red = 255 %}
+{% endif %}
+{% assign green = green_raw | times : pourcent | divided_by: 100  %}
+{% if green > 255 %}
+	{% assign green = 255 %}
+{% endif %}
+{% assign blue = blue_raw | times : pourcent | divided_by: 100  %}
+{% if blue > 255 %}
+	{% assign blue = 255 %}
+{% endif %}
+
+{% comment %}convert to hex{% endcomment %}
+{% assign red_hex =  red | dec_to_hex %}
+{% assign green_hex =  green | dec_to_hex %}
+{% assign blue_hex =  blue | dec_to_hex %}
+
+{% assign lighten_color_hex = '' %}
+{% assign hex_raw = red_hex | slice: 2,3 %}
+{% if hex_raw.size == 1 %}
+	{% assign hex_raw = hex_raw | prepend: '0' %}
+{% endif %}
+{% assign lighten_color_hex = lighten_color_hex | append: hex_raw %}
+{% assign hex_raw = green_hex | slice: 2,3 %}
+{% if hex_raw.size == 1 %}
+	{% assign hex_raw = hex_raw | prepend: '0' %}
+{% endif %}
+{% assign lighten_color_hex = lighten_color_hex | append: hex_raw %}
+{% assign hex_raw = blue_hex | slice: 2,3 %}
+{% if hex_raw.size == 1 %}
+	{% assign hex_raw = hex_raw | prepend: '0' %}
+{% endif %}
+{% assign lighten_color_hex = lighten_color_hex | append: hex_raw %}
+
+{% assign lighten_color_hex = lighten_color_hex | prepend: '#' %}

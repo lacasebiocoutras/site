@@ -1,0 +1,58 @@
+/* The switch - the box around the slider */
+.toogle-switch {
+  position: relative;
+  display: inline-block;  
+  width: 2em;
+  height: 1em;
+  padding-right: 0.75em;
+  margin-left: 0.25em;
+
+  /* Hide default HTML checkbox */
+  input {display:none;}
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $primary-color-light; //#ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";   
+    height: 0.75em;
+    width: 0.75em;
+    left: 0.125em;
+    bottom: 0.125em;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  // input:focus + .slider {
+  //   box-shadow: 0 0 1px #2196F3;
+  // }
+
+  input:checked + .slider:before {
+    transform: translateX(0.75em);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 1em;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+}

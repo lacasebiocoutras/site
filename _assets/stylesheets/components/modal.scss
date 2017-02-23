@@ -1,0 +1,248 @@
+/* CSS */
+// .cModal {
+
+//   visibility: hidden;
+//   display:none;
+// }
+
+// .cModal:target {
+
+//   visibility: visible;
+//   display:block;
+// }
+
+.cf:before,
+.cf:after {
+  content:"";
+  display:table;
+}
+.cf:after {
+  clear:both;
+}
+.droite {
+  float:right;
+}
+
+.oModal {
+  position: fixed;
+  z-index: -99999;
+  visibility: hidden;
+  pointer-events: none;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  // background-opacity: 0.5;
+  // background-color: $secondary-color;
+
+
+  //original, from http://www.trucsweb.com/tutoriels/css/css-modal/
+  // voir ajout js esc, block scroll avec overflow--hiden
+  // ex ajout audio dans modal : http://www.parolier.be/
+
+  //note : pb avec animation en sortie, flash suite f5
+
+  // position: fixed;
+  // z-index: 99999;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  // left: 0;
+  // background: rgba(0, 0, 0, 0.8);
+  // opacity:0;
+  // -webkit-transition: opacity 400ms ease-in;
+  // -moz-transition: opacity 400ms ease-in;
+  // transition: opacity 400ms ease-in;
+  // pointer-events: none;
+
+
+  //https://css-tricks.com/receding-background-modal-boxes/
+}
+
+.oModal:target {
+
+  z-index: 99999;
+  visibility: visible;
+  pointer-events: auto;
+  @include animationCustom(fadeIn, 1.5s);
+
+  //original
+  // opacity:1;
+  // pointer-events: auto;
+}
+
+.oModal:target > div {
+  margin: 10% auto;
+
+
+  // transition: all 0.4s ease-in-out;
+  // -moz-transition: all 0.4s ease-in-out;
+  // -webkit-transition: all 0.4s ease-in-out;
+}
+
+.oModal > div {
+
+  position: relative;
+  max-width: 600px;
+  max-height: 400px;
+  overflow-y: auto;
+
+  margin: 1% auto;
+  padding: 8px 8px 8px 8px;
+  border-radius: 5px;
+  background: #eee;
+
+  // transition: all 0.4s ease-in-out;
+  // -moz-transition: all 0.4s ease-in-out;
+  // -webkit-transition: all 0.4s ease-in-out;
+
+
+
+}
+
+.oModal > div header,.oModal > div footer {
+  border-bottom: 1px solid #e7e7e7;
+  border-radius: 5px 5px 0 0;
+
+  a {
+    color: #7aa76d;
+    text-decoration: none;
+
+    -webkit-transition: 0.15s color ease;
+       -moz-transition: 0.15s color ease;
+        -ms-transition: 0.15s color ease;
+         -o-transition: 0.15s color ease;
+            transition: 0.15s color ease;
+  }
+  a:hover {
+      color: #91cd85;
+  }
+}
+.oModal .footer {
+  border:none;
+  border-top: 1px solid #e7e7e7;
+  border-radius: 0 0 5px 5px;
+}
+
+.oModal > div h2 {
+  margin:0;
+}
+
+.oModal > div .btn {
+  float:right;
+}
+
+.oModal > div section,.oModal > div > header, .oModal > div > footer {
+  padding:15px;
+}
+
+// .boxmodal {
+//   width: 150px;
+//   height: 150px;
+//   background: red;
+//   margin-top: 20px;
+//   margin-left: auto;
+//   margin-right: auto;
+// }
+
+// .boxmodal:hover {
+//   background-color: green;
+//   cursor: pointer;
+//   // transition: background-color 2s ease-out 2s;
+
+
+//   animation: 3s ease-in 1s 2 reverse both paused fadeIn;
+// }
+
+
+// .contentModal {
+
+//   visibility: hidden;
+
+//   position:fixed;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   z-index:1000;
+//   background: rgba(0, 0, 0, 0.8);
+//   opacity:0;
+//   -webkit-transition: opacity 200ms ease-in;
+//   -moz-transition: opacity 200ms ease-in;
+//   transition: opacity 200ms ease-in;
+//   pointer-events: none;
+// }
+// .contentModal:target {
+
+//   visibility: visible;
+//   opacity:1;
+//   pointer-events: auto;
+// }
+
+// .contentModal:target > div {
+//   margin: 10% auto;
+
+
+//   // transition: all 0.4s ease-in-out;
+//   // -moz-transition: all 0.4s ease-in-out;
+//   // -webkit-transition: all 0.4s ease-in-out;
+// }
+
+// .contentModal > div {
+
+//   position: relative;
+//   max-width: 600px;
+//   max-height: 400px;
+//   overflow-y: auto;
+
+//   margin: 1% auto;
+//   padding: 8px 8px 8px 8px;
+//   border-radius: 5px;
+//   background: #eee;
+
+//   // transition: all 0.4s ease-in-out;
+//   // -moz-transition: all 0.4s ease-in-out;
+//   // -webkit-transition: all 0.4s ease-in-out;
+
+
+
+// }
+
+// .contentModal > div header,.contentModal > div footer {
+//   border-bottom: 1px solid #e7e7e7;
+//   border-radius: 5px 5px 0 0;
+
+//   a {
+//     color: #7aa76d;
+//     text-decoration: none;
+
+//     -webkit-transition: 0.15s color ease;
+//        -moz-transition: 0.15s color ease;
+//         -ms-transition: 0.15s color ease;
+//          -o-transition: 0.15s color ease;
+//             transition: 0.15s color ease;
+//   }
+//   a:hover {
+//       color: #91cd85;
+//   }
+// }
+// .contentModal .footer {
+//   border:none;
+//   border-top: 1px solid #e7e7e7;
+//   border-radius: 0 0 5px 5px;
+// }
+
+// .contentModal > div h2 {
+//   margin:0;
+// }
+
+// .contentModal > div .btn {
+//   float:right;
+// }
+
+// .contentModal > div section,.contentModal > div > header, .contentModal > div > footer {
+//   padding:15px;
+// }
+

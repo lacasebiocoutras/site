@@ -1,0 +1,41 @@
+{%comment%}
+<!--
+  param in :
+    include
+      name_id_to_target
+      index_to_target
+      delim
+    nb_modal_id_gl  , see collection_ext/section-display_detail_items-main_container/modal/init_modal_current_page.html
+    list_modal_id_gl
+    list_modal_index_item_gl
+
+  global :
+    site.data.coll_ext.design.UI.modal.config
+
+
+  param out :
+    name_id_target
+    nb_modal_id_gl , updated
+    list_modal_id_gl
+    list_modal_index_item_gl
+
+
+
+
+-->
+{%endcomment%}
+
+
+{% assign prefixe_id_target = site.data.coll_ext.design.UI.modal.config.default_prefixe_id_target %}
+{% assign name_id_close = site.data.coll_ext.design.UI.modal.config.default_id_close %}
+
+{% if include.name_id_to_target != null %}
+  {% assign name_id_target = prefixe_id_target | append: include.name_id_to_target  %}
+{% else %}
+  {% assign name_id_target = prefixe_id_target | append: include.index_to_target  %}
+{% endif %}
+
+
+{% assign nb_modal_id_gl = nb_modal_id_gl | plus: 1  %}
+{% assign list_modal_id_gl = list_modal_id_gl | append: name_id_target | append: include.delim %}
+{% assign list_modal_index_item_gl = list_modal_index_item_gl | append: include.index_to_target | append: include.delim %}

@@ -1,0 +1,35 @@
+model: 'default'
+
+design_model_page: 'default-list_flex'
+design_detail_items: 'miniature-default'
+
+config_container_detail:
+  force_url_with_id: false
+# config_article_detail:
+# config_container_list:
+#  force_page_title_dist_0: false
+# config_article_list:
+  # visible with js, or noscript, force visible
+#   add_class_invisible: false
+#   force_header_with_button: true
+#   force_header_with_button_class_button: 'catSearch'
+#   force_header_with_button_class_heading: 'termSearch'
+
+# param to allow the content items to be displayed in the parent
+display_items_on_parent: false
+# how many children to display if display_items_on_parent: true on child sections
+dist_display_children: 1
+# force details items in child at a given dist
+activate_force_details: false
+dist_force_details: 1
+# flag to update design model on a child, for detail items
+activate_current_model_detail_on_child: false
+force_current_model_detail_on_parent: false
+# config to hide page when page is displayed on a parent (display_items_on_parent=true)
+hide-page: false
+# display direct desc items, at dist 0, with priority mix > subsections_first
+mix_details_subsections_items: false
+subsections_first: false
+# display  items on child, dist > 0, with priority mix > subsections_first
+mix_details_subsections_items_on_child: false
+subsections_first_on_child: false

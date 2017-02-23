@@ -1,0 +1,25 @@
+model: 'notre-actualite-sections-list_flex'
+list-model-dist:
+  - dist: 0
+    list-model-type:
+      - type: ["detail_items", "subsection_items", "mix_items"]
+        design_model:
+          type: 'list_flex'
+          custom: 'items-default'
+
+      - type: ["subsections"]
+        design_model:
+          type: 'list_flex'
+          custom: 'notre-actu-subsections-dist0'
+
+  - dist: 1
+    list-model-type:
+      - type: ["detail_items", "subsection_items", "mix_items"]
+        design_model:
+          type: 'list_flex'
+          custom: 'notre-actu-items-dist1'
+
+      - type: ["subsections"]
+        design_model:
+          type: 'list_flex'
+          custom: 'subsections-default'

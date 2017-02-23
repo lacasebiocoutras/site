@@ -1,0 +1,38 @@
+{%comment%}<!--
+param in :
+  include.date, form : 1 december/décembre/dec/déc 2016, invariant english, french
+param out :
+  new_date_convert
+  new_date_convert_unix
+-->{%endcomment%}
+{% assign date_split = include.date | strip | downcase | split: ' ' %}
+
+{% assign day = date_split[0] %}
+{% assign daytemp = day %}
+{% if daytemp contains '1e' %}
+  {% assign day = '1' %}
+{% endif %}
+
+
+
+{% assign month = date_split[1] %}
+
+{% capture month_en %}
+  {% if month contains 'ja' %} january
+  {% elsif month contains 'f' %} february
+  {% elsif month contains 'mar' %} march
+  {% elsif month contains 'avr' or month contains 'apr' %} april
+  {% elsif month contains 'mai' or month contains 'may' %} may
+  {% elsif month contains 'juin' or month contains 'jun'%} june
+  {% elsif month contains 'juil' or month contains 'jul'%} july
+  {% elsif month contains 'ao' or month contains 'aug'%} august
+  {% elsif month contains 'sep' %} september
+  {% elsif month contains 'oc' %} october
+  {% elsif month contains 'nov' %} november
+  {% elsif month contains 'dec' or month contains 'déc' %} december
+  {% endif %}
+{% endcapture %}
+
+{% assign space = ' ' %}
+{% assign new_date_convert = day | append: space | append: month_en | append: space | append: date_split[2] %}
+{% capture new_date_convert_unix %}{{new_date_convert | date: '%s'}}{% endcapture %}

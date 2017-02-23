@@ -1,0 +1,41 @@
+{%comment%}<!--
+  param in :
+    include
+      list_sort_ref
+      array_to_sort
+      nb_elt_to_sort
+      delim
+
+  param out :
+    array_sort_ouput
+
+ -->{%endcomment%}
+
+{% assign array_to_sort = include.array_to_sort %}
+
+{% comment %}<!-- reference for resort -->{% endcomment %}
+{% assign array_sort_ref = include.list_sort_ref | remove_first: include.delim | split: include.delim  %}
+{% assign nb_sort_ref = array_sort_ref.size %}
+
+{% assign list_index_ref = include.delim  %}
+
+{% assign iter_max_items_sub = include.nb_elt_to_sort | minus: 1 %}
+{% for iter_items_sub in (0..iter_max_items_sub)  %}
+  {% assign items_sub_search = array_to_sort[iter_items_sub] | plus: 0 %}
+  {% assign iter_search_value = -1 %}
+  {% include coll_ext/utils/array/index_of_value_in_array_int.html
+    array_part=array_sort_ref
+    search_value=items_sub_search
+    nbElt=nb_sort_ref
+    period_array_nbElt=1
+    offsetDeb=0
+  %}
+  {% assign list_index_ref = list_index_ref | append: iter_search_value | append: include.delim  %}
+{% endfor %}
+{% assign array_index_ref = list_index_ref | remove_first: include.delim | split: include.delim  %}
+
+{% include coll_ext/utils/array/sort_array_2tab_min2max.html
+  tab1ref=array_index_ref
+  tab2=array_to_sort
+%}
+{% assign array_sort_ouput = tab2_sort %}

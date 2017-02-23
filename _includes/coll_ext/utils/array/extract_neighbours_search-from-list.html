@@ -1,0 +1,47 @@
+{%comment%}
+<!--
+param in :
+  include
+    search_value
+    list
+    period
+    offsetDeb
+    offsetNeighbours
+    delim
+
+
+param out :
+  list_elts
+-->
+{%endcomment%}
+
+{% assign search_value_tmp = include.search_value | append: ''  %}
+
+{% assign array_tmp = include.list | remove_first: delim | split: delim  %}
+{% assign array_size_tmp = array_tmp.size %}
+
+{% assign period_tmp = include.period | plus:0 %}
+{% assign nb_elt_tmp = array_size_tmp | divided_by: period_tmp | minus: 1 %}
+
+{% assign iter_search_value = include.offsetDeb | plus: 0 %}
+{% assign iterNeighbours = include.offsetNeighbours | plus: 0 %}
+
+{% assign list_elts = delim %}
+
+
+{% for i_tmp in (0..nb_elt_tmp) %}
+
+  {% assign string_tmp = array_tmp[iter_search_value] %}
+
+  {% if string_tmp ==  search_value_tmp %}
+    {% assign val_tmp = array_tmp[iterNeighbours] | plus: 0  %}
+    {% assign list_elts = list_elts | append : val_tmp | append : delim %}
+  {% endif %}
+
+
+
+ {% assign iter_search_value = iter_search_value | plus : period_tmp %}
+ {% assign iterNeighbours = iterNeighbours | plus : period_tmp %}
+
+{% endfor %}
+

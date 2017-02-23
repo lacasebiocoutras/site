@@ -1,0 +1,55 @@
+
+{%comment%}
+<!--
+  param in :
+    include
+      optim_class_css
+      config_optim_css
+      delim_array
+
+  var global :
+
+  param out : var globales xxx_gl, see below
+
+-->
+{%endcomment%}
+
+{% assign class_css = include.optim_class_css %}
+{% assign config = include.config_optim_css %}
+
+{% comment %}
+  <!-- variables globales optim css class_gl -->
+{% endcomment %}
+{% assign delim_gl = include.delim_array %}
+
+{% assign mode_gl = config.mode  %}
+{% assign mode_compress_ref_gl = config.list_mode.compress %}
+
+{% assign list_class_name_gl =  delim_gl %}
+{% assign list_class_default_gl =  delim_gl %}
+{% assign list_class_compress_gl =  delim_gl %}
+
+{% assign array_class_name_gl =  null %}
+{% assign array_class_default_gl =  null %}
+{% assign array_class_compress_gl =  null %}
+
+{% assign nb_class_name_gl = 0 %}
+
+
+{% comment %}
+  <!-- prepa -->
+{% endcomment %}
+{% assign list_class = class_css.list_class  %}
+
+{% for class in list_class %}
+  {% assign list_class_name_gl =  list_class_name_gl | append: class.name | append: delim_gl %}
+  {% assign list_class_default_gl =  list_class_default_gl | append: class.default | append: delim_gl %}
+  {% assign list_class_compress_gl =  list_class_compress_gl | append: class.compress | append: delim_gl %}
+{% endfor %}
+
+
+{% assign array_class_name_gl = list_class_name_gl | remove_first: delim_gl | split: delim_gl %}
+{% assign array_class_default_gl = list_class_default_gl | remove_first: delim_gl | split: delim_gl %}
+{% assign array_class_compress_gl = list_class_compress_gl | remove_first: delim_gl | split: delim_gl %}
+
+{% assign nb_class_name_gl = array_class_name_gl.size  %}

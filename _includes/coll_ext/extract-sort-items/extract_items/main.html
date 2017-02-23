@@ -1,0 +1,133 @@
+{%comment%}
+  <!--
+  param in :
+    include.array_index array_index_item
+    include.array_dist array_dist_children
+    include.page_model
+
+  var global
+    raw_items
+    extension_item
+    extension_section
+    delim
+
+  param out:
+    items_display_current_section
+
+   -->
+{%endcomment%}
+
+{%comment%}
+  <!-- common -->
+{%endcomment%}
+{% assign extension_item = site.collections_ext.path_extension_item %}
+{% assign extension_section = site.collections_ext.path_extension_section %}
+{% assign delim = site.data.coll_ext.config.common.delimitator.array %}
+
+{%comment%}
+  <!-- input : -->
+{%endcomment%}
+{% assign array_index_item_part = include.array_index | remove_first: delim | split: delim %}
+{% assign array_dist_children_item_part = include.array_dist | remove_first: delim | split: delim %}
+{% assign array_index_item_size = array_index_item_part.size | minus: 1 %}
+
+
+
+
+{%comment%}
+  <!-- det. max_dist_children, how many iteration max on subsections : -->
+{%endcomment%}
+{% capture max_dist_children %}
+   {% include coll_ext/utils/array/val_max_array_int.html
+    array=array_dist_children_item_part
+    size=array_index_item_size
+  %}
+{% endcapture %}
+{% assign max_dist_children = max_dist_children | plus: 0 %}
+{%comment%}
+  <!-- param of the model, from site.data.coll_ext.master_model : dist_display_children -->
+{%endcomment%}
+{% include coll_ext/config/model-subsections.html
+  modelSubsection=include.page_model
+%}
+{% assign dist_display_children = model_subsection.dist_display_children | plus: 0 %}
+{% if max_dist_children > dist_display_children %}
+  {% assign max_dist_children = dist_display_children %}
+{% endif %}
+
+
+
+
+
+{%comment%}
+  <!-- output : -->
+{%endcomment%}
+{% assign items_display_current_section = delim %}
+{% assign section_display_subsection = delim %}
+{% assign info_section_subsection = delim %}
+{% assign items_display_subsection = delim %}
+{% assign info_items_subsection = delim %}
+
+
+{% assign dist_direct_desc = 1 %}
+
+{% for index_item in (0..array_index_item_size) %}
+
+  {% assign dist_children = array_dist_children_item_part[index_item] | plus: 0  %}
+
+
+  {% if dist_children == dist_direct_desc %}
+
+    {% assign index_array_part = array_index_item_part[index_item] | plus: 0  %}
+    {% assign item_main_tmp = raw_items[index_array_part] %}
+
+    {%comment%}
+      <!-- default case : detailed items to be displayed on the current page (or section) -->
+    {%endcomment%}
+    {% assign display_detail = true %}
+
+
+    {% if item_main_tmp.url contains extension_section %}
+
+      {% include coll_ext/config/model-subsections.html
+        modelSubsection=item_main_tmp.model
+      %}
+
+      {% if model_subsection.display_items_on_parent != null and  model_subsection.display_items_on_parent != false and  dist_children <= max_dist_children %}
+        {%comment%}
+          <!-- EXTRA : encapsulation nth of subsections with option display_items_on_parent at true  -->
+          <!--
+            for each subsection with display_items_on_parent==true :
+
+            info_items_subsection : [index_item_raw | dist_children | nb_item_display | index_deb_list | ... ]
+            list items_display_subsection  :  items to display at each dist_children for each section with index_item_raw
+
+            info_section_subsection : [index_item_raw | dist_children | nb subsection with display_items_on_parent at true  | index_deb_list | .. ]
+            section_display_subsection :  subsection with display_items_on_parent at true at each dist_children
+          -->
+          <!-- if no child, info_items_subsection = delim-->
+        {%endcomment%}
+        {% assign display_detail = false %}
+        {% include coll_ext/extract-sort-items/extract_items/main-loop.html
+          array_dist_part=array_dist_children_item_part
+          array_index_part=array_index_item_part
+          current_subsection=index_array_part
+          url_ref=item_main_tmp.url
+          max_dist_children=max_dist_children%}
+
+      {% endif %}
+    {% endif %}
+
+
+    {%comment%}
+      <!-- default case : items of the current section -->
+    {%endcomment%}
+    {% if display_detail == true %}
+      {% assign items_display_current_section = items_display_current_section | append: index_array_part | append: delim %}
+    {% endif%}
+
+  {% endif %}
+{% endfor %}
+
+
+

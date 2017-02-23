@@ -1,0 +1,43 @@
+---
+layout: page
+permalink: /selection-produits/index.html
+title: Une sélection de nos produits
+description: Retrouvez notre sélection de produits bio, écologiques,... régulièrement mise à jour
+model: force_header_home
+---
+     
+{% for list in site.data.coll_ext.model_json.list-model-json %}
+  {% if list.id == 'categorie-recherche-selection-produits' %}
+
+    {% assign title_search = list.title  %}
+    
+
+    {% include coll_ext_utils/list-detail-items_init_step.html %}
+    {% include coll_ext/main.html
+      force_page_ref_input=true
+      force_display_no_details=true
+    %}
+
+    <ul class="Grid Grid--gutters-m ">
+      <li class="Grid-cell--autoSize "> 
+        <button class="catSearchShowAll">
+          <div class="termSearch">{{title_search}}</div>              
+        </button>     
+      </li>
+      <li class="Grid-cell  ">
+        <form action="" id="site_search" onkeypress="return event.keyCode != 13;">
+          <input type="search" id="search_box" placeholder="Recherche" autocomplete="off">
+        </form>            
+      </li>
+    </ul>  
+  {% endif %}
+{% endfor %}       
+
+{% for list in site.data.coll_ext.model_json.list-model-json %}
+  {% if list.id == 'recherche-selection-produits' %}
+    {% include coll_ext_utils/list-detail-items_init_step.html %}
+    {% include coll_ext/main.html
+      force_page_ref_input=true
+    %}
+  {% endif %}
+{% endfor %}

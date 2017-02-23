@@ -1,0 +1,68 @@
+---
+layout: compress
+---
+
+{% for list in site.data.coll_ext.model_json.list-model-json %}
+
+  {% if list.id == 'recherche-selection-produits' %}
+    {% include coll_ext_utils/list-detail-items_init_step.html %}
+    {% include coll_ext/main.html
+      force_page_ref_input=true
+      force_display_no_html=true
+    %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} output utils : info_section_subsection_ref_categories_gl{% endcomment %}
+<!-- form list categories -->
+{% assign list_categories = delim %}
+{% assign list_url_ref_categories = delim %}
+
+{% include coll_ext_search/json/assign_list_categories.html
+  list_subsection_categories=info_section_subsection_ref_categories_gl
+%}
+{% assign array_categories = list_categories | remove_first: delim | split: delim %}
+{% assign array_url_ref_categories = list_url_ref_categories | remove_first: delim | split: delim %}
+{% assign iter_max_cat = array_categories.size | minus: 1 %}
+
+
+{% assign array_index_raw_items_gl = list_index_raw_items_gl | remove_first: delim | split: delim  %}
+{% assign array_name_id_items_gl = list_name_id_items_gl | remove_first: delim | split: delim  %}
+{% assign iter_max = array_index_raw_items_gl.size | minus: 1  %}
+
+
+{% comment %}<!-- add delim to disciminate categories with partial name similar -->{% endcomment %}
+{% assign add_delim_categorie = site.data.coll_ext.model_json.config.add_delim_categorie %}
+
+[
+{% for iter in (0..iter_max)  %}
+  {% assign index_raw_items = array_index_raw_items_gl[iter] | plus: 0 %}
+  {% assign current_raw_item = raw_items[index_raw_items] %}
+  {% assign current_name_id = array_name_id_items_gl[iter] %}
+
+  {% comment %}<!-- extract categories -->{% endcomment %}
+  {% assign current_cat = empty_string  %}
+  {% for iter_cat in (0..iter_max_cat)  %}
+    {% assign url_ref_cat = array_url_ref_categories[iter_cat] %}
+    {% if current_raw_item.url contains url_ref_cat %}
+      {% assign current_cat = current_cat | append: add_delim_categorie | append: array_categories[iter_cat] | append: add_delim_categorie | append: space_string %}
+    {% endif %}
+
+  {% endfor %}
+
+  {% comment %}<!-- json data -->{% endcomment %}
+  {
+    "name_id" : "{{ current_name_id }}",
+    "title" : "{{ current_raw_item.title | escape }}",
+    "category" : "{{ current_cat }}",
+    "description" : "{{ current_raw_item.description | strip_html | strip }}",
+    "content" : "{{ current_raw_item.content | strip_html | strip }}",
+    "tags" : "{{ current_raw_item.tags | array_to_sentence_string }}",
+    "url" : "{{ site.baseurl }}{{ current_raw_item.url }}",
+    "date_debut" : "{{current_raw_item.date-debut-promotion }}",
+    "date_fin" : "{{ current_raw_item.date-fin-promotion }}"
+  } {% unless forloop.last %},{% endunless %}
+{% endfor %}
+]
+
+

@@ -1,0 +1,45 @@
+{%comment%}
+<!--
+  param in:
+    include.output_temp
+
+  var global
+    delim
+    array_index_size
+    array_time_tosort_loc
+    array_index_loc
+    array_dist_children_loc
+    array_is_section_loc
+
+  param out :
+  mode output_temp=false
+    array_index_item
+    array_dist_children_item
+    array_is_section_item
+  mode output_temp=true
+    array_index_item_tmp
+    array_dist_children_item_tmp
+    array_is_section_item_tmp
+
+-->
+{%endcomment%}
+
+{% for j in (0..array_index_size) %}
+  {% assign val_time_loop = array_time_tosort_loc[j] | plus: 0 %}
+  {% if val_time_loop == val_time %}
+    {% assign val_index = array_index_loc[j] %}
+    {% assign val_dist = array_dist_children_loc[j] %}
+    {% assign val_is_section = array_is_section_loc[j] %}
+
+    {% if include.output_temp == false %}
+      {% assign array_index_item = array_index_item | append: val_index | append: delim %}
+      {% assign array_dist_children_item = array_dist_children_item | append: val_dist | append: delim %}
+      {% assign array_is_section_item = array_is_section_item | append: val_is_section | append: delim %}
+    {% else %}
+      {% assign array_index_item_tmp = array_index_item_tmp | append: val_index | append: delim %}
+      {% assign array_dist_children_item_tmp = array_dist_children_item_tmp | append: val_dist | append: delim %}
+      {% assign array_is_section_item_tmp = array_is_section_item_tmp | append: val_is_section | append: delim %}
+    {% endif %}
+
+  {% endif %}
+{% endfor %}

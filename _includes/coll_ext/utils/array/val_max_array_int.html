@@ -1,0 +1,16 @@
+{%comment%}<!--
+param in :
+  include.array
+  include.size
+param out :
+  max_tmp, capture
+-->{%endcomment%}
+
+{% assign max_tmp = include.array[0] | plus: 0  %}
+{% for i in (0..include.size) %}
+ {% assign val_tmp = include.array[i] | plus: 0  %}
+ {% if val_tmp > max_tmp %}
+  {% assign max_tmp = val_tmp %}
+ {% endif %}
+{% endfor %}
+{{max_tmp}}

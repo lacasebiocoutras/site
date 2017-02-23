@@ -1,0 +1,13 @@
+# mode: 'default' / 'compress'
+mode: 'default'
+# conflict with rake serve dev if mode change, delete _site & .asset-cache folders before
+# or assets:
+#      cache: false, in _config.dev.yml, ok!
+
+
+list_mode:
+  default: 'default'
+  compress: 'compress'
+
+param:
+  delim_id: '-'

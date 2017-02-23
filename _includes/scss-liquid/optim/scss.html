@@ -1,0 +1,36 @@
+{%comment%}
+<!--
+  param in :
+    include.optim_class_css
+    include.config_optim_css
+
+  var global :
+
+-->
+{%endcomment%}
+
+{% assign class_css = include.optim_class_css %}
+{% assign config = include.config_optim_css %}
+
+{% assign mode = config.mode  %}
+{% assign compress = config.list_mode.compress  %}
+
+{% assign list_class = class_css.list_class  %}
+
+
+{% assign deb_sass_var = '$' %}
+{% assign mid_sass_var = ': "' %}
+{% assign fin_sass_var = '";' %}
+
+{% for class in list_class %}
+
+  {% if  mode ==  compress %}
+    {% assign value = class.compress  %}
+  {% else %}
+    {% assign value = class.default  %}
+  {% endif %}
+  {% assign var_sass = deb_sass_var | append: class.name | append: mid_sass_var | append: value | append: fin_sass_var  %}
+
+  {{var_sass}}
+
+{% endfor %}

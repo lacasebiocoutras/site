@@ -1,0 +1,31 @@
+{%comment%}<!--
+param in :
+  tab2_sort
+  include.index
+  include.value
+
+param out :
+  tab2_sort
+ -->{%endcomment%}
+
+{% assign delim = site.data.coll_ext.config.common.delimitator.array %}
+
+
+{% assign tabref_tmp = tab2_sort %}
+{% assign sizeTabref = tabref_tmp.size | minus: 1 %}
+{% assign indexref = include.index %}
+{% assign valueref = include.value %}
+
+
+{% assign tab2_sort = '' %}
+{% for i in (0..sizeTabref) %}
+  {% if i == indexref %}
+    {% assign valueTabRef = valueref | plus: 0 %}
+  {% else %}
+    {% assign valueTabRef = tabref_tmp[i] | plus: 0 %}
+  {% endif %}
+  {% assign tab2_sort = tab2_sort | append : valueTabRef | append: delim %}
+{% endfor%}
+
+{% assign tab2_sort = tab2_sort | split: delim %}
+

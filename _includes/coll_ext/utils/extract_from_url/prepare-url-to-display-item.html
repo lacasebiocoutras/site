@@ -1,0 +1,194 @@
+{%comment%}
+<!--
+  param in :
+    include
+      item_url
+      index_item
+      add_url_with_id_to_container
+      add_url_section_in_container name_section_to_item
+      list_index_ref
+
+
+
+  var global :
+    config/common-param
+    raw_items
+
+  param out
+    current_item_is_section
+    url_item_display
+    url_section_item_display
+    title_section_item_display
+
+-->
+{%endcomment%}
+
+{%comment%}
+  <!-- output -->
+{%endcomment%}
+{% assign url_item_display = null %}
+{% assign url_section_item_display = null %}
+{% assign title_section_item_display = null %}
+
+{%comment%}
+  <!-- input -->
+{%endcomment%}
+{% assign item_url = include.item_url %}
+{% assign index_detail_item = include.index_detail_item | plus: 0 %}
+
+
+{% assign last_part_url_curren_item = null %}
+{% assign current_item_is_section = false %}
+{% include coll_ext/utils/extract_from_url/last-part-url-current-item.html
+  current_item_url=item_url
+  extension_section=extension_section
+  extension_item=extension_item
+%}
+
+<div><p>last_part_url_curren_item: {{last_part_url_curren_item}}, current_item_is_section : {{current_item_is_section}}</p></div>
+
+{%comment%}
+  <!-- specific detail item -->
+  <!-- ! case : add id at the url of the item ( url_page_section/#id) -->
+  <!-- use case : list items from home page or from anywhere -->
+{%endcomment%}
+{% if current_item_is_section == false and include.add_url_with_id_to_container == true %}
+
+
+  {%comment%}<!-- extract id -->{%endcomment%}
+  {% include coll_ext/utils/extract_from_url/name_id.html
+    url=item_url
+  %}
+  {% assign name_id = name_id %}
+
+  {%comment%}<!--specific type detail item :  write url to anchor to section page, id = section-item -->{%endcomment%}
+  {%comment%}<!--specific modal, add content -->{%endcomment%}
+  {% assign url_item_display = item_url  | remove_first: last_part_url_curren_item  | append: extension_section | append: '#' | append : 'content-' | append : name_id %}
+
+{% else %}
+
+  {%comment%}
+    <!--default -->
+  {%endcomment%}
+  {% if current_item_is_section == true %}
+    {% assign url_item_display = item_url  %}
+  {% endif %}
+  {% assign url_item_display = item_url  %}
+{% endif %}
+
+{% assign url_item_display_ref = url_item_display  %}
+
+
+
+
+
+
+
+{%comment%}
+  <!-- ! add filter if one or some subsections with parameter hide-page active on the url-->
+{%endcomment%}
+{% assign array_subsection_filter = delim %}
+
+<div><p>url_item_display : {{url_item_display}}, avant hide</p></div>
+
+{% assign filter_url_hide_section = true %}
+{% if filter_url_hide_section == true %}
+
+
+{% assign array_index_ref = include.list_index_ref | remove_first: delim | split: delim  %}
+{% assign array_index_size = array_index_ref.size | minus: 1 %}
+
+  {% for i in (0..array_index_size) %}
+
+    {%comment%}
+      <!-- pointer to item -->
+    {%endcomment%}
+    {% assign index_array_tmp = array_index_ref[i] | plus: 0  %}
+    {% assign  item_tmp = raw_items[index_array_tmp] %}
+
+    {% assign url_tmp = item_tmp.url | remove_first: extension_section %}
+
+    {% if url_item_display_ref contains url_tmp %}
+
+      <div><p style="color: red;">item_tmp.url : {{item_tmp.url}}; </p></div>
+      <div><p>item_tmp.model : {{item_tmp.model}}</p></div>
+
+      {% assign url_tmp_part = url_tmp | split: '/' %}
+      {% assign size_url_tmp_part = url_tmp_part.size | minus: 1 %}
+      {% assign url_part_item = url_tmp_part[size_url_tmp_part] | prepend: '/' | append : '/'  %}
+
+      {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+
+      {% if model_subsection.display_items_on_parent == true %}
+        {% assign dist_display_children = model_subsection.dist_display_children  %}
+
+      {% endif %}
+
+      {% if model_subsection.hide-page == true %}
+
+      {% endif %}
+
+      {% if url_item_display_ref != url_tmp %}
+
+      {% endif %}
+
+
+    {% endif %}
+
+
+    {% include coll_ext/config/model-subsections.html modelSubsection=item_tmp.model %}
+    {% if model_subsection.hide-page == true %}
+
+
+      {% assign url_tmp_part = url_tmp | split: '/' %}
+      {% assign size_url_tmp_part = url_tmp_part.size | minus: 1 %}
+      {% assign url_part_item = url_tmp_part[size_url_tmp_part] | prepend: '/' | append : '/'  %}
+
+      {% if url_item_display contains url_tmp %}
+        {% comment %}<div><p> url_item_display contains url_tmp, item_tmp.url : {{item_tmp.url}}</p></div>{% endcomment %}
+        {%comment%}<!-- determine if last descendant -->{%endcomment%}
+        {% comment %}
+        {% assign url_last_desc_tmp = url_item_display | remove: url_tmp | remove_first: extension_section | remove_first: extension_item | remove: '#' | remove : name_id %}
+        <div><p>------ url_last_desc_tmp : {{url_last_desc_tmp}}</p></div>
+        <div><p>++++ url_part_item : {{url_part_item}}</p></div>
+        {% assign url_last_desc_part_tmp = url_last_desc_tmp | split: '/' %}
+        {% assign url_last_desc_size_tmp = url_last_desc_part_tmp.size  %}
+        {% if url_last_desc_size_tmp == 0 %}{% endif %}
+        {% endcomment %}
+        {% if url_item_display != url_tmp %}
+          {% assign array_subsection_filter = array_subsection_filter | append: url_part_item | append: delim %}
+          {% comment %}<div><p>-----add to array_subsection_filter : {{url_part_item}}</p></div>{% endcomment %}
+        {% endif %}
+
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+
+  {% if array_subsection_filter != delim %}
+    {% assign array_subsection_filter_part = array_subsection_filter | remove_first: delim | split: delim %}
+    {% assign array_subsection_filter_size = array_subsection_filter_part.size | minus: 1 %}
+    {% for index_tmp in (0..array_subsection_filter_size) %}
+      {% assign array_subsection_filter = array_subsection_filter_part[index_tmp] %}
+      {% assign url_item_display = url_item_display | replace: array_subsection_filter_part[index_tmp], '/' %}
+    {% endfor%}
+  {% endif %}
+
+{% endif %}
+
+{% comment %}<div><p>url_item_display : {{url_item_display}}, apres hide</p></div>{% endcomment %}
+
+
+{%comment%}
+  <!-- info url and title of the section containing the current item -->
+{%endcomment%}
+{% if include.add_url_section_in_container == true  %}
+  {% include coll_ext/utils/extract_from_url/url_section.html
+    url=item_url
+    url_part_item=last_part_url_curren_item
+  %}
+  {% assign url_section_item_display = url_section_item %}
+  {% assign title_section_item_display = title_section_item %}
+{% endif %}
+
+{% comment %}{% assign url_item_display = url_item_display_ref %}{% endcomment %}

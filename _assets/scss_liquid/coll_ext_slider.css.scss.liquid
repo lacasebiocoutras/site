@@ -1,0 +1,81 @@
+{% comment %}
+  //file css add directly in include/head.html
+{% endcomment %}
+
+
+{% comment %}
+  // specific collection_ext, add css for design_model with slider
+  // *****************************************************
+  // first implement : slider  translate specific,
+{% endcomment %}
+
+{% assign type_design_ref = site.data.coll_ext.design.config.param.type_slider  %}
+{% assign type_translate = site.data.scss_liquid.UI.slider.config.type.translate %}
+
+{% comment %}
+  // import mixin
+{% endcomment %}
+@import "UI/slider/slider-standard";
+@import "UI/slider/standard-submixins/slider_active";
+@import "UI/slider/standard-submixins/slider_animation";
+@import "UI/slider/standard-submixins/slider_article";
+@import "UI/slider/standard-submixins/slider_controls";
+@import "UI/slider/standard-submixins/slider_design";
+@import "UI/slider/standard-submixins/slider_info_box";
+
+
+
+{% assign delim_id = site.data.scss_liquid.optim.config.param.delim_id  %}
+{% assign delim_array = site.data.coll_ext.config.common.delimitator.array  %}
+
+{% assign container = site.data.scss_liquid.UI.slider.config.container.coll_ext %}
+{% assign config_sliders = site.data.scss_liquid.UI.slider.config.list_type %}
+
+
+
+
+{% comment %}// optim css{% endcomment %}
+{% include scss-liquid/optim/scss.html
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% comment %}// extra optim css : container_display, type_slider_display{% endcomment %}
+{% include scss-liquid/optim/extra.html name_extra=container
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign container_display = extra_compress %}
+
+{% include scss-liquid/optim/extra.html name_extra=type_translate
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign type_slider_display = extra_compress %}
+{% comment %}// end optim css{% endcomment %}
+
+
+{% comment %}
+  // parse site.documents to find collection_ext slider
+  // out : list  info_add_css_out
+{% endcomment %}
+{% assign info_add_css_out = delim %}
+{% include scss-liquid/collection_ext/template-standard_info_css.html
+  type_design_ref = 'slider'
+%}
+
+
+{% comment %}
+  // form css specific collection_ext,  slider translate
+{% endcomment %}
+{% include scss-liquid/collection_ext/template-standard_slider_translate.html
+  container_display=container_display
+  container_ref=container
+  type_slider_display=type_slider_display
+  type_slider_ref=type_translate
+  list_sliders=info_add_css_out
+  config_type=config_sliders
+  delim_id=delim_id
+  delim_array=delim_array
+%}
+
+

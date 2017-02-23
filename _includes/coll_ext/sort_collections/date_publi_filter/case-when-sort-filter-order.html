@@ -1,0 +1,30 @@
+{%comment%}
+<!--
+  param in:
+    include.iter
+    include.sort_filter
+    include.array_index
+
+  var global:
+    raw_items
+
+  param out :
+    val_sort
+
+-->
+{%endcomment%}
+
+{% assign iter_tmp = include.iter | plus: 0 %}
+{% assign index_tmp = include.array_index[iter_tmp] | plus: 0 %}
+{% assign item_tmp = raw_items[index_tmp] %}
+{%comment%}
+  <!-- case/when type sort_filter, today no other way (use where.. ko) if new param, need to be add-->
+{%endcomment%}
+{% case include.sort_filter %}
+  {% when 'order' %}
+     {% assign val_sort = item_tmp.order %}
+  {% when 'title' %}
+     {% assign val_sort = item_tmp.title %}
+  {% else %}
+     {% assign val_sort = item_tmp.order %}
+{% endcase %}

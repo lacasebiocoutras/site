@@ -1,0 +1,50 @@
+{%comment%}<!--
+param in :
+  include.tab1ref
+  include.tab2
+param out :
+  tab1_sort
+  tab2_sort
+-->{%endcomment%}
+
+{% assign tab1_sort = include.tab1ref %}
+{% assign tab2_sort = include.tab2 %}
+
+
+{% assign nbEltTab1 = tab1_sort.size | minus: 1 %}
+{% assign nbEltTab1Minus = nbEltTab1 | minus: 1 %}
+
+{% for i in (0..nbEltTab1Minus) %}
+
+  {% assign debIndex = i | plus: 1 %}
+
+  {% for j in (debIndex..nbEltTab1) %}
+
+    {% assign tab1_i = tab1_sort[i] | plus: 0 %}
+    {% assign tab1_j = tab1_sort[j] | plus: 0 %}
+
+    {% if tab1_i < tab1_j %}
+
+      {% include coll_ext/utils/array/optim/change_index_array-optim-tab1_sort.html index=i value= tab1_j %}
+
+      {% include coll_ext/utils/array/optim/change_index_array-optim-tab1_sort.html index=j value= tab1_i %}
+
+      {%comment%}<!-- tab 2 -->{%endcomment%}
+      {% assign tab2_i = tab2_sort[i] | plus: 0 %}
+      {% assign tab2_j = tab2_sort[j] | plus: 0 %}
+
+      {% include coll_ext/utils/array/optim/change_index_array-optim-tab2_sort.html index=i value= tab2_j %}
+
+      {% include coll_ext/utils/array/optim/change_index_array-optim-tab2_sort.html index=j value= tab2_i %}
+
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% comment %}
+{% for i in (0..nbEltTab1) %}
+  {% assign tab1_i = tab1_sort[i] | plus: 0 %}
+  {{tab1_i}} ;
+{% endfor %}
+{% endcomment %}
+

@@ -1,0 +1,65 @@
+{% comment %}{% capture description %}
+    {% if page.description.length > 5 %}
+      {{page.description}}
+    {% else %}
+      {% if page.excerpt.length > 5 %}
+        {{ page.excerpt}}
+      {% else %}
+        {{ site.description }}
+      {% endif %}
+    {% endif %}
+{% endcapture %}{% endcomment %}
+
+
+{% assign description = site.description | append: ' ' %}
+
+{% if page.url == '/' %}
+
+	{% include coll_ext/config/common-param.html %}
+	{% for collection in site.collections %}
+	  {% if collection.label == 'nos-informations' %}
+	    {% assign raw_items_temp = collection.docs %}
+	    {% break %}
+	  {% endif %}
+	{% endfor %}
+	{% assign items_tmp = raw_items_temp | sort: 'order' %}
+	{% for item_tmp in items_tmp %}
+	  {% if item_tmp.path contains '/page-acceuil/messages-acceuil/bienvenue.md' %} 
+	    {% if item_tmp.order < 100 %}
+	      {% assign textBienvenue = item_tmp.content %} 
+	    {% endif %}
+	  {% endif %}
+	{% endfor %}
+	{% if textBienvenue != null and textBienvenue != '' %}
+		{% assign text_splitted = '' %}
+	  {% include coll_ext_utils/text/keep-text-until-first-match.html 
+	    text= textBienvenue
+	    match_ref='</h1>'
+	  %}
+	  {% assign textBienvenue = text_splitted | strip_html | truncatewords: 20 %}
+	{% endif %}
+
+	{% assign description = description | append: textBienvenue %}
+	
+	
+{% else %}
+
+	{% if page.description == null or page.description.length < 5 %}
+
+		{% assign text_splitted = page.content %}
+	  {% include coll_ext_utils/text/split-text-until-first-match.html 
+	    text= page.content
+	    match_ref='</h1>'
+	  %}
+	  {% assign excerpt_local = text_splitted | strip_html | truncatewords: 20 %}
+
+		{% assign description = description | append: excerpt_local %}
+
+	{% else %}
+
+		{% assign description = description | append: page.description %}
+	{% endif %}
+{% endif %}
+
+
+<meta name="description" content="{{description | strip_html | strip_newlines | truncate: 250}}" />

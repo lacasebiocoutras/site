@@ -1,0 +1,72 @@
+{%comment%}
+<!--
+param in :
+  include
+    items_name_ref
+    custom_design_ref
+    search_value
+    list
+    period
+    offsetDeb
+    offsetNeighbours_nbitems
+    offsetNeighbours_index
+
+  var globale
+    delim
+    empty_string
+    raw_items
+
+
+
+
+param out :
+  info_add_css_part
+-->
+{%endcomment%}
+
+{% assign info_add_css_part = empty_string  %}
+
+
+{% include coll_ext/utils/array/extract_neighbours_search-from-list.html
+  search_value=include.search_value
+  list=include.list
+  period=include.period
+  offsetDeb=include.offsetDeb
+  offsetNeighbours=include.offsetNeighbours_nbitems
+  delim=delim
+%}
+{% assign list_nb_items_tmp = list_elts %}
+{% assign array_nb_items_tmp = list_nb_items_tmp | remove_first: delim | split: delim %}
+{% assign array_nb_items_size_tmp = array_nb_items_tmp.size | minus: 1  %}
+
+
+{% include coll_ext/utils/array/extract_neighbours_search-from-list.html
+  search_value=include.search_value
+  list=include.list
+  period=include.period
+  offsetDeb=include.offsetDeb
+  offsetNeighbours=include.offsetNeighbours_index
+  delim=delim
+%}
+{% assign list_index_sub_tmp = list_elts %}
+{% assign array_index_sub_tmp = list_index_sub_tmp | remove_first: delim | split: delim %}
+
+
+{% for i_index_sub_tmp in (0..array_nb_items_size_tmp)  %}
+  {% assign index_sub_tmp = i_index_sub_tmp | plus: 0 %}
+  {% assign nb_items_tmp = array_nb_items_tmp[index_sub_tmp] | plus: 0 %}
+  {% if nb_items_tmp > 0  %}
+
+    {% comment %}<!-- get url of subsection-->{% endcomment %}
+    {% assign index_url_sub_tmp = array_index_sub_tmp[index_sub_tmp] | plus: 0  %}
+    {% assign item_url_sub_tmp =  raw_items[index_url_sub_tmp].url %}
+
+    {% assign info_add_css_part = info_add_css_part
+    | append: include.search_value | append: delim
+    | append: item_url_sub_tmp | append: delim
+    | append: include.items_name_ref | append: delim
+    | append: nb_items_tmp | append: delim
+    | append: include.custom_design_ref | append: delim %}
+
+  {% endif %}
+{% endfor %}

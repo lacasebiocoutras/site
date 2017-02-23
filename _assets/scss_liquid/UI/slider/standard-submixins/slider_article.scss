@@ -1,0 +1,34 @@
+
+
+@mixin slider_article_standard($container, $type, $type_ref) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    .#{$inner__item_gl} {
+
+      article {
+         img {
+          width: 100%;
+          // vertical-align: middle;
+        }
+      }
+    }
+
+  }
+}
+
+@mixin slider_article_coll_ext($container, $type, $type_ref) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    .#{$inner__item_gl} {
+
+      article {
+
+
+      }
+    }
+
+  }
+}
+

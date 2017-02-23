@@ -1,0 +1,50 @@
+
+{%comment%}<!--
+param in :
+  include.month_toconvert : 'fev', 'fév', .. (invariant fr, en)
+param out :
+  new_day_convert
+  new_date_convert_num
+-->{%endcomment%}
+
+{% assign month = include.month_toconvert | strip | downcase %}
+
+{% if month contains 'ja' %}
+  {% assign new_day_convert = 'january' %}
+  {% assign new_date_convert_num = 1 %}
+{% elsif month contains 'f' %}
+  {% assign new_day_convert = 'february' %}
+  {% assign new_date_convert_num = 2 %}
+{% elsif month contains 'mar' %}
+  {% assign new_day_convert = 'march' %}
+  {% assign new_date_convert_num = 3 %}
+{% elsif month contains 'avr' or month contains 'apr' %}
+  {% assign new_day_convert = 'april' %}
+  {% assign new_date_convert_num = 4 %}
+{% elsif month contains 'mai' or month contains 'may' %}
+  {% assign new_day_convert = 'may' %}
+  {% assign new_date_convert_num = 5 %}
+{% elsif month contains 'juin' or month contains 'jun'%}
+  {% assign new_day_convert = 'june' %}
+  {% assign new_date_convert_num = 6 %}
+{% elsif month contains 'juil' or month contains 'jul'%}
+  {% assign new_day_convert = 'july' %}
+  {% assign new_date_convert_num = 7 %}
+{% elsif month contains 'ao' or month contains 'aug'%}
+  {% assign new_day_convert = 'august' %}
+  {% assign new_date_convert_num = 8 %}
+{% elsif month contains 'sep' %}
+  {% assign new_day_convert = 'september' %}
+  {% assign new_date_convert_num = 9 %}
+{% elsif month contains 'oc' %}
+  {% assign new_day_convert = 'october' %}
+  {% assign new_date_convert_num = 10 %}
+{% elsif month contains 'nov' %}
+  {% assign new_day_convert = 'november' %}
+  {% assign new_date_convert_num = 11 %}
+{% elsif month contains 'dec' or month contains 'déc' %}
+  {% assign new_day_convert = 'december' %}
+  {% assign new_date_convert_num = 12 %}
+{% endif %}
+
+

@@ -1,0 +1,40 @@
+{%comment%}
+<!--
+  param in :
+    include
+      before
+      class_body
+      type_picture miniature
+      img_miniature item.miniature
+      title_miniature
+
+  param out : display html
+
+
+-->
+{%endcomment%}
+
+
+
+{% if include.before == true %}
+
+  <li class=" Grid-cell Grid-cell--autoSize">
+    {% if include.img_miniature %}
+      {% picture {{include.type_picture}} {{include.img_miniature}} alt="image {{include.title_miniature}}"  %}
+    {% endif %}
+  </li>
+
+
+  <li class="{{include.class_body}} Grid-cell">
+
+
+
+
+{% else %}
+
+
+
+  </li>
+
+
+{% endif %}

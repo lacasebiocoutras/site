@@ -1,0 +1,53 @@
+- title : 'Actualités récentes'
+  collection: 'nos-informations'
+  force_display_coll_ext: true
+  force_display_coll_ext_section: 'notre-actualite'
+  # force_display_coll_ext_model: 'default-selection-produits-slider'
+  force_display_coll_ext_model: 'acceuil_list_actu-recentes'
+  sort :
+    # available  'date-publication' | 'order' | 'title' (| 'date-evenement')
+    # defined in /_data/coll_ext/config/sort_site-documents.yml
+    # default : 'order'
+    filter: 'date-publication'
+    nb-max-item-per-section: 3
+    # choose-subsections: ['alimentation', 'sante-bien-etre']
+    # 'mieux-nous-connaitre','actualites'
+    choose-subsections: []
+    filter-subsections: ['mieux-nous-connaitre','evenements']
+
+- title : 'Evenements à venir'
+  collection: 'nos-informations'
+  force_display_coll_ext: true
+  force_display_coll_ext_section: 'notre-actualite'
+  # force_display_coll_ext_model: 'default-selection-produits-slider'
+  force_display_coll_ext_model: 'acceuil_list_a-venir'
+  sort :
+    # available  'date-publication' | 'order' | 'title' (| 'date-evenement')
+    # defined in /_data/coll_ext/config/sort_site-documents.yml
+    # default : 'order'
+    filter: 'date-evenement'
+    nb-max-item-per-section: 5
+    # choose-subsections: ['alimentation', 'sante-bien-etre']
+    choose-subsections: ['evenements']
+    filter-subsections: []
+
+
+- title : 'Derniers ajouts à notre sélection de produits'
+  collection: 'selection-produits'
+  force_display_coll_ext: true
+  force_display_coll_ext_section: 'selection-produits'
+  # force_display_coll_ext_model: 'default-selection-produits-slider'
+  force_display_coll_ext_model: 'acceuil_list_selection-produits'
+  sort :
+    # available  'date-publication' | 'order' | 'title' (| 'date-evenement')
+    # defined in /_data/coll_ext/config/sort_site-documents.yml
+    # default : 'order'
+    filter: 'date-promotion'
+    nb-max-item-per-section: 2
+    # choose-subsections: ['alimentation', 'sante-bien-etre']
+    choose-subsections: []
+    filter-subsections: []
+
+
+
+

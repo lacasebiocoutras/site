@@ -1,0 +1,47 @@
+{%comment%}
+<!--
+  param in :
+    include
+      url_ref
+      dist_item
+      type_item
+      trunc_url_part
+      delim_id
+
+  var global :
+    site.data.scss_liquid
+    include/collection_ext/utils
+    include/scss-liquid/optim
+
+  param_out :
+    id_slider
+
+-->
+
+<!--
+  parse all collections, to find items with meta model slider.
+  if detect, determine nb-sub = nb_items slider
+
+-->
+
+{%endcomment%}
+
+
+{% assign id_url_trunc = '' %}
+{% include coll_ext/utils/extract_from_url/trunc_url_part.html
+  url=include.url_ref
+  trunc_url_part=include.trunc_url_part
+  delim_id=include.delim_id
+%}
+
+{% include scss-liquid/optim/extra.html name_extra=include.type_item
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+  force_compress=true
+%}
+{% assign type_item_display = extra_compress %}
+
+{% assign id_slider = id_url_trunc | append: include.delim_id %}
+{% assign id_slider = id_slider | append: type_item_display %}
+{% assign id_slider = id_slider | append: include.delim_id %}
+{% assign id_slider = id_slider | append: include.dist_item %}

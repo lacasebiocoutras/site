@@ -1,0 +1,238 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: "La Case Bio"
+email: lacasebiocoutras@gmail.com
+description: "La case Bio, votre magasin biologique de proximité, au 12bis rue Edouard Vaillant, 33230 Coutras, France."
+baseurl: "/site" # the subpath of your site, e.g. /blog
+url: https://lacasebiocoutras.github.io # the base hostname & protocol for your site
+
+# twitter_username: lacasebiocoutras
+# github_username:  lacasebiocoutras
+lang: fr
+words_per_minute: 150
+
+
+# Jekyll configuration
+# permalink: /:categories/:title.html
+permalink: /:path.html
+# permalink: /:year/:month/:title.html
+
+excerpt_separator: <!--fin-excerpt-->
+
+
+
+# Configuration settings you cannot change from https://help.github.com/articles/configuring-jekyll/
+
+# Produce an index for related posts:
+# lsi: false
+# Disable custom plugins, and ignore symbolic links:
+#safe: true
+# source: [your repo's top level directory]
+# incremental: false
+# highlighter: rouge
+# gist:
+#    noscript: false
+
+
+
+
+# Build settings
+markdown: kramdown
+
+sass:
+  sass_dir: _assets/stylesheets
+  style: compressed
+# _layouts/compress.html
+compress_html:
+  clippings: all
+  endings: all
+  comments: all # ["<!--", "-->"]
+
+
+
+keep_files: [images] #conserver dans fichier destination, _site par défaut
+# include: ["_pages"]
+
+exclude:
+  - gulp
+  - node_modules
+  - .asset-cache
+  - .editorconfig
+  - .gitignore
+  - .jshintrc
+  - .ruby-version
+  - Gemfile*
+  - README.md
+  - autoprefixer.yml
+  - gulpfile.js
+  - package.json
+  - _site/
+  - .code-highlighter-cache
+  - Rakefile.rb
+  - vendor
+  - .travis.yml
+  - oldFile
+
+
+# Plugins
+whitelist: []
+gems:
+  - jekyll-assets # generate locally !
+  - jekyll-sitemap
+
+# Plugin: jekyll-assets
+
+assets:
+  sources:
+    - _assets/js
+    - _assets/stylesheets
+    - _assets/images
+    - _assets/fonts
+    - _assets/scss_liquid
+    - _assets/css_lib
+  compress:
+    css: true
+    js: true
+  cache: false
+  digest: true
+  #fait planter carousel, optim css si active, a analyser, todo
+  features:
+    liquid: true
+
+
+
+
+
+collections:  
+  nos-informations:
+    output: true
+    permalink: /:path.html
+    title: nos-informations
+  selection-produits:
+    output: true
+    permalink: /:path.html
+    title: selection-produits
+  pages:
+    output: true
+    permalink: /:path.html
+    title: pages
+
+
+collections_ext:
+  # ! dependence : site.baseurl
+  path_extension_section: /index.html
+  path_extension_item: .html
+
+# Defaults
+defaults: 
+  # nos-informations
+  - scope:
+      path: _nos-informations
+      type: nos-informations
+    values:
+      layout: post
+  # selection-produits
+  - scope:
+      path: _selection-produits
+      type: selection-produits
+    values:
+      layout: post
+  # Pages
+  - scope:
+      path: _pages
+      type: pages
+    values:
+      layout: page
+
+
+# Plugin: jekyll-picture-tag
+
+picture:
+  source: "images/_originals"
+  output: "images"
+  markup: "picture"
+  presets:
+    default:
+      ppi: [1]
+      source_720:
+        media: "(min-width: 1200px)"
+        width: "720"
+      source_670:
+        media: "(min-width: 768px)"
+        width: "670"
+      source_540:
+        media: "(min-width: 600px)"
+        width: "540"
+      source_default:
+        width: "320"
+    slider-home:
+      attr:
+        class: "slider-home-image"
+        itemprop: "image"
+      ppi: [1]     
+      source_1200:
+        media: "(min-width: 1600px)"
+        width: "1200"
+      source_960:
+        media: "(min-width: 599px)"
+        width: "960"
+      source_500:
+        media: "(min-width: 301px)"
+        width: "500"
+      source_default:
+        width: "300"
+    img-right-home:
+      attr:
+        class: "img-right-home-image"
+        itemprop: "image"
+      ppi: [1]
+      source_default:
+        width: "400"
+    # !! logo-home, used to generate 1st time, custom, force in include/header-home.html
+    # logo-home:
+    #   attr:
+    #     class: "logo-home-image"
+    #     itemprop: "image"
+    #   ppi: [1]
+    #   source_2300:
+    #     media: "(min-width: 1680px)"
+    #     width: "2300"
+    #     height: "230"
+    #   source_1680:
+    #     media: "(min-width: 920px)"
+    #     width: "1680"
+    #     height: "230"       
+    #   source_default:
+    #     width: "920"
+    #     height: "230"    
+    # logo-intergrid-home:
+    #   attr:
+    #     class: "logo-intergrid-home-image"
+    #     itemprop: "image"
+    #   source_default:
+    #     width: "250"
+    miniature:
+      attr:
+        class: "miniature-image"
+        itemprop: "image"
+      source_100:
+        media: "(min-width: 300px)"
+        width: "200"
+      source_default:
+        width: "100"
+    miniature-full:
+      attr:
+        class: "miniature-full-image"
+        itemprop: "image"
+      source_500:
+        media: "(min-width: 500px)"
+        width: "500"
+      source_default:
+        width: "300"
+

@@ -1,0 +1,57 @@
+{% comment %}
+<!--
+  extract info  : structure def in config.yml of jekyll picture tag pluggin
+-->
+<!--
+  more info,
+  https://github.com/robwierzbowski/jekyll-picture-tag
+  other project https://github.com/wildlyinaccurate/jekyll-responsive-image
+  https://github.com/jekyll/jekyll-assets/issues
+-->
+{% endcomment %}
+
+{% for preset in site.picture.presets  %}
+
+  <div style="color: red;"><p>preset : {{preset}}</p></div>
+
+  {% assign cur_preset = preset[1] %}
+
+  <div style="color: green;"><p>cur_preset : {{cur_preset}}</p></div>
+
+  {% for source in cur_preset  %}
+
+    {% if source[0] contains 'source_' %}
+
+      {% assign cur_source = source[1] %}
+
+      <div><p>cur_source : {{cur_source}} </p></div>
+
+
+      {% for elt in cur_source %}
+
+        <div><p>elt : {{elt[0]}} : {{elt[1]}} </p></div>
+
+        {% comment %}
+        {% if elt[0] contains 'witdh' %}
+          <div><p> witdh : {{elt[1]}}</p></div>
+        {% endif %}
+        {% endcomment %}
+      {% endfor %}
+
+
+
+      {% comment %}
+        <div><p>source : {{source}} </p></div>
+
+        <div><p>source[0] : {{source[0]}}</p></div>
+        <div><p>source[1] : {{source[1]}}</p></div>
+        <div><p>source.media : {{source.media}}</p></div>
+        <div><p>source.width : {{source.width}}</p></div>
+      {% endcomment %}
+
+
+    {% endif %}
+
+  {% endfor %}
+
+{% endfor %}

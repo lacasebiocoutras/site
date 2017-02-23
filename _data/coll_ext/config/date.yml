@@ -1,0 +1,43 @@
+#todo : filter we
+
+text_date_event_fr :
+  one_day:
+    intro: 'Le'
+    link: ''
+    last: ''
+    spaceWord: ' '
+    separatorDate: ' '
+    maskLongday:
+    maskLongmonth:
+  two_day:
+    intro: 'Les'
+    link: '&'
+    last:
+    spaceWord: ' '
+    separatorDate: ' '
+    mask_longday:
+    mask_longmonth:
+  one_week:
+    intro: 'Semaine du'
+    link: 'au'
+    last:
+    spaceWord: ' '
+    separatorDate: ' '
+    maskLongday: o
+    maskLongmonth:
+  more_than_one_week:
+    intro: 'Du'
+    link: 'au'
+    last:
+    spaceWord: ' '
+    separatorDate: '/'
+    maskLongday: o
+    maskLongmonth: o
+  default_days:
+    intro: 'Du'
+    link: 'au'
+    last:
+    spaceWord: ' '
+    separatorDate: ' '
+    mask_longday:
+    mask_longmonth:

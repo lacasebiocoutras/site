@@ -1,0 +1,411 @@
+/**
+ * from
+
+ https://github.com/dangvanthanh/carousel.sass **
+
+ http://csscience.com/responsiveslidercss3/ **
+  - voir ajout js cas translate
+
+ We put the radio buttons at the top so when they are :checked we can use a general sibling selectors (~) to change our
+        slider.
+
+  see : http://ilee.co.uk/css-translate3d-performance-hack/
+ */
+
+ /**
+  todo : The CSS (black fading), add mask for text https://css-tricks.com/slider-with-sliding-backgrounds/
+  todo : cas 2 items, control next prev need to be review!
+  */
+
+
+
+
+@mixin slider_standard($container, $container_ref, $type, $type_ref, $nb_items) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    @if $container_ref != 'coll_ext' {
+      /* radio slider setup with hack selector ~ */
+      .#{$slider_gl} {
+        > input[type="radio"] {
+
+          display: none;
+
+          &:checked {
+            ~ .#{$slides_gl} .#{$inner__item_gl} {
+              visibility: visible !important;
+              @if $type_ref == 'opacity' {
+                opacity: 0;
+              }
+            }
+          }
+
+          @for $i from 1 through $nb_items {
+
+            &:nth-child(#{$i}) {
+              &:checked {
+
+                @if $type_ref == 'translate' {
+                  ~ .#{$slides_gl} .#{$inner_gl} {
+                    margin-left: ($i - 1) * (-100%);
+                  }
+                }
+                @if $type_ref == 'opacity' {
+                  ~ .#{$slides_gl} .#{$inner__item_gl} {
+                    &:nth-child(#{$i}) {
+                      opacity: 1;
+                    }
+                  }
+                }
+
+
+                @if $container_ref != 'coll_ext' {
+                  ~ .#{$active_gl} {
+                    > label {
+                      &:nth-child(#{$i}) {
+                        @extend %animation-active;
+                      }
+                    }
+                  }
+                }
+                @if $container_ref == 'coll_ext' {
+                  ~ .#{$active_gl} {
+                    > li {
+                      &:nth-child(#{$i}) {
+                        > label {
+                          // &:nth-child(#{$i}) {
+                            @extend %animation-active-coll-ext;
+                          // }
+                        }
+                      }
+                    }
+                  }
+                }
+
+
+                @if $container_ref != 'coll_ext' {
+
+                  ~ .#{$controls_gl} {
+                    > label {
+
+                      @if $i == 1 {
+                        &:nth-child(#{$nb_items}) {
+                          @extend %animation-prev;
+                        }
+                      } @else if $i == $nb_items {
+                        &:nth-child(#{$nb_items - 1}) {
+                          @extend %animation-prev;
+                        }
+                      } @else {
+                        &:nth-child(#{$i - 1}) {
+                          @extend %animation-prev;
+                        }
+                      }
+                    }
+                  }
+
+                  ~ .#{$controls_gl} {
+                    > label {
+                      @if $i == $nb_items {
+                        &:nth-child(1) {
+                          @extend %animation-next;
+                        }
+                      } @else {
+                        &:nth-child(#{$i + 1}) {
+                          @extend %animation-next;
+                        }
+                      }
+                    }
+                  }
+
+                  ~ .#{$slides_gl} .#{$inner__item_gl} {
+                    &:nth-child(#{$i}) {
+                      .#{$info_gl} {
+                         opacity: 1;
+                          -webkit-transition: all 1s ease-out 0.6s;
+                          -moz-transition: all 1s ease-out 0.6s;
+                          -o-transition: all 1s ease-out 0.6s;
+                          transition: all 1s ease-out 0.6s;
+                      }
+                    }
+                  }
+
+                } //end if $container_ref != 'coll_ext' on controls
+              }
+            }
+          }
+
+        }
+      }// end slider setup
+    }// end if $container_ref != 'coll_ext'
+
+
+    .#{$overflow_gl} {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .#{$slides_gl} {
+      list-style-type: none;
+    }
+
+
+    .#{$slides_gl} .#{$inner_gl} {
+
+      @if $type_ref != 'translate' {
+        width: 100%;
+      }
+    }
+
+
+    @if $type_ref == 'opacity' {
+      .#{$slides_gl} {
+        position: relative;
+      }
+    }
+
+    .#{$inner__item_gl} {
+      display: block;
+      @if $type_ref == 'opacity' {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+      @if $type_ref == 'translate' {
+        float: left;
+      }
+    }
+
+
+
+
+  } // / .containerSlider
+} // / mixin
+
+
+
+
+
+
+
+
+
+
+
+// extra opacity
+@mixin slider_standard_extra_before($container, $type, $type_ref, $id, $nb_items, $heightSlides) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    .#{$slider_gl}-#{$type}-#{$id} {
+
+      .#{$slides_gl} {
+        height: $heightSlides ; // !!needed with opacity, auto with translate
+      }
+
+      .#{$slides_gl} .#{$inner_gl} {
+        width: $nb_items * 100%;
+      }
+
+      .#{$inner__item_gl} {
+        @if $nb_items > 0 {
+          width: 100% / $nb_items;
+        }
+      }
+
+    } // /.slider
+  }// /.containerSlider
+}
+
+@mixin slider_standard_extra_after($container, $type, $type_ref, $id, $nb_items, $nb_max_items) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    .#{$slider_gl}-#{$type}-#{$id} {
+
+
+        @if ($nb_items < $nb_max_items) {
+
+          > input[type="radio"] {
+
+            @for $i from 1 through $nb_items {
+              @if ($i == 1 or $i== $nb_items) {
+
+                &:nth-child(#{$i}) {
+                  &:checked {
+
+                    ~  .#{$controls_gl} {
+                      > label {
+
+                        @if $i == 1 {
+                          &:nth-child(#{$nb_items}) {
+                            @extend %animation-prev;
+                          }
+                        } @else if $i == $nb_items {
+                          &:nth-child(#{$nb_items - 1}) {
+                            @extend %animation-prev;
+                          }
+                        } @else {
+                          &:nth-child(#{$i - 1}) {
+                            @extend %animation-prev;
+                          }
+                        }
+                      }
+                    }
+
+                    ~ .#{$controls_gl} {
+                      > label {
+                        @if $i == $nb_items {
+                          &:nth-child(1) {
+                            @extend %animation-next;
+                          }
+                        } @else {
+                          &:nth-child(#{$i + 1}) {
+                            @extend %animation-next;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } // /for $i
+
+          }// / > input[type="radio"]
+        } // /if ($nb_items < $nb_max_items)
+
+
+    } // /.slider
+  }// /.containerSlider
+}// / mixin
+
+
+
+
+// specific coll_ext, nedd id in slider
+@mixin slider_coll_ext_setup_radio($container, $container_ref, $type, $type_ref, $id, $nb_items, $heightSlides) {
+
+  .#{$containerSlider_gl}-#{$container}-#{$type} {
+
+    // $slider_loc : #{$slider_gl};
+    // @if $container_ref == 'coll_ext' {
+    //   $slider_loc : #{$slider_gl}-#{$type}-#{$id};
+    // }
+
+    .#{$slider_gl}-#{$type}-#{$id} {
+
+       > input[type="radio"] {
+
+          display: none;
+
+          &:checked {
+            ~ .#{$slides_gl} .#{$inner__item_gl} {
+              visibility: visible !important;
+              @if $type_ref == 'opacity' {
+                opacity: 0;
+              }
+            }
+          }
+
+          @for $i from 1 through $nb_items {
+
+            &:nth-child(#{$i}) {
+              &:checked {
+
+                @if $type_ref == 'translate' {
+                  ~ .#{$slides_gl} .#{$inner_gl} {
+                    margin-left: ($i - 1) * (-100%);
+                  }
+                }
+                @if $type_ref == 'opacity' {
+                  ~ .#{$slides_gl} .#{$inner__item_gl} {
+                    &:nth-child(#{$i}) {
+                      opacity: 1;
+                    }
+                  }
+                }
+
+
+                @if $container_ref != 'coll_ext' {
+                  ~ .#{$active_gl} {
+                    > label {
+                      &:nth-child(#{$i}) {
+                        @extend %animation-active;
+                      }
+                    }
+                  }
+                }
+                @if $container_ref == 'coll_ext' {
+                  ~ .#{$active_gl} {
+                    > li {
+                      &:nth-child(#{$i}) {
+                        > label {
+                          // &:nth-child(#{$i}) {
+                            @extend %animation-active-coll-ext;
+                          // }
+                        }
+                      }
+                    }
+                  }
+                }
+
+
+                @if $container_ref != 'coll_ext' {
+
+                  ~ .#{$controls_gl} {
+                    > label {
+
+                      @if $i == 1 {
+                        &:nth-child(#{$nb_items}) {
+                          @extend %animation-prev;
+                        }
+                      } @else if $i == $nb_items {
+                        &:nth-child(#{$nb_items - 1}) {
+                          @extend %animation-prev;
+                        }
+                      } @else {
+                        &:nth-child(#{$i - 1}) {
+                          @extend %animation-prev;
+                        }
+                      }
+                    }
+                  }
+
+                  ~ .#{$controls_gl} {
+                    > label {
+                      @if $i == $nb_items {
+                        &:nth-child(1) {
+                          @extend %animation-next;
+                        }
+                      } @else {
+                        &:nth-child(#{$i + 1}) {
+                          @extend %animation-next;
+                        }
+                      }
+                    }
+                  }
+
+                  ~ .#{$slides_gl} .#{$inner__item_gl} {
+                    &:nth-child(#{$i}) {
+                      .#{$info_gl} {
+                         opacity: 1;
+                          -webkit-transition: all 1s ease-out 0.6s;
+                          -moz-transition: all 1s ease-out 0.6s;
+                          -o-transition: all 1s ease-out 0.6s;
+                          transition: all 1s ease-out 0.6s;
+                      }
+                    }
+                  }
+
+                } //end if $container_ref != 'coll_ext' on controls
+              }
+            }
+          }
+
+        }
+
+    } // /.slider
+  }// /.containerSlider
+}

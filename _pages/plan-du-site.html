@@ -1,0 +1,65 @@
+---
+layout: post
+permalink: /plan-du-site/index.html
+title: "Plan du site La Case Bio"
+description : Plan du site La Case Bio
+model: 
+---
+
+
+<a href="{{site.baseurl}}/"><h2>Page d'acceuil</h2></a>
+<p>{{site.description}}</p>
+
+
+
+
+
+{% for collection in site.collections %}
+  {% if collection.label == 'nos-informations' %}
+    {% assign raw_items_tmp = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign items_tmp = raw_items_tmp | sort: 'order' %}
+
+{% comment %}pages notre actualités : page principale + articles détaillés{% endcomment %}
+
+{% for item_tmp in items_tmp %}
+	{% if item_tmp.path contains '/notre-actualite/index.md' %} 
+    <a href="{{item_tmp.url | prepend: site.baseurl}}"><h2>{{item_tmp.title}}</h2></a>
+		<p>{{item_tmp.description}}</p>
+	{% endif %}
+{% endfor %}
+<h4> Articles détaillés : </h4>
+{% for item_tmp in items_tmp %}
+
+		{% unless item_tmp.path contains '/index.md'  %}
+			{% if item_tmp.path contains '/notre-actualite/actualites/page-perso' %} 
+		    <a href="{{item_tmp.url | prepend: site.baseurl}}"><h3 style="padding-left: 1em;">{{item_tmp.title}}</h3></a>
+				<p style="padding-left: 1em;">{{item_tmp.description}}</p>
+		  {% endif %}
+		  {% if item_tmp.path contains '/notre-actualite/mieux-nous-connaitre' %} 
+		    <a href="{{item_tmp.url | prepend: site.baseurl}}"><h3 style="padding-left: 1em;">{{item_tmp.title}}</h3></a>
+				<p style="padding-left: 1em;">{{item_tmp.description}}</p>
+		  {% endif %}
+		{% endunless %}
+{% endfor %}
+
+{% for page in site.pages %}	
+	{% if page.url contains '/selection-produits/index.html' %}
+		<a href="{{page.url | prepend: site.baseurl}}"><h2>{{page.title}}</h2></a>
+				<p>{{page.description}}</p>
+	{% endif %}
+{% endfor %}
+{% for page in site.pages %}	
+	{% if page.url contains '/newsletter/index.html' %}
+		<a href="{{page.url | prepend: site.baseurl}}"><h2>{{page.title}}</h2></a>
+				<p>{{page.description}}</p>
+	{% endif %}
+{% endfor %}
+{% for page in site.pages %}	
+	{% if page.url contains '/mentions-legales/index.html' %}
+		<a href="{{page.url | prepend: site.baseurl}}"><h2>{{page.title}}</h2></a>
+				<p>{{page.description}}</p>
+	{% endif %}
+{% endfor %}

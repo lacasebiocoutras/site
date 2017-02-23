@@ -1,0 +1,412 @@
+/**
+ * from
+
+ https://github.com/dangvanthanh/carousel.sass **
+
+ http://csscience.com/responsiveslidercss3/ **
+  - voir ajout js cas translate
+
+ We put the radio buttons at the top so when they are :checked we can use a general sibling selectors (~) to change our
+        slider.
+
+  see : http://ilee.co.uk/css-translate3d-performance-hack/
+ */
+
+ /**
+  todo : The CSS (black fading), add mask for text https://css-tricks.com/slider-with-sliding-backgrounds/
+  */
+
+
+
+
+
+%animation-next {
+  background: url(asset_path('next.png')) no-repeat;
+  float: right;
+  margin: 0 -70px 0 0;
+  display: block;
+}
+
+%animation-prev {
+  background: url(asset_path('prev.png')) no-repeat;
+  float: left;
+  margin: 0 0 0 -70px;
+  display: block;
+}
+
+
+@mixin slider_standard($type, $nb_items) {
+
+.#{$containerSlider_gl}-#{$type} {
+
+  label, a {
+    color: teal;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  label:hover, a:hover {
+    color: #000 !important;
+  }
+
+  label, .#{$active_gl}, img { -moz-user-select:none;-webkit-user-select:none; }
+
+
+  .#{$slider_gl} {
+    margin:0 auto;
+    text-align: center;
+    // add responsive
+    max-width: 960px;
+  }
+
+
+  /* radio slider setup with hack selector ~ */
+  .#{$slider_gl} {
+    > input[type="radio"] {
+
+      display: none;
+
+      &:checked {
+        ~ .#{$slides_gl} .#{$inner__item_gl} {
+          visibility: visible !important;
+          @if $type == 'opacity' {
+            opacity: 0;
+          }
+        }
+      }
+
+      @for $i from 1 through $nb_items {
+
+        &:nth-child(#{$i}) {
+          &:checked {
+
+            @if $type == 'translate' {
+              ~ .#{$slides_gl} .#{$inner_gl} {
+                margin-left: ($i - 1) * (-100%);
+              }
+            }
+            @if $type == 'opacity' {
+              ~ .#{$slides_gl} .#{$inner__item_gl} {
+                &:nth-child(#{$i}) {
+                  opacity: 1;
+                }
+              }
+            }
+
+            ~ .#{$active_gl} {
+              > label {
+                &:nth-child(#{$i}) {
+                  background: #333;
+                  border-color: #333 !important;
+                }
+              }
+            }
+
+            ~ .#{$controls_gl} {
+              > label {
+
+                @if $i == 1 {
+                  &:nth-child(#{$nb_items}) {
+                    @extend %animation-prev;
+                  }
+                } @else if $i == $nb_items {
+                  &:nth-child(#{$nb_items - 1}) {
+                    @extend %animation-prev;
+                  }
+                } @else {
+                  &:nth-child(#{$i - 1}) {
+                    @extend %animation-prev;
+                  }
+                }
+              }
+            }
+
+            ~ .#{$controls_gl} {
+              > label {
+                @if $i == $nb_items {
+                  &:nth-child(1) {
+                    @extend %animation-next;
+                  }
+                } @else {
+                  &:nth-child(#{$i + 1}) {
+                    @extend %animation-next;
+                  }
+                }
+              }
+            }
+
+            ~ .#{$slides_gl} .#{$inner__item_gl} {
+              &:nth-child(#{$i}) {
+                .#{$info_gl} {
+                   opacity: 1;
+                    -webkit-transition: all 1s ease-out 0.6s;
+                    -moz-transition: all 1s ease-out 0.6s;
+                    -o-transition: all 1s ease-out 0.6s;
+                    transition: all 1s ease-out 0.6s;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }// end slider setup
+
+  .#{$overflow_gl} {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* specific translate, filtering in html */
+
+
+  .#{$slides_gl} .#{$inner_gl} {
+    line-height: 0;
+
+    // @if $type == 'translate' {
+    //   width: $nb_items * 100%;
+    // }
+    @if $type != 'translate' {
+      width: 100%;
+    }
+  }
+  /* / specific translate */
+
+
+ @if $type == 'opacity' {
+    .#{$slides_gl} {
+      // height: $heightSlides * 1px; // !!drawback
+      position: relative;
+    }
+  }
+
+  .#{$inner__item_gl} {
+    display: block;
+    @if $type == 'opacity' {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: -1;
+    }
+    @if $type == 'translate' {
+      float: left;
+      // @if $nb_items > 0 {
+      //   width: 100% / $nb_items;
+      // }
+    }
+
+    article {
+       img {
+        width: 100%;
+        // vertical-align: middle;
+      }
+    }
+
+
+  }
+
+
+  /* Control Setup */
+
+  .#{$controls_gl} {
+    margin: -33% 0 0 0;
+    width: 100%;
+    height: 50px;
+  }
+
+  .#{$controls_gl} label {
+    display: none;
+    width: 50px;
+    height: 50px;
+    opacity: 0.3;
+  }
+
+  .#{$active_gl} {
+    margin: 30% 0 0;
+    text-align: center;
+  }
+
+  .#{$active_gl} label {
+    border-radius: 5px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #bbb;
+  }
+
+  .#{$active_gl} label:hover {
+    background: #ccc;
+    border-color: #777 !important;
+  }
+
+  .#{$controls_gl} label:hover {
+    opacity: 0.8;
+  }
+
+  /* Info Box */
+
+  .#{$info_gl} {
+    line-height: 20px;
+    margin: 0 0 -150%;
+    position: absolute;
+    font-style: italic;
+    padding: 30px 30px;
+    opacity: 0;
+    color: #000;
+    text-align: left;
+  }
+
+  .#{$info_gl} h3 {
+    color: #333;
+    margin: 0 0 5px;
+    font-weight: normal;
+    font-size: 22px;
+    font-style: normal;
+  }
+
+  /* Slider Styling */
+
+  .#{$slides_gl} {
+
+    list-style-type: none;
+    margin: 45px 0 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px #666;
+    padding: 1%;
+    background: #fff;
+  }
+
+
+
+  /* Animation */
+
+  .#{$controls_gl} label{
+    transform: translateZ(0);
+    transition: opacity 0.2s ease-out;
+  }
+
+  .#{$info_gl}, .#{$controls_gl}, .#{$slides_gl}, .#{$active_gl}, .#{$active_gl} label, .#{$info_gl} h3 {
+    transform: translateZ(0);
+    transition: all 0.5s ease-out;
+  }
+
+  @if $type == 'opacity' {
+    .#{$slides_gl} .#{$inner__item_gl} {
+      transition: opacity 2s;
+    }
+
+  }
+
+  @if $type == 'translate' {
+
+    .#{$slides_gl} .#{$inner_gl} {
+      transform: translateZ(0);
+      transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000); /* easeInOutQuart */
+      transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000); /* easeInOutQuart */
+    }
+
+    .#{$slider_gl} {
+      transform: translateZ(0);
+      transition: all 0.5s ease-out;
+    }
+
+  }
+
+
+
+
+
+} // / .containerSlider
+} // / mixin
+
+
+
+// extra opacity
+@mixin slider_standard_extra_before($id, $type, $nb_items, $heightSlides) {
+
+  .#{$containerSlider_gl}-#{$type} {
+    .#{$slider_gl}-#{$type}-#{$id} {
+
+      .#{$slides_gl} {
+        height: $heightSlides ; // !!needed with opacity, auto with translate
+      }
+
+      .#{$slides_gl} .#{$inner_gl} {
+        width: $nb_items * 100%;
+      }
+
+      .#{$inner__item_gl} {
+        @if $nb_items > 0 {
+          width: 100% / $nb_items;
+        }
+      }
+
+    } // /.slider
+  }// /.containerSlider
+}
+
+@mixin slider_standard_extra_after($id, $type, $nb_items, $nb_max_items) {
+
+  .#{$containerSlider_gl}-#{$type} {
+      .#{$slider_gl}-#{$type}-#{$id} {
+
+
+        @if ($nb_items < $nb_max_items) {
+
+          > input[type="radio"] {
+
+            @for $i from 1 through $nb_items {
+              @if ($i == 1 or $i== $nb_items) {
+
+                &:nth-child(#{$i}) {
+                  &:checked {
+
+                    ~  .#{$controls_gl} {
+                      > label {
+
+                        @if $i == 1 {
+                          &:nth-child(#{$nb_items}) {
+                            @extend %animation-prev;
+                          }
+                        } @else if $i == $nb_items {
+                          &:nth-child(#{$nb_items - 1}) {
+                            @extend %animation-prev;
+                          }
+                        } @else {
+                          &:nth-child(#{$i - 1}) {
+                            @extend %animation-prev;
+                          }
+                        }
+                      }
+                    }
+
+                    ~ .#{$controls_gl} {
+                      > label {
+                        @if $i == $nb_items {
+                          &:nth-child(1) {
+                            @extend %animation-next;
+                          }
+                        } @else {
+                          &:nth-child(#{$i + 1}) {
+                            @extend %animation-next;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } // /for $i
+
+          }// / > input[type="radio"]
+        } // /if ($nb_items < $nb_max_items)
+
+
+    } // /.slider
+  }// /.containerSlider
+}// / mixin
+
+
+
+

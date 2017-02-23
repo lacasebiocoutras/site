@@ -1,0 +1,38 @@
+{% assign class_invisible_no_script = site.data.coll_ext.config.display_list-items.config.class_invisible | prepend: '.' %}
+
+{% if page.url == '/'%}
+
+  <script data-main="{{site.baseurl}}/assets-js/app-home" src="{{site.baseurl}}/assets-js/vendor/require.2.2.0.min.js" async defer></script>
+  <noscript>
+    <style>
+        {{class_invisible_no_script}} {display:block;}
+    </style>
+  </noscript>
+
+{% elsif  page.url contains '/selection-produits/index.html' %}
+
+  
+  <script data-main="{{site.baseurl}}/assets-js/app-default-search" src="{{site.baseurl}}/assets-js/vendor/require.2.2.0.min.js" async defer></script>
+  <noscript>
+    <style>
+        {{class_invisible_no_script}} {display:block;}
+    </style>
+  </noscript>
+
+{% elsif  page.url contains '/newsletter/index.html' %}
+
+	<script data-main="{{site.baseurl}}/assets-js/app-newsletter" src="{{site.baseurl}}/assets-js/vendor/require.2.2.0.min.js" async defer></script>
+
+{% else %}
+
+  <script data-main="{{site.baseurl}}/assets-js/app-default" src="{{site.baseurl}}/assets-js/vendor/require.2.2.0.min.js" async defer></script>
+{% endif %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" async defer>
+
+
+
+{%comment%}<!-- Piwik -->{%endcomment%}
+{%comment%}<!--  <script type="text/javascript">var _paq=_paq||[];_paq.push(["trackPageView"]),_paq.push(["enableLinkTracking"]),function(){var e="//sdmg33.890m.com/piwik/";_paq.push(["setTrackerUrl",e+"piwik.php"]),_paq.push(["setSiteId",1]);var a=document,p=a.createElement("script"),t=a.getElementsByTagName("script")[0];p.type="text/javascript",p.async=!0,p.defer=!0,p.src="{{site.baseurl}}/assets/js/plugin/piwik.min.js",t.parentNode.insertBefore(p,t)}();</script> -->{%endcomment%}
+{%comment%}<!-- <noscript><p><img src="//sdmg33.890m.com/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript> -->{%endcomment%}
+{%comment%}<!-- End Piwik Code -->{%endcomment%}

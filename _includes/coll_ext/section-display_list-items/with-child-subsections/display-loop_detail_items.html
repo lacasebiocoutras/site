@@ -1,0 +1,61 @@
+{%comment%}
+<!--
+  param in :
+    include
+      index_ref
+      dist_class_loop
+      subsection_ref_url
+      model_parent
+      model_current_section
+      current_extra_sort_type
+
+  var globale
+    info_items_subsection_part
+    items_display_subsection_part
+    nb_max_subsection
+    period_info_subsection
+    offset_period_items
+
+  param out:
+
+ -->
+{%endcomment%}
+
+
+
+{% assign index_ref= include.index_ref | plus: 0 %}
+
+{% assign iter_search_value = -1 %}
+{% include coll_ext/utils/array/index_of_value_in_array_int.html
+  array_part=info_items_subsection_part
+  search_value=index_ref
+  nbElt=nb_max_subsection
+  period_array_nbElt=period_info_subsection
+  offsetDeb=0
+%}
+{% if iter_search_value > -1 %}
+
+  {% assign iter_detail_items_ref = iter_search_value | plus: offset_period_items | minus: 1  %}
+
+  {% assign nb_detail_items = info_items_subsection_part[iter_detail_items_ref] | plus: 0 %}
+  {% assign iter_detail_items_ref = iter_detail_items_ref | plus: 1 %}
+  {% assign deb_index_detail_items = info_items_subsection_part[iter_detail_items_ref] | plus: 0 %}
+
+  {% if nb_detail_items > 0 %}
+
+    {% include coll_ext/section-display_list-items/with-child-subsections/display_detail_items_on_subsection.html
+      bornedeb=deb_index_detail_items
+      nb_items=nb_detail_items
+      tab_items=items_display_subsection_part
+      display_with_subsections=false
+      current_dist=include.dist_class_loop
+      subsection_ref_url=include.subsection_ref_url
+      header=null
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+
+  {% endif %}
+
+{% endif %}

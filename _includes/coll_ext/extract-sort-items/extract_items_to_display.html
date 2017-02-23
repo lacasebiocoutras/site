@@ -1,0 +1,122 @@
+{%comment%}
+<!--
+  param in :
+    include
+      collection_name
+      page_ref_url
+      page_ref_model
+      page_ref_sort_items
+      page_ref_choose_subsections
+      page_ref_filter_subsections
+
+    gl
+      force_display_no_html_gl
+      force_no_display_gl
+
+
+
+  var global :
+    common-param :
+
+  param out :
+    see init on include
+    info_section_subsection_ref_categories_gl
+
+-->
+{%endcomment%}
+
+
+
+{% include coll_ext/config/model-subsections.html
+  modelSubsection=include.page_ref_model
+%}
+{% assign model_parent = model_subsection %}
+
+
+{%comment%}
+  <!-- preliminary step : if sort_items of type extra (date-evenement, date-promotion,..) force sort based-std-type, and then in display re-sort based on extra type model if page_current_extra_sort_type != null ,
+  /_data/coll_ext/config/sort_site-documents.yml-->
+{%endcomment%}
+{% assign page_current_extra_sort_type = null %}
+{% include coll_ext/sort_collections/extra-sort-date/force-filter-to-default.html
+  type_filter=include.page_ref_sort_items
+%}
+{% assign sort_items_page = sort_items%}
+{% assign page_current_extra_sort_type =  is_extra_sort_type %}
+
+
+
+
+
+{%comment%}
+  <!-- step 1 : sort on site.documents -->
+{%endcomment%}
+{% assign raw_items = null %}
+{% assign array_index_item = delim %}
+{% assign array_dist_children_item = delim %}
+{% assign array_is_section_item = delim %}
+
+{% assign page_url = include.page_ref_url | remove_first: extension_section %}
+{% include coll_ext/sort_collections/date_publi_filter-on-collection.html
+  collection_name=include.collection_name
+  urlref=page_url
+  sort_type_model=sort_items_page
+  max_dist_display_children=model_parent.dist_display_children
+  page_ref_choose_subsections=include.page_ref_choose_subsections
+  page_ref_filter_subsections=include.page_ref_filter_subsections
+%}
+
+{% comment %}<div>
+  <p>array_index_item : {{array_index_item}}</p>
+  <p>array_dist_children_item: {{array_dist_children_item}}</p>
+  <p>array_is_section_item : {{array_is_section_item}}</p>
+</div>{% endcomment %}
+
+{%comment%}
+  <!-- step 2 : extract items to display -->
+{%endcomment%}
+{% assign items_display_current_section = delim %}
+{% assign section_display_subsection = delim %}
+{% assign info_section_subsection = delim %}
+{% assign items_display_subsection = delim %}
+{% assign info_items_subsection = delim %}
+
+{% if  array_index_item != delim %}
+
+  {% include coll_ext/extract-sort-items/extract_items/main.html
+    array_index=array_index_item
+    array_dist=array_dist_children_item
+    page_model=include.page_ref_model
+  %}
+{% endif %}
+
+
+{% comment %}
+  <!-- extra filter -->
+{% endcomment %}
+
+
+{% include coll_ext/extract-sort-items/delete_empty_subsection.html
+    dist_to_force=site.data.coll_ext.config.display_list-items.config.dist_force_del_empty_section_default
+%}
+
+{% if force_display_no_html_gl == true or force_no_display_gl == true %}
+  {% assign info_section_subsection_ref_categories_gl  = info_section_subsection %}
+{% endif %}
+
+
+{% comment %}<!-- force details items at a given dist if mode activate -->{% endcomment %}
+{% if model_parent.activate_force_details == true %}
+  {% include coll_ext/extract-sort-items/force_items_to_display.html
+    dist_to_force=model_parent.dist_force_details
+  %}
+{% endif %}
+
+
+{% comment %}<!-- force delete details items at all dist -->{% endcomment %}
+{% if force_display_no_detail_gl == true %}
+  {% include coll_ext/extract-sort-items/delete_details_items.html
+  %}
+{% endif %}
+
+

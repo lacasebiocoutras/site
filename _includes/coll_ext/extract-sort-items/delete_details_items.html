@@ -1,0 +1,79 @@
+{%comment%}
+<!--
+  param in :
+    include
+
+
+  var globale
+    common
+    raw_items
+    extension_section
+
+
+  param out:
+
+
+ -->
+{%endcomment%}
+
+{% assign dist_to_force = -1 %}
+
+
+{% assign period_info_items_section = site.data.coll_ext.config.display_list-items.config.period_info_items_section | plus: 0 %}
+{% assign offset_index_items_section = site.data.coll_ext.config.display_list-items.config.offset_index_items_section | plus: 0 %}
+{% assign offset_dist_items_section = site.data.coll_ext.config.display_list-items.config.offset_dist_items_section | plus: 0 %}
+{% assign offset_nbitems_items_section = site.data.coll_ext.config.display_list-items.config.offset_nbitems_items_section | plus: 0 %}
+{% assign offset_tab_offset_items_section = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_items_section | plus: 0 %}
+
+{% comment %}
+  <!-- update info_items_subsection -->
+{% endcomment %}
+{% assign info_items_subsection_size = 0 %}
+{% assign info_items_subsection_force = delim %}
+
+{% if info_items_subsection != delim %}
+  {% assign info_items_subsection_part = info_items_subsection | remove_first: delim | split: delim %}
+  {% assign info_items_subsection_size = info_items_subsection_part.size %}
+{% endif%}
+
+{% assign nb_max_items_subsection = info_items_subsection_size | divided_by: period_info_items_section %}
+{% assign index_items_sub_ref = 0  %}
+{% for iter_subsections in (1..nb_max_items_subsection)  %}
+  {% comment %}<!-- info current items on subsection -->{% endcomment %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_index_items_section %}
+  {% assign index_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_dist_items_section %}
+  {% assign dist_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_nbitems_items_section %}
+  {% assign nbitems_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_tab_offset_items_section %}
+  {% assign tab_offset_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+
+  {% if dist_items_sub > dist_to_force %}
+    {% assign nbitems_items_sub = 0 %}
+    {% assign tab_offset_items_sub = 0 %}
+  {% endif %}
+
+  {% assign items_display_force = index_items_sub | append: delim | append : dist_items_sub | append: delim | append : nbitems_items_sub | append: delim | append : tab_offset_items_sub | append: delim %}
+  {% assign info_items_subsection_force = info_items_subsection_force | append: items_display_force %}
+
+  {% assign index_items_sub_ref = index_items_sub_ref | plus: period_info_items_section %}
+{% endfor %}
+
+{% comment %}
+  <!-- update items_display_current_section -->
+{% endcomment %}
+{%comment%}
+  <!-- separe details items from section items-->
+{%endcomment%}
+{% assign list_detail_items = delim %}
+{% assign list_section_items = delim %}
+{% include coll_ext/utils/extract_from_url/lists-extension-from-list-items.html
+  list_items=items_display_current_section %}
+
+{% comment %}
+  <!-- output -->
+{% endcomment %}
+{% assign items_display_current_section = list_section_items %}
+{% assign info_items_subsection = info_items_subsection_force %}
+

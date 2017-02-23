@@ -1,0 +1,9 @@
+default_model_selected: 'detail-default'
+
+default_id_symbol: '#'
+default_id_close: '#X'
+default_prefixe_id_target: 'content-'
+default_class_modal: 'oModal'
+
+default_miniature_original: 'lacasebio.png'
+

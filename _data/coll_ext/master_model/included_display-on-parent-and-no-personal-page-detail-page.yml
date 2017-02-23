@@ -1,0 +1,19 @@
+model: 'display-on-parent-and-no-personal-page-detail-page'
+force_current_model_detail_on_parent: true
+design_model_page: 'default-list_flex'
+# 'miniature-link-to-url' 'miniature-default' 'miniature-modal'
+design_detail_items: 'miniature-modal'
+config_container_detail:
+  force_url_with_id: false
+ # param to allow the content items to be displayed in the parent
+display_items_on_parent: true
+# how many children to display if display_items_on_parent: true on child sections
+dist_display_children: 0
+# config to hide page when page is displayed on a parent (display_items_on_parent=true)
+hide-page: true
+# display direct desc items, at dist 0, with priority mix > subsections_first
+mix_details_subsections_items: false
+subsections_first: false
+# display  items on child, dist > 0, with priority mix > subsections_first
+mix_details_subsections_items_on_child: false
+subsections_first_on_child: false

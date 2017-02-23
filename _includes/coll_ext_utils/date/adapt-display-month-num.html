@@ -1,0 +1,14 @@
+{%comment%}<!--
+param in :
+  include.month_tofilter
+param out:
+  new_month
+ -->{%endcomment%}
+
+{% assign new_month = include.month_tofilter %}
+{% assign month_tmp = include.month_tofilter | plus:0 %}
+{% if  month_tmp < 10 %}
+  {% assign new_month = include.month_tofilter | prepend: '0' %}
+{% endif %}
+
+

@@ -1,0 +1,51 @@
+{%comment%}
+<!--
+  param in :
+    include
+      list_subsection_categories
+
+
+  var global :
+    common-param :
+
+  param out :
+    list_categories
+    list_url_ref_categories
+
+-->
+{%endcomment%}
+
+
+{% assign list_categories = delim %}
+{% assign list_url_ref_categories = delim %}
+
+
+{% assign period_info_subsection = site.data.coll_ext.config.display_list-items.config.period_info_subsection | plus: 0 %}
+{% assign offset_index_subsection = site.data.coll_ext.config.display_list-items.config.offset_index_subsection | plus: 0 %}
+{% assign offset_dist_subsection = site.data.coll_ext.config.display_list-items.config.offset_dist_subsection | plus: 0 %}
+{% assign offset_nbitems_subsection = site.data.coll_ext.config.display_list-items.config.offset_nbitems_subsection | plus: 0 %}
+{% assign offset_tab_offset_subsection = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_subsection | plus: 0 %}
+
+{% if include.list_subsection_categories != delim %}
+  {% assign info_section_subsection_part = include.list_subsection_categories | remove_first: delim | split: delim  %}
+  {% assign info_section_subsection_size = info_section_subsection_part.size %}
+{% endif%}
+{% assign nb_max_subsection = info_section_subsection_size | divided_by: period_info_subsection %}
+{% assign index_sub_ref = 0  %}
+{% for iter_subsections in (1..nb_max_subsection)  %}
+  {% comment %}<!-- info current subsection -->{% endcomment %}
+  {% assign index_tmp = index_sub_ref | plus: offset_index_subsection %}
+  {% assign index_subsection = info_section_subsection_part[index_tmp] | plus: 0 %}
+  {% assign subsection_raw = raw_items[index_subsection] %}
+
+  {% assign url_ref_categories = subsection_raw.url | remove: extension_section  %}
+  {% assign url_ref_categories_part = url_ref_categories | remove_first: delim_url | split: delim_url  %}
+  {% assign url_ref_categories =  url_ref_categories_part | last %}
+  {% assign url_ref_categories =  url_ref_categories | prepend: delim_url | append: delim_url %}
+
+  {% assign list_categories = list_categories | append: subsection_raw.title | append: delim %}
+  {% assign list_url_ref_categories = list_url_ref_categories | append: url_ref_categories | append: delim %}
+
+  {% assign index_sub_ref = index_sub_ref | plus: period_info_subsection %}
+
+{% endfor %}

@@ -1,0 +1,30 @@
+{%comment%}<!--
+param in :
+  include
+    list
+    period
+    offsetDeb
+
+var global:
+  delim
+
+param out :
+  list_elts
+-->{%endcomment%}
+
+
+{% assign array_tmp = include.list | remove_first: delim | split: delim  %}
+{% assign array_size_tmp = array_tmp.size %}
+
+{% assign period_tmp = include.period | plus:0 %}
+{% assign nb_elt_tmp = array_size_tmp | divided_by: period_tmp | minus: 1 %}
+{% assign iter_array = include.offsetDeb | plus: 0 %}
+
+{% assign list_elts = delim %}
+
+{% for i_tmp in (0..nb_elt_tmp) %}
+
+ {% assign val_tmp = array_tmp[iter_array] | plus: 0  %}
+ {% assign list_elts = list_elts | append : val_tmp | append : delim %}
+ {% assign iter_array = iter_array | plus: period_tmp %}
+{% endfor %}

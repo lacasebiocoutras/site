@@ -1,0 +1,42 @@
+{%comment%}<!--
+  param in:
+    include
+      model
+
+
+  var globale
+    site.data.coll_ext.design.config.default_model_selected
+    site.design.UI.list_flex.models
+
+  param out :
+    config_display_container
+    styling_model_container
+
+
+
+ -->
+ {%endcomment%}
+
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% assign model_selected = site.data.coll_ext.design.UI.modal.config.default_model_selected %}
+
+{% if include.model != null %}
+  {% for model_tmp in site.data.coll_ext.design.UI.modal.models %}
+    {% if model_tmp.model == include.model %}
+      {% assign model_selected = model_tmp.model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for model_tmp in site.data.coll_ext.design.UI.modal.models %}
+  {% if model_tmp.model == model_selected %}
+    {% assign config_modal = model_tmp.config_display %}
+    {% assign config_action = model_tmp.config_action %}
+    {% assign styling_model = model_tmp.styling %}
+    {% break %}
+  {% endif %}
+{% endfor %}

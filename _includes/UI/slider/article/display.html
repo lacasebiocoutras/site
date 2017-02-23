@@ -1,0 +1,57 @@
+{%comment%}
+<!--
+  param in :
+    include
+      before
+      current_style
+      page_ref_url
+      display_header
+      add_url_to_header
+      header
+
+  var global :
+
+
+-->
+{%endcomment%}
+
+
+{% comment %}
+  <!-- init optim html scss liquid class, global -->
+{% endcomment %}
+{% include scss-liquid/optim/list-class.html
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+  delim_array=site.data.coll_ext.config.common.delimitator.array
+%}
+
+{% if include.before == true %}
+
+  {% assign add_attr = '' %}
+  {% include UI/utils/add-attributes.html
+    name_attribute='style'
+    value_attribute=include.current_style
+  %}
+
+
+  {% include scss-liquid/optim/class.html class_gl='inner__item_gl' %}
+  <li class="{{class_gl}}" {{add_attr}}>
+
+    {% if include.display_header == true %}
+      {% if include.add_url_to_header == true %}
+        <a  href="{{site.baseurl}}{{include.page_ref_url}}">
+      {% endif %}
+
+        <h4 class="heading">{{include.header}}</h4>
+
+      {% if include.add_url_to_header == true %}
+        </a>
+      {% endif %}
+
+    {% endif %}
+
+{% else %}
+
+  </li>
+
+{% endif %}

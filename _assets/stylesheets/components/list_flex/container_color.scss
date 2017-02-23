@@ -1,0 +1,68 @@
+
+.li-unresize-nobg-secondarycolor {
+  background: none;
+  box-shadow: none;
+
+  .heading {color : $secondary-color;}
+  .item_list {
+    background: $secondary-color;
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+    color: $primary-color-dark;
+  } 
+}
+
+.li-unresize-bg-secondarycolor {
+  // background: none;
+  // box-shadow: none;
+  box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+  background: $primary-color-light; //$warning-color;
+
+  .heading {color : $primary-color-dark;}
+  .item_list {
+    background: $secondary-color;
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+    color: $primary-color-dark;
+  } 
+}
+
+.li-unresize-bg-primarycolor {
+  box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+  background: $secondary-color;
+  .heading {
+    // color : $white;
+    color : $primary-color-dark;
+  }
+  .item_list {
+    background: $primary-color-light;
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);  
+  }
+}
+
+.li-unresize-no-color {
+  box-shadow: none;
+  background: none;
+  .heading {
+    color : $white;
+  }
+  .item_list {
+    box-shadow : none;
+    background: none;
+    color: $secondary-text-color;
+  } 
+}
+
+
+.li-resize-secondarycolor {
+
+  background: none;
+  .heading {
+    color : $accent-color;
+  }
+  .item_list {
+    box-shadow: 0 0 $border-shadow rgba($shadow-color, 0.5);
+    background: $secondary-color !important;
+    color: $primary-color-dark;
+  }
+}
+
+

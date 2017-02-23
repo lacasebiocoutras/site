@@ -1,0 +1,45 @@
+container:
+  picture: 'picture'
+  coll_ext: 'coll_ext'
+
+type:
+  translate: 'translate'
+  opacity: 'opacity'
+  infinite: 'infinite'
+
+list_type:
+  - type: 'translate'
+    share-container-betw-car: true
+    style_item_first: 'visibility: hidden;'
+    style_item_next: 'visibility: hidden;'
+    style_prev_next: ''
+    #specific
+    default_slides_height: 'auto'
+    force_nb_item_to_one: false
+
+  - type: 'opacity'
+    share-container-betw-car: true
+    style_item_first: 'visibility: hidden; z-index: 3;'
+    style_item_next: 'visibility: hidden; z-index: -1;'
+    style_prev_next: ''
+    #specific
+    default_slides_height: '480px'
+    force_nb_item_to_one: true
+
+  - type: 'infinite'
+    share-container-betw-car: true
+    style_item_first: ''
+    style_item_next: ''
+    style_prev_next: ''
+    #specific
+    time_transition_percent: 3
+    second_per_frame: 5
+    default_slides_max_witdh: '640px'
+
+
+type_img_source:
+  original: 'original'
+  baseurl: 'baseurl'
+  direct_url: 'direct_url'
+
+

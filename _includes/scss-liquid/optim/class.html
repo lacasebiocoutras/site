@@ -1,0 +1,53 @@
+{%comment%}
+<!--
+  param in :
+    include.class_gl
+
+  var global :
+    delim_gl
+    mode_gl
+    mode_compress_ref_gl
+    list_class_name_gl
+    list_class_default_gl
+    list_class_compress_gl
+    array_class_name_gl
+    array_class_default_gl
+    array_class_compress_gl
+    nb_class_name_gl
+
+  param out : class_gl :  default, or compress
+
+
+
+-->
+{%endcomment%}
+
+
+{% assign name_class = '' %}
+
+{% assign class_gl_test = include.class_gl | prepend: delim_gl | append: delim_gl %}
+
+{% if list_class_name_gl contains class_gl_test %}
+
+  {% comment %}<!-- det. index in array_class_name_gl -->{% endcomment %}
+  {% assign iter_search_value = 0 %}
+  {% include coll_ext/utils/array/index_of_value_in_array_string.html
+    array_part=array_class_name_gl
+    search_value=include.class_gl
+    nbElt=nb_class_name_gl
+    period_array_nbElt=1
+    offsetDeb=0
+  %}
+  {% assign index_class = iter_search_value %}
+
+  {% if mode_gl == mode_compress_ref_gl %}
+    {% assign class_gl = array_class_compress_gl[index_class] %}
+  {% else %}
+    {% assign class_gl = array_class_default_gl[index_class] %}
+  {% endif %}
+
+{% endif %}
+
+{% comment %}mode capture {% endcomment %}
+{% comment %}{{class_gl}}
+{% endcomment %}

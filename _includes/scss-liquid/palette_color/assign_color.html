@@ -1,0 +1,34 @@
+{%comment%}
+<!--
+  param in :
+    palette_color
+    name_color_search
+
+  var global :
+
+  output:
+    assign_color
+
+
+-->
+{%endcomment%}
+
+{% assign assign_color =  site.data.scss_liquid.palette-color.config.default_color  %}
+
+{% assign name_color_search = include.name_color_search | append: ''  %}
+
+{% for color in  include.palette_color %}
+
+  {% assign name_color = color.name | append: '' %}
+  {% assign code_color = color.code %}
+  {% assign type_code_color = color.type %}
+
+
+  {% if name_color == name_color_search and type_code_color == site.data.scss_liquid.palette-color.config.type_code_raw %}
+
+    {% assign assign_color = code_color %}
+
+    {% break %}
+  {% endif %}
+
+{% endfor %}

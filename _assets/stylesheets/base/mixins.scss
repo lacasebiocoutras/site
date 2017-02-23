@@ -1,0 +1,49 @@
+/*
+   Bourbon Clearfix
+   ========================================================================== */
+
+/// Provides an easy way to include a clearfix for containing floats.
+///
+/// @link http://cssmojo.com/latest_new_clearfix_so_far/
+///
+/// @example scss - Usage
+///   .element {
+///     @include clearfix;
+///   }
+///
+/// @example css - CSS Output
+///   .element::after {
+///     clear: both;
+///     content: "";
+///     display: table;
+///   }
+
+@mixin clearfix {
+  &::after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}
+
+@mixin animationCustom($animation, $duration, $transition: ease, $iteration: 1) {
+  animation-name: $animation;
+  animation-duration: $duration;
+  animation-timing-function: $transition;
+  animation-iteration-count: $iteration;
+  // animation-fill-mode: both;
+  // animation-direction: alternate;
+}
+
+
+/*
+@if $line-height != $doc-line-height and $line-height != 1 {
+    line-height: ceil($size / $line-height) * ($line-height / $size);
+  }
+@else if $line-height == 1 {
+  line-height: 1;
+}
+@else {
+  line-height: ceil($size / $doc-line-height) * ($doc-line-height / $size);
+}
+*/

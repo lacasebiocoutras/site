@@ -1,0 +1,212 @@
+{%comment%}
+<!--
+  param in :
+    include
+      header
+      list_items
+      currentdist
+      type_items
+      page_ref_url
+      model_parent
+      model_current_section
+      current_extra_sort_type
+
+  param in global
+    nb_max_items_per_section_gl
+    force_display_no_html_gl
+
+  global
+    common-param
+    info_section_subsection
+    nb_max_subsection
+
+
+  param out:
+
+ -->
+{%endcomment%}
+
+
+{% assign array_index_raw_items = include.list_items | remove_first: delim | split: delim %}
+{% assign nb_raw_items = array_index_raw_items.size | minus: 1 %}
+
+
+{% comment %}
+  <!-- specific sort based on date extra type, promotion ;  re-sort array_index_raw_items, and extra info if needed : add class invisible, ... -->
+{% endcomment %}
+
+{% if include.current_extra_sort_type != null %}
+
+  {% if include.current_extra_sort_type ==  site.data.coll_ext.config.sort_site-documents.config.extra_date_evenement %}
+    {% include coll_ext/sort_collections/extra-sort-date/date_event_filter-on-index-array.html
+      array_index_part=array_index_raw_items
+      array_index_size=nb_raw_items
+    %}
+    {% assign array_index_raw_items = array_index_sort_date_event %}
+    {% assign nb_raw_items = array_index_raw_items.size | minus: 1 %}
+  {% endif %}
+
+
+  {% if include.current_extra_sort_type == site.data.coll_ext.config.sort_site-documents.config.extra_date_promotion %}
+
+    {% comment %}<!-- based_on_type: 'date-publication' not modify, can be modify:  -->{% endcomment %}
+
+
+    {% comment %}{% include coll_ext/sort_collections/extra-sort-date/date_promotion_filter-on-index-array.html
+      array_index_part=array_index_raw_items
+      array_index_size=nb_raw_items
+    %}
+    {% assign array_index_raw_items = array_index_sort_date_event %}
+    {% assign nb_raw_items = array_index_raw_items.size | minus: 1 %}{% endcomment %}
+  {% endif %}
+
+{% endif %}
+
+
+{% comment %}
+  <!-- assign design model list -->
+{% endcomment %}
+{% assign design_model_ref = null %}
+{% include coll_ext/config/select-design_model_page.html
+  model=include.model_parent.design_model_page
+  currentdist=include.currentdist
+  type_items=include.type_items
+%}
+{% assign design_model_list_ref = design_model_ref %}
+
+{% assign hide_page_current = true %}
+{% assign page_ref_url = include.page_ref_url %}
+
+{% comment %}
+  <!--extra, force header page, title at dist0 from param model_parent -->
+{% endcomment %}
+{% assign force_flag_display_header = false %}
+{% assign force_header = include.header %}
+
+{% if include.model_parent.config_container_list.force_header_dist_0 == true and currentdist == 0 %}
+  {% assign force_flag_display_header = true %}
+
+  {% assign url_head = include.model_parent.config_container_list.force_url_header_dist_0 %}
+  {% if url_head != null and url_head != ''  %}
+    {% assign hide_page_current = false %}
+    {% assign page_ref_url = url_head %}
+  {% endif %}  
+{% endif %}
+
+{% if force_display_no_html_gl == false %}
+  {% include UI/_common/list-items/container.html
+    part_before=true
+    current_type_ui=design_model_list_ref.type
+    type_items=include.type_items
+    currentdist=include.currentdist
+    nb_items=nb_raw_items
+    page_ref_url=page_ref_url
+    hide_page_current=hide_page_current
+    design_model=design_model_list_ref.custom
+    extra_config=include.model_parent.config_container_list
+    flag_display_header=force_flag_display_header
+    header=force_header
+    list_items_sub=include.list_items
+  %}
+{% endif %}
+
+
+{% assign nb_item = 0 %}
+{% if nb_max_items_per_section_gl == null %}
+  {% assign nb_max_items_per_section_gl = site.data.coll_ext.config.display_list-items.config.nb_max_items_per_section  %}
+{% endif %}
+
+
+{% comment %}
+  <!-- loop on items -->
+{% endcomment %}
+{% for index_item in (0..nb_raw_items) %}
+
+  {% assign index_current_raw_item = array_index_raw_items[index_item] | plus: 0  %}
+  {% assign current_item = raw_items[index_current_raw_item] %}
+
+  {% comment %}todo : filter section, specific list items{% endcomment %}
+
+
+  {%comment%}
+    <!-- prepare name id, specific detail items list-flex  -->
+  {%endcomment%}
+  {% assign current_name_id = null %}
+  {% include coll_ext/utils/extract_from_url/name_id.html
+    url=current_item.url
+  %}
+  {% assign current_name_id = name_id %}
+
+  {% if force_display_no_html_gl == false %}
+
+    {% comment %}<!-- add_class_invisible, specific list-flex with id for each detail item defined -->{% endcomment %}
+    {% include UI/_common/list-items/article.html
+      current_type_ui=design_model_list_ref.type
+      part_before=true
+      design_model=design_model_list_ref.custom
+      extra_config=include.model_parent.config_article_list
+      name_id=current_name_id
+      page_ref_url=null
+      hide_page_current=null
+      flag_display_header=null
+      header=null
+    %}
+    <article itemscope itemtype="http://schema.org/CreativeWork">
+
+      {% include coll_ext/section-display_detail-item/display-item.html
+        model_parent=include.model_parent
+        current_dist=include.currentdist
+        index_item=index_current_raw_item
+        delim=delim
+        force_url_with_id_to_container=null
+        force_url_add_to_container=null
+      %}
+
+    </article>
+    {% include UI/_common/list-items/article.html
+      current_type_ui=design_model_list_ref.type
+      part_before=false
+      design_model=null
+      extra_config=null
+      name_id=null
+      page_ref_url=null
+      hide_page_current=null
+      flag_display_header=null
+      header=null
+    %}
+
+  {% else %}
+    {% comment %}<!-- no display html, add info index_current_raw_item; current_name_id, .. -->{% endcomment %}
+    {% assign list_index_raw_items_gl = list_index_raw_items_gl | append : index_current_raw_item | append : delim %}
+    {% assign list_name_id_items_gl = list_name_id_items_gl | append : current_name_id | append : delim %}
+
+    {% assign list_section_items_gl = delim %}
+
+
+
+  {% endif %}
+
+  {% assign nb_item = nb_item | plus: 1 %}
+  {% if nb_item == nb_max_items_per_section_gl %}
+    {% break %}
+  {% endif %}
+
+{% endfor %}
+
+
+{% if force_display_no_html_gl == false %}
+  {% include UI/_common/list-items/container.html
+    part_before=false
+    current_type_ui=design_model_list_ref.type
+    type_items=include.type_items
+    currentdist=include.currentdist
+    nb_items=nb_raw_items
+    page_ref_url=page_ref_url
+    hide_page_current=null
+    design_model=design_model_list_ref.custom
+    extra_config=include.model_parent.config_container_list
+    flag_display_header=null
+    header=null
+    list_items_sub=null
+  %}
+{% endif %}

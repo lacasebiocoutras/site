@@ -1,0 +1,57 @@
+/* ==========================================================================
+   CRITICAL CSS
+   ========================================================================== */
+
+{% comment %}//palette color, dynamic load{% endcomment %}
+{% include scss-liquid/palette_color/scss.html
+  palette_color=site.data.custom.design.palette_color
+%}
+
+@import "base/variables";
+@import "base/font-critical";
+
+@import "breakpoint";
+@import "base/mixins";
+
+@import "base/reset";
+@import "base/base-slidebars";
+{% comment %}@import "base/base";{% endcomment %}
+{% comment %}@import 'lib/slidebars';{% endcomment %}
+
+
+@import "utils/suitcss-utils-display";
+@import "utils/suitcss-utils-text";
+@import 'utils/grid';
+@import 'utils/animations';
+@import 'utils/media';
+@import 'utils/spacing';
+
+@import 'components/site';
+@import 'components/container';
+@import 'components/header-nav-home';
+@import 'components/footer';
+
+
+@import 'components/list_flex/container-default';
+@import 'components/list_flex/container_color';
+@import 'components/miniature/container-default';
+
+
+
+{% comment %}specif default-page : {% endcomment %}
+@import 'components/default-page';
+{% comment %}@import 'components/post-content';{% endcomment %}
+
+
+{% comment %}specif home page{% endcomment %}
+{% comment %}@import 'components/home-page';{% endcomment %}
+
+{% comment %}specif search{% endcomment %}
+@import "components/list_flex/container-selection-produits";  
+@import 'components/miniature/container-selection-produits';
+
+{% comment %}to delete : {% endcomment %}
+{% comment %}@import 'lib/swiper';{% endcomment %}
+{% comment %}@import 'lib/swiper-acceuil-selection';{% endcomment %}
+
+

@@ -1,0 +1,276 @@
+{%comment%}
+<!--
+param in :
+ include
+   collection_name
+   urlref
+   sort_type_model (null)
+   max_dist_display_children (null)
+   page_ref_choose_subsections
+   page_ref_filter_subsections
+
+param out :
+  raw_items
+  array_index_item :list index of sorted items in raw_items; conditionned :  |1|2|3|
+  array_dist_children_item :  |1|1|2|
+  array_is_section_item :  |1|0|1| , 1: true
+ -->
+
+<!-- todo : filter on collection with url_ref info -->
+{%endcomment%}
+
+
+{%comment%}
+  <!--output -->
+{%endcomment%}
+{% assign raw_items = null %}
+{% assign array_index_item = delim %}
+{% assign array_dist_children_item = delim %}
+{% assign array_is_section_item = delim %}
+
+
+{%comment%}
+  <!--param config sort -->
+{%endcomment%}
+{% assign sort_level_children = site.data.coll_ext.config.sort_site-documents.config.sort_level_children %}
+{% assign type_date_ref = site.data.coll_ext.config.sort_site-documents.config.type_date_ref %}
+{% assign sort_max_order_display = site.data.coll_ext.config.sort_site-documents.config.sort_max_order_display %}
+{% assign period_unix = site.data.coll_ext.config.sort_site-documents.config.period_unix %}
+
+{%comment%}
+  <!--input -->
+{%endcomment%}
+{% include coll_ext/sort_collections/utils/assign_std_sort_model.html
+  model_sort_type=include.sort_type_model
+%}
+{% assign sort_type_filter = model_sort.sort_type_filter %}
+{% assign sort_revfilter = model_sort.sort_revfilter %}
+{% assign sort_type_subfilter = model_sort.sort_type_subfilter %}
+{% assign sort_rev_subfilter = model_sort.sort_rev_subfilter %}
+
+{%comment%}
+  <!--specific force mode, add filter on subsections : choose or filter -->
+{%endcomment%}
+{% assign filter_name_subsections = null %}
+{% assign size_choose = include.page_ref_choose_subsections.size | plus: 0 %}
+{% assign size_filter = include.page_ref_filter_subsections.size | plus: 0 %}
+
+{% if include.page_ref_choose_subsections != null and size_choose > 0 %}
+  {% assign array_name_subsections = include.page_ref_choose_subsections  %}
+  {% assign filter_name_subsections = site.data.coll_ext.model_list-detail-items..config.display_some_section %}
+{% endif %}
+{% if filter_name_subsections == null and include.page_ref_filter_subsections != null and size_filter > 0  %}
+  {% assign array_name_subsections = include.page_ref_filter_subsections %}
+  {% assign filter_name_subsections = site.data.coll_ext.model_list-detail-items..config.display_all_except_one %}
+{% endif %}
+
+
+
+
+{% assign url_ref = include.urlref %}
+
+{% capture nowunix %}{{'now' | date: '%s'}}{% endcapture %}
+
+
+{%comment%}
+  <!-- global var ::  raw_items , current collection -->
+  <!-- todo  filter with url_ref-->
+{%endcomment%}
+{% for collection in site.collections %}
+  {% if collection.label == include.collection_name %}
+    {% assign raw_items = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+
+
+{%comment%}
+  <!--   limit max of order for an item to be display -->
+{%endcomment%}
+{% if model_sort.sort_max_order != null %}
+  {% assign sort_max_order_display = model_sort.sort_max_order | plus: 0 %}
+{% endif %}
+
+{% assign max_order_display = sort_max_order_display | plus: 1 %}
+
+
+
+{%comment%}
+  <!--   limit dist of chidren to be sort, from the current/parent section -->
+{%endcomment%}
+{% if include.max_dist_display_children != null %}
+  {% assign sort_level_children = include.max_dist_display_children | plus: 1 | plus: 1 %}
+  {%comment%}
+    <!-- plus 1 , to display details and subsections items of the last child, and plus 1 to be strictly sup -->
+  {%endcomment%}
+{% endif %}
+
+
+
+{%comment%}
+  <!-- apply default jekyll sort_filter on raw_items -->
+{%endcomment%}
+
+{% if sort_type_filter == type_date_ref %}
+  {% assign sort_filter_tmp = sort_type_subfilter %}
+  {% assign sort_rev_tmp = sort_rev_subfilter %}
+{% else %}
+  {% assign sort_filter_tmp = sort_type_filter %}
+  {% assign sort_rev_tmp = sort_revfilter %}
+{% endif %}
+
+
+{% if raw_items != null %}
+  {% if sort_filter_tmp != null and sort_filter_tmp != '' %}
+    {% assign raw_items = raw_items | sort: sort_filter_tmp %}
+  {% endif %}
+  {% assign rev_filter = true %}
+  {% if sort_rev_tmp == null or sort_rev_tmp == false %}
+    {% assign rev_filter = false %}
+  {% endif %}
+  {% if rev_filter == true %}
+    {% assign raw_items = raw_items | reverse %}
+  {% endif %}
+{% endif %}
+
+
+
+{% assign array_index_size = -1 %}
+{% assign array_index = delim %}
+{% assign array_dist_children = delim %}
+{% assign array_is_section = delim %}
+{% assign array_time_tosort = delim %}
+{% assign array_time_uniq = delim %}
+
+
+{% for item_tmp in raw_items %}
+   {% if item_tmp.url contains url_ref and item_tmp.order < max_order_display  %}
+
+    {% assign url_tmp =  item_tmp.url | remove_first: url_ref %}
+    {% assign url_tmp = url_tmp | remove_first: extension_section | remove_first: extension_item %}
+    {% assign url_tmp = url_tmp | split: '/' %}
+    {% assign dist_child = url_tmp.size | minus: 1  %}
+
+    {% assign add_item_to_array = false %}
+    {% if dist_child > 0 and dist_child < sort_level_children %}
+      {% assign add_item_to_array = true %}
+    {% endif %}
+
+    {% comment %}<!-- filtering subsection part -->{% endcomment %}
+    {% if filter_name_subsections != null %}
+      {% assign filtering_name_item = false %}
+        {% include coll_ext_utils/list-detail-items_filter-section.html
+          filter_name_section=filter_name_subsections
+          array_name_section=array_name_subsections
+          url_item=item_tmp.url
+        %}
+        {% if filtering_name_item == true %}
+          {% assign add_item_to_array = false %}
+        {% endif %}
+    {% endif %}
+
+
+    {% if add_item_to_array == true %}
+
+      {% assign index_to_array = forloop.index0 %}
+
+      {% assign array_index = array_index | append : index_to_array | append: delim %}
+
+      {% assign array_dist_children = array_dist_children | append : dist_child | append: delim %}
+
+      {% assign is_section = false %}
+      {% if item_tmp.url contains extension_section %}
+        {% assign is_section = true %}
+      {% endif %}
+      {% assign array_is_section = array_is_section | append : is_section | append: delim %}
+
+
+      {% if sort_type_filter == type_date_ref or sort_type_subfilter == type_date_ref %}
+
+        {% include coll_ext/sort_collections/date_publi_filter/convert-date-publi-unix.html %}
+        {% assign diff_date = new_date_convert_unix | minus: nowunix %}
+        {% assign date_unix = diff_date | divided_by: period_unix %}
+        {% assign date_unix_str = date_unix | append: delim%}
+
+        {% assign array_time_tosort = array_time_tosort | append : date_unix_str %}
+
+        {% assign date_unix_test= date_unix_str | prepend: delim %}
+        {% unless array_time_uniq contains date_unix_test %}
+          {% if array_time_uniq == delim %}
+            {%assign max_time = date_unix %}{%assign min_time = date_unix %}
+          {% else %}
+            {% if date_unix > max_time %}
+              {% assign max_time = date_unix %}
+            {% endif %}
+            {% if date_unix < min_time %}
+              {% assign min_time = date_unix %}
+            {% endif %}
+          {% endif %}
+          {% assign array_time_uniq = array_time_uniq | append : date_unix_str %}
+        {% endunless%}
+      {% endif %}
+
+    {% endif %} {%comment%}<!-- end loop (if add_item_to_array == true)  -->{%endcomment%}
+  {% endif %}
+{% endfor %}
+
+
+{% if sort_type_filter == type_date_ref %}
+
+  {% include coll_ext/sort_collections/date_publi_filter/sort-index-date-publi.html
+    array_index=array_index
+    array_dist_children=array_dist_children
+    array_is_section=array_is_section
+    array_time_tosort=array_time_tosort
+    array_time_uniq=array_time_uniq
+    sort_revfilter=sort_revfilter
+    output_temp=false
+  %}
+
+{% else %}
+
+  {%comment%}<!-- sort  with order, title, .. rev or not -->{%endcomment%}
+  {% assign array_index_item = delim %}
+  {% assign array_dist_children_item = delim %}
+  {% assign array_is_section_item = delim %}
+
+  {% if array_index != delim %}
+    {% assign array_index_item = array_index %}
+    {% assign array_dist_children_item = array_dist_children %}
+    {% assign array_is_section_item = array_is_section %}
+  {% endif %}
+
+  {%comment%}
+    <!-- add subfilter date-publication rev or not, with sort_type_filter='order','title'..need to be implement for other param -->
+  {%endcomment%}
+  {% if sort_type_filter == 'order' or sort_type_filter == 'title' %}
+    {% if sort_type_subfilter == type_date_ref %}
+
+      {% assign array_index_out = delim %}
+      {% assign array_dist_children_out =  delim %}
+      {% assign array_is_section_out =  delim %}
+
+
+      {% include coll_ext/sort_collections/date_publi_filter/sort-index-subfilter-date-publi.html
+        array_index=array_index
+        array_dist_children=array_dist_children
+        array_is_section=array_is_section
+        array_time_tosort=array_time_tosort
+        array_time_uniq=array_time_uniq
+        sort_filter=sort_type_filter
+        sort_subfilter=sort_type_subfilter
+        sort_rev_subfilter=sort_rev_subfilter
+        output_temp=true
+      %}
+
+      {% if array_index_out != delim %}
+        {% assign array_index_item = array_index_out %}
+        {% assign array_dist_children_item = array_dist_children_out %}
+        {% assign array_is_section_item = array_is_section_out %}
+      {% endif %}
+
+    {% endif %}
+  {% endif %}
+
+{% endif %}

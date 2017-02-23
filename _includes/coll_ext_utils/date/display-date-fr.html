@@ -1,0 +1,210 @@
+{%comment%}<!--
+param in :
+  include.date
+  include.date_end
+  data/custom.config-date
+param out :
+  date_text_out
+ -->{%endcomment%}
+
+{%comment%}<!-- date_event : date evenement, first day -->{%endcomment%}
+{% include coll_ext_utils/date/convert-date-fr-en2en_unix.html date=include.date %}
+{% assign date_event = new_date_convert %}
+{% assign date_event_unix = new_date_convert_unix %}
+{% include coll_ext_utils/date/longdate-en2fr.html date=date_event %}
+{% assign date_event_trad = new_date_convert %}
+{% assign date_event_trad_part = date_event_trad | strip | split: ' '  %}
+
+
+ {%comment%}<!-- CASE : ONE DAY EVENT-->{%endcomment%}
+{% if include.date_end == null or include.date_end == include.date %}
+
+  {% assign diff_date_event = 0 %}
+  {%comment%}<!-- config text -->{%endcomment%}
+  {% assign textOut = site.data.coll_ext.config.date.text_date_event_fr.one_day %}
+  {% assign separator = ' ' %}
+  {% if textOut.separatorDate != null %}
+    {% assign separator = textOut.separatorDate %}
+  {% endif %}
+  {% assign space = ' ' %}
+  {% if textOut.spaceWord != null %}
+    {% assign space = textOut.spaceWord %}
+  {% endif %}
+
+ {%comment%}<!-- CASE : EVENT DURING MORE THAN A DAY-->{%endcomment%}
+{% else %}
+
+  {%comment%}<!-- date_end_event : last day event -->{%endcomment%}
+  {% include coll_ext_utils/date/convert-date-fr-en2en_unix.html date=include.date_end %}
+  {% assign date_end_event = new_date_convert %}
+  {% assign date_end_event_unix = new_date_convert_unix %}
+  {% include coll_ext_utils/date/longdate-en2fr.html date=date_end_event %}
+  {% assign date_end_event_trad = new_date_convert %}
+  {% assign date_end_event_trad_part = date_end_event_trad | split: ' ' %}
+
+   {%comment%}<!-- info unix timestap for comparison -->{%endcomment%}
+  {% assign one_day_unix = 86400 %}
+  {% assign week_firstday = site.data.custom.config-date.date_shop.firstday %}
+  {% include coll_ext_utils/date/convert-day-fr2en_num.html day_toconvert=week_firstday %}
+  {% assign week_firstday_num = new_date_convert_num %}
+  {% assign week_lastday = site.data.custom.config-date.date_shop.lastday %}
+  {% include coll_ext_utils/date/convert-day-fr2en_num.html day_toconvert=week_lastday %}
+  {% assign week_lastday_num = new_date_convert_num %}
+  {% assign nb_day_week = week_lastday_num | minus: week_firstday_num %}
+  {% assign week_period = one_day_unix | times: nb_day_week %}
+
+
+  {%comment%}<!-- test same year -->{%endcomment%}
+  {% assign same_year = true %}
+  {% if date_event_trad_part[3] != date_end_event_trad_part[3] %}
+    {% assign same_year = false %}
+  {% endif %}
+  {%comment%}<!-- test same month, with local reconv -->{%endcomment%}
+  {% assign month_tmp = date_event_trad_part[2] %}
+  {% include coll_ext_utils/date/convert-month-fr2en_num.html month_toconvert=month_tmp %}
+  {% assign month_date_event = new_date_convert_num %}
+  {% assign month_tmp = date_end_event_trad_part[2] %}
+  {% include coll_ext_utils/date/convert-month-fr2en_num.html month_toconvert=month_tmp %}
+  {% assign month_date_end_event = new_date_convert_num %}
+  {% assign same_month = true %}
+  {% if month_date_event != month_date_end_event %}
+    {% assign same_month = false %}
+  {% endif %}
+
+  {%comment%}<!-- filter : how many days ? -->{%endcomment%}
+  {% assign diff_date_event = date_end_event_unix | minus: date_event_unix %}
+  {% if diff_date_event < 0%}
+    {%comment%}<!-- ! inversion date : only display date_evenement as one day's event-->{%endcomment%}
+  {% endif%}
+
+  {%comment%}<!-- add text option, from data/utils, depend how many days -->{%endcomment%}
+  {% if diff_date_event == one_day_unix %}
+    {% assign textOut = site.data.coll_ext.config.date.text_date_event_fr.two_day %}
+  {% elsif diff_date_event == week_period %}
+    {% assign textOut = site.data.coll_ext.config.date.text_date_event_fr.one_week %}
+  {% elsif diff_date_event > week_period %}
+    {% assign textOut = site.data.coll_ext.config.date.text_date_event_fr.more_than_one_week %}
+  {% else %}
+    {% assign textOut = site.data.coll_ext.config.date.text_date_event_fr.default_days %}
+  {% endif %}
+
+  {% assign separator = ' ' %}
+  {% if textOut.separatorDate != null %}
+    {% assign separator = textOut.separatorDate %}
+  {% endif %}
+  {% assign space = ' ' %}
+  {% if textOut.spaceWord != null %}
+    {% assign space = textOut.spaceWord %}
+  {% endif %}
+  {%comment%}<!-- ending add text option, from data/custom.config-date -->{%endcomment%}
+
+{% endif %}
+
+
+
+
+{%comment%}<!-- assign day -->{%endcomment%}
+{%comment%}<!-- date_first_part -->{%endcomment%}
+{% assign date_first_part = '' %}
+{% if textOut.maskLongday == null or textOut.maskLongday == '' %}
+  {% assign date_first_part = date_event_trad_part[0] | append: space  %}
+{% endif %}
+{%comment%}<!-- adapt display day 1er, 1st,.. -->{%endcomment%}
+{% assign num_day = date_event_trad_part[1] %}
+{% include coll_ext_utils/date/adapt-display-day-num.html day_tofilter=num_day separator=separator %}
+{% assign date_first_part = date_first_part | append: new_day %}
+{%comment%}<!-- date_last_part -->{%endcomment%}
+{% assign date_last_part = '' %}
+{% if diff_date_event > 0 %}
+  {% if textOut.maskLongday == null or textOut.maskLongday == '' %}
+    {% assign date_last_part = date_end_event_trad_part[0] | append: space  %}
+  {% endif %}
+  {%comment%}<!-- adapt display day 1er, 1st,.. -->{%endcomment%}
+  {% assign num_day = date_end_event_trad_part[1] %}
+  {% include coll_ext_utils/date/adapt-display-day-num.html day_tofilter=num_day separator=separator %}
+  {% assign date_last_part = date_last_part | append: new_day %}
+{% endif %}
+{%comment%}<!-- ending assign day -->{%endcomment%}
+
+{%comment%}<!-- assign month -->{%endcomment%}
+{% assign add_info_first_part = false %}
+{% assign add_info_last_part = false %}
+{% if diff_date_event > 0 %}
+  {% assign add_info_last_part = true %}
+  {% if same_month == false or same_year == false %}
+     {% assign add_info_first_part = true %}
+  {% endif %}
+{% else %}
+  {% assign add_info_first_part = true %}
+{% endif %}
+
+{% if add_info_first_part == true %}
+  {% if textOut.maskLongmonth == null or textOut.maskLongmonth == '' %}
+    {% assign date_first_part = date_first_part | append: separator | append: date_event_trad_part[2] | append: separator  %}
+  {% else %}
+    {% assign month_tmp = date_event_trad_part[2] %}
+    {% include coll_ext_utils/date/convert-month-fr2en_num.html month_toconvert=month_tmp %}
+    {%comment%}<!-- adapt display month :  2 to 02, .. -->{%endcomment%}
+    {% include coll_ext_utils/date/adapt-display-month-num.html month_tofilter=new_date_convert_num %}
+    {% assign date_first_part = date_first_part | append: separator | append: new_month %}
+  {% endif %}
+{% endif %}
+{% if add_info_last_part == true %}
+  {% if textOut.maskLongmonth == null or textOut.maskLongmonth == '' %}
+    {% assign date_last_part = date_last_part | append: separator | append: date_end_event_trad_part[2] %}
+  {% else %}
+    {% assign month_tmp = date_end_event_trad_part[2] %}
+    {% include coll_ext_utils/date/convert-month-fr2en_num.html month_toconvert=month_tmp %}
+    {%comment%}<!-- adapt display month :  2 to 02, .. -->{%endcomment%}
+    {% include coll_ext_utils/date/adapt-display-month-num.html month_tofilter=new_date_convert_num %}
+    {% assign date_last_part = date_last_part | append: separator | append: new_month %}
+  {% endif %}
+{% endif %}
+{%comment%}<!-- ending assign month -->{%endcomment%}
+
+{%comment%}<!-- assign year-->{%endcomment%}
+{%comment%}<!-- show always in static, in javascript it will be filter on short list if same as current year -->{%endcomment%}
+{% if diff_date_event > 0 %}
+  {% if same_year == true %}
+    {% assign date_last_part = date_last_part | append: separator | append: date_end_event_trad_part[3] %}
+  {% else %}
+    {% assign date_first_part = date_first_part | append: separator | append: date_event_trad_part[3] %}
+    {% assign date_last_part = date_last_part | append: separator | append: date_end_event_trad_part[3] %}
+  {% endif %}
+{% else %}
+  {% assign date_first_part = date_first_part | append: separator | append: date_event_trad_part[3]  %}
+{% endif %}
+{%comment%}<!-- ending assign year-->{%endcomment%}
+
+
+{%comment%}<!-- text output -->{%endcomment%}
+{% if textOut.intro == null or textOut.intro == ''  %}
+  {% assign date_first_part = date_first_part | capitalize %}
+  {% assign date_text_out = '' %}
+{% else %}
+  {% assign date_text_out = textOut.intro | append:space %}
+{% endif %}
+
+{% if diff_date_event > 0 %}
+  {% assign date_text_out = date_text_out | append: date_first_part | append:space %}
+  {% assign date_text_out = date_text_out | append: textOut.link | append:space %}
+  {% assign date_text_out = date_text_out | append: date_last_part %}
+{% else %}
+  {% assign date_text_out = date_text_out | append: date_first_part %}
+{% endif %}
+
+{% if textOut.last != null %}
+  {% assign date_text_out = date_text_out | append: textOut.last %}
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+

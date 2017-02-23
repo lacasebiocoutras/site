@@ -1,0 +1,77 @@
+---
+layout: compress
+---
+
+{% comment %} information "slider-translate-selection-produits-su-0" {% endcomment %}
+{% for list in site.data.coll_ext.model_json.list-model-json %}
+  {% if list.id == 'categorie-recherche-selection-produits' %}   
+    {% include coll_ext_utils/list-detail-items_init_step.html %}
+    {% include coll_ext/main.html
+      force_page_ref_input=true
+      force_display_no_html=true
+      force_no_display=true
+    %}
+  {% endif %}
+{% endfor %}
+{% comment %} output utils : info_section_subsection_ref_categories_gl{% endcomment %}
+<!-- form list categories -->
+{% assign list_categories = delim %}
+{% assign list_url_ref_categories = delim %}
+
+{% include coll_ext_search/json/assign_list_categories.html
+  list_subsection_categories=info_section_subsection_ref_categories_gl
+%}
+{% assign array_categories = list_categories | remove_first: delim | split: delim %}
+{% assign nb_max_slider = array_categories.size %}
+
+
+
+{% comment %} information "slider-translate-selection-produits-su-0" {% endcomment %}
+{% for collection in site.collections %}
+  {% if collection.label == 'nos-informations' %}
+    {% assign raw_items_navig_acceuil = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign items_tmp = raw_items_navig_acceuil | sort: 'order' %}
+
+{% assign cpt_images_carousel = 0 %}
+
+{% for item_tmp in items_tmp %}  
+  {% if item_tmp.path contains '/page-acceuil/carousel/' %} 
+    {% unless item_tmp.path contains '/index.md'  %}      
+      {% if item_tmp.order < 100 %}
+        {% assign cpt_images_carousel = cpt_images_carousel | plus:1 %}        
+      {% endif %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+
+
+
+
+
+{% comment %}<!-- 
+  class_slider and id_item_slider to adapt, recup in browser dbg TODO
+-->{% endcomment %}
+{ "list" : [
+    {"url":"/",
+     "class_slider": "slider-translate-selection-produits-su-0",
+     "id_item_slider": "translate-selection-produits-su-0-",
+     "nb_items_slider": {{nb_max_slider}},
+     "delay_sec": 4,
+     "btn_active_loop": "loop-selection-produits-su-0"
+    },
+    {"url":"/",
+     "class_slider": "slider-translate-t-acc",
+     "id_item_slider": "translate-t-acc-",
+     "nb_items_slider": {{cpt_images_carousel}},
+     "delay_sec": 4,
+     "btn_active_loop": "loop-t-acc"
+    }
+  ],
+  "config" :
+  {
+  }
+
+}

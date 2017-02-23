@@ -1,0 +1,142 @@
+{%comment%}
+<!--
+  param in :
+    include
+      list_index_raw
+      list_index_extract
+      page_ref_url
+      model_parent
+      model_current_section
+      current_extra_sort_type
+      currentdist
+      title_detail_items
+
+    todo : include.title_detail_items=page.title-last-section
+
+  var globale
+    delim
+    raw_items
+    extension_section
+
+
+  param out:
+
+
+ -->
+{%endcomment%}
+
+
+
+{% assign currentdist = include.currentdist | plus: 0 %}
+{% if currentdist > 0 %}
+  {% assign model_mix_ref = include.model_parent.mix_details_subsections_items_on_child %}
+  {% assign model_sub_first_ref = include.model_parent.subsections_first_on_child %}
+{% else %}
+  {% assign model_mix_ref = include.model_parent.mix_details_subsections_items %}
+  {% assign model_sub_first_ref = include.model_parent.subsections_first %}
+{% endif %}
+
+
+{%comment%}
+  <!-- DISPLAY mix detail items and section items, param mix_details_subsections_items=true -->
+{%endcomment%}
+
+{% if model_mix_ref != null and model_mix_ref != false %}
+  {% if include.list_index_extract != delim %}
+    {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+      header=include.title_detail_items
+      list_items=include.list_index_extract
+      currentdist=currentdist
+      type_items=site.data.coll_ext.design.config.param.name_ref.mix_items
+      page_ref_url=include.page_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+  {% endif %}
+
+
+{%comment%}
+  <!-- ELSE DISPLAY separate details items / section items -->
+{%endcomment%}
+{% else %}
+
+  {%comment%}
+    <!-- preliminary :  separe details items from section items-->
+  {%endcomment%}
+  {% assign list_detail_items = delim %}
+  {% assign list_section_items = delim %}
+  {% include coll_ext/utils/extract_from_url/lists-extension-from-list-items.html
+    list_items=include.list_index_extract %}
+
+
+  {%comment%}
+    <!-- todo gestion header-->
+  {%endcomment%}
+  {% assign header_details = include.title_detail_items %}
+  {% assign header_subsections = include.title_detail_items %}
+
+
+
+  {%comment%}
+    <!-- STEP1 : display detail items of the current page/section, before subsections, or not after  -->
+  {%endcomment%}
+  {% unless model_sub_first_ref != null and model_sub_first_ref != false %}
+    {% if list_detail_items != delim %}
+
+      {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+        header=header_details
+        list_items=list_detail_items
+        currentdist=currentdist
+        type_items=site.data.coll_ext.design.config.param.name_ref.detail_items
+        page_ref_url=include.page_ref_url
+        model_parent=include.model_parent
+        model_current_section=include.model_current_section
+        current_extra_sort_type=include.current_extra_sort_type
+      %}
+
+      {% assign header_subsections = null %}
+    {% endif %}
+  {% endunless %}
+
+
+
+  {%comment%}
+    <!-- STEP2 : display subsections with no child -->
+  {%endcomment%}
+  {% if list_section_items != delim %}
+    {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+      header=header_subsections
+      list_items=list_section_items
+      currentdist=currentdist
+      type_items=site.data.coll_ext.design.config.param.name_ref.subsection_items
+      page_ref_url=include.page_ref_url
+      model_parent=include.model_parent
+      model_current_section=include.model_current_section
+      current_extra_sort_type=include.current_extra_sort_type
+    %}
+
+    {% assign header_details = null %}
+  {% endif %}
+
+  {%comment%}
+    <!-- STEP1 bis : display detail items of the current page/section, after subsections, or not before  -->
+  {%endcomment%}
+  {% if model_sub_first_ref != null and  model_sub_first_ref != false %}
+    {% if list_detail_items != delim %}
+      {% include coll_ext/section-display_list-items/display-items-current-section-to-an-item.html
+        header=header_details
+        list_items=list_detail_items
+        currentdist=currentdist
+        diff_dist_section=0
+        type_items=site.data.coll_ext.design.config.param.name_ref.detail_items
+        page_ref_url=include.page_ref_url
+        model_parent=include.model_parent
+        model_current_section=include.model_current_section
+        current_extra_sort_type=include.current_extra_sort_type
+      %}
+    {% endif %}
+  {% endif %}
+
+
+{% endif %}

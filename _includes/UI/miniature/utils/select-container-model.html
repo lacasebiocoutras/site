@@ -1,0 +1,49 @@
+{%comment%}<!--
+  param in:
+    include
+      model
+      item_is_section
+
+
+  var globale
+    site.data.coll_ext.design.config.default_model_selected
+    site.design.UI.list_flex.models
+
+  param out :
+    config_display_container
+    styling_model_container
+
+
+
+ -->
+ {%endcomment%}
+
+
+{% comment %}
+  <!-- filter with current model -->
+{% endcomment %}
+{% assign model_selected = site.data.coll_ext.design.UI.miniature.config.default_container_selected %}
+
+{% if include.item_is_section == true %}
+  {% assign type_design = include.model.type_subsection_item %}
+{% else %}
+  {% assign type_design = include.model.type_detail_item %}
+{% endif %}
+{% assign current_model_container = type_design.container_model.custom %}
+
+{% if current_model_container != null %}
+  {% for model_tmp in site.data.coll_ext.design.UI.miniature.models %}
+    {% if model_tmp.model == current_model_container %}
+      {% assign model_selected = model_tmp.model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for model_tmp in site.data.coll_ext.design.UI.miniature.models %}
+  {% if model_tmp.model == model_selected %}
+    {% assign config_display_container = model_tmp.config_display %}
+    {% assign styling_model_container = model_tmp.styling %}
+    {% break %}
+  {% endif %}
+{% endfor %}

@@ -1,0 +1,43 @@
+---
+layout: master
+---
+
+
+
+<div class="default-page-content" itemscope itemtype="http://schema.org/BlogPosting">
+
+  
+{% unless page.model %}
+
+  <div class="list-items case-list-unresize li-unresize-bg-primarycolor">
+    <ul class="Grid Grid--gutters-m">
+      <li class="item_list Grid-cell u-full">
+      	{% assign force_title_h2 = false %}
+      	{% if content contains '<h1' %}
+      		{% assign force_title_h2 = true %}
+      	{% endif %}
+      	{% assign home_title = site.title | prepend: "Acceuil&nbsp;" %}
+        {% include coll_ext_utils/path-navig-title.html 
+        	title=home_title 
+        	class_logo="logo-back"
+        	force_title_h2=force_title_h2
+        %}
+      </li>
+      
+      <li class="item_list Grid-cell u-full u-spaceBP">
+      	<div class="post-content" itemprop="articleBody">
+          {{ content }} 
+        </div>
+      </li>
+    </ul>
+  </div>
+
+{% else %} 	
+	<!-- <div class="post-content" itemprop="articleBody"> -->
+    {{ content }} 
+  <!-- </div> -->
+{% endunless %}
+	
+  
+
+</div>

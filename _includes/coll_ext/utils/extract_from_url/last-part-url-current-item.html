@@ -1,0 +1,50 @@
+{%comment%}
+<!--
+  param in :
+    include
+      current_item_url
+      extension_section
+      extension_item
+
+  param out
+    current_item_is_section
+    current_item_url_size
+    last_part_url_curren_item
+
+-->
+{%endcomment%}
+
+{%comment%}
+  <!-- output -->
+{%endcomment%}
+{% assign last_part_url_curren_item = null %}
+
+{%comment%}
+  <!-- input -->
+{%endcomment%}
+{% assign current_item_url = include.current_item_url %}
+
+
+{% assign current_extension =  extension_item %}
+{% assign current_item_is_section = false %}
+{% if current_item_url contains extension_section %}
+  {% assign current_extension =  extension_section %}
+  {% assign current_item_is_section = true %}
+{% endif %}
+
+
+{%comment%}
+  <!-- extract url information, name_current_item -->
+{%endcomment%}
+{% assign url_init_item = current_item_url | remove_first: current_extension %}
+{% assign url_init_item_part = url_init_item | split: '/' %}
+{% assign current_item_url_size = url_init_item_part.size | minus: 1 %}
+
+{% assign name_current_item = url_init_item_part[current_item_url_size]%}
+{% assign last_part_url_curren_item = name_current_item  | append : current_extension | prepend: '/' %}
+{%comment%}<!-- note: add append current_extension for comparaison, to discriminate ambigious cases -->{%endcomment%}
+
+<!--  detail item :  filter last_part_url_curren_item, xxx.html-->
+{% if current_item_is_section == false %}
+  {% assign current_item_url_size = current_item_url_size | minus: 1 %}
+{% endif %}

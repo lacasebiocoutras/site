@@ -1,0 +1,56 @@
+{% comment %}
+  <!-- report info sub, update info_section_subsection_force part  -->
+{% endcomment %}
+{% assign val_tmp = index_subsection | append: delim %}
+{% assign info_section_subsection_force = info_section_subsection_force | append: val_tmp %}
+
+{% assign val_tmp = dist_subsection | append: delim %}
+{% assign info_section_subsection_force = info_section_subsection_force | append: val_tmp %}
+
+{% assign val_tmp = nbitems_subsection | append: delim %}
+{% assign info_section_subsection_force = info_section_subsection_force | append: val_tmp %}
+{% comment %}<!-- ! rewrite taboffset -->{% endcomment %}
+{% assign val_tmp = iter_display_subsections_gl | append: delim %}
+{% assign info_section_subsection_force = info_section_subsection_force | append: val_tmp %}
+
+{% assign iter_display_subsections_gl = iter_display_subsections_gl | plus: nbitems_subsection %}
+ {% comment %}
+  <!-- report display sub, section_display_subsection_force part  -->
+{% endcomment %}
+{% assign iter_display_deb = tab_offset_subsection | plus: 0 %}
+{% assign iter_display_fin = iter_display_deb | plus: nbitems_subsection | minus: 1  %}
+
+{% for iter_display in (iter_display_deb..iter_display_fin) %}
+  {% assign index_display_sub = section_display_subsection_part[iter_display] %}
+  {% assign val_tmp = index_display_sub | append: delim %}
+  {% assign section_display_subsection_force = section_display_subsection_force | append: val_tmp %}
+{% endfor %}
+
+
+{% comment %}
+  <!-- report info items sub, update info_items_subsection_force part  -->
+{% endcomment %}
+{% assign val_tmp = index_items_sub | append: delim %}
+{% assign info_items_subsection_force = info_items_subsection_force | append: val_tmp %}
+
+{% assign val_tmp = dist_items_sub | append: delim %}
+{% assign info_items_subsection_force = info_items_subsection_force | append: val_tmp %}
+
+{% assign val_tmp = nbitems_items_sub | append: delim %}
+{% assign info_items_subsection_force = info_items_subsection_force | append: val_tmp %}
+{% comment %}<!-- ! rewrite taboffset -->{% endcomment %}
+{% assign val_tmp = iter_display_items_gl | append: delim %}
+{% assign info_items_subsection_force = info_items_subsection_force | append: val_tmp %}
+
+{% assign iter_display_items_gl = iter_display_items_gl | plus: nbitems_items_sub %}
+{% comment %}
+  <!-- report display sub, section_display_subsection_force part  -->
+{% endcomment %}
+{% assign iter_display_deb = tab_offset_items_sub | plus: 0 %}
+{% assign iter_display_fin = iter_display_deb | plus: nbitems_items_sub | minus: 1  %}
+
+{% for iter_display in (iter_display_deb..iter_display_fin) %}
+  {% assign index_display_sub = items_display_subsection_part[iter_display] %}
+  {% assign val_tmp = index_display_sub | append: delim %}
+  {% assign items_display_subsection_force = items_display_subsection_force | append: val_tmp %}
+{% endfor %}

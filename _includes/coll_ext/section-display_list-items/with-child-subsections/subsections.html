@@ -1,0 +1,261 @@
+{%comment%}
+<!--
+  param in :
+    include
+      model_parent
+      model_current_section
+      current_extra_sort_type
+      page_ref_url
+      page_ref_title
+
+
+  var globale
+    config/common-param
+    raw_items
+    section_display_subsection
+    info_section_subsection
+    items_display_subsection
+    info_items_subsection
+
+  param out:
+
+ -->
+ {%endcomment%}
+
+
+
+
+{% assign model_parent = include.model_parent %}
+{% assign model_current_section = include.model_current_section %}
+{% assign current_extra_sort_type = include.current_extra_sort_type %}
+
+{% include coll_ext/section-display_list-items/with-child-subsections/subfunctions/subsections_init_step_gl.html %}
+
+
+
+{% include coll_ext/config/select-design_model_page.html
+  model=include.model_parent.design_model_page
+  currentdist=0
+  type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+%}
+{% assign design_subsections_dist0 = design_model_ref %}
+
+{% assign hide_page_current = true %}
+{% assign page_ref_url = include.page_ref_url %}
+
+{% comment %}
+  <!--extra, force header page, title; url-title at dist0 from param model_parent -->
+{% endcomment %}
+{% assign force_flag_display_header = false %}
+{% assign force_flag_url_header = false %}
+{% assign force_header = include.page_ref_title %}
+
+{% if include.model_parent.config_container_list.force_header_dist_0 == true  %}
+  {% assign force_flag_display_header = true %}
+
+  {% assign url_head = include.model_parent.config_container_list.force_url_header_dist_0 %}
+  {% if url_head != null and url_head != ''  %}
+    {% assign hide_page_current = false %}
+    {% assign page_ref_url = url_head %}
+  {% endif %}
+{% endif %}
+{% comment %}header=include.page_ref_title{% endcomment %}
+
+
+{% include UI/_common/list-items/container.html
+  part_before=true
+  current_type_ui=design_subsections_dist0.type
+  type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+  currentdist=0
+  nb_items=nb_sub_dist0
+  page_ref_url=page_ref_url
+  hide_page_current=hide_page_current
+  design_model=design_subsections_dist0.custom
+  extra_config=include.model_parent.config_container_list
+  flag_display_header=force_flag_display_header
+  header=force_header
+  list_items_sub=list_items_sub_dist0
+%}
+{% comment %}<!-- note: header =false; redondance with path navig -->{% endcomment %}
+
+
+{% for i_sub in (1..nb_max_subsection) %}
+
+  {% assign index_info_subsection = index_info_subsection_ref %}
+  {% assign index_info_items = index_info_items_ref %}
+
+  {% assign current_subsection = info_section_subsection_part[index_info_subsection] | plus: 0 %}
+  {% assign index_info_subsection = index_info_subsection | plus: 1 %}
+  {% assign dist_subsection = info_section_subsection_part[index_info_subsection] | plus: 0 %}
+
+  {% if dist_subsection ==  dist_ref_main_subsection %}
+
+    {% assign index_info_subsection = index_info_subsection | plus: 1 %}
+    {% assign nb_subsections_at_dist = info_section_subsection_part[index_info_subsection] | plus: 0 %}
+    {% assign index_info_subsection = index_info_subsection | plus: 1 %}
+    {% assign deb_index_subsections = info_section_subsection_part[index_info_subsection] | plus: 0 %}
+
+    {% assign nb_items_at_dist = info_items_subsection_part[index_info_items] | plus: 0 %}
+    {% assign index_info_items = index_info_items | plus: 1 %}
+    {% assign deb_index_items = info_items_subsection_part[index_info_items] | plus: 0 %}
+
+    {% assign name_id_todo=name_id_todo %}
+
+    {% assign main_subsection = raw_items[current_subsection] %}
+
+
+    {% include coll_ext/config/model-subsections.html modelSubsection=main_subsection.model %}
+    {% assign model_current_section = model_subsection %}
+
+    {% include coll_ext/sort_collections/extra-sort-date/force-filter-to-default.html
+      type_filter=main_subsection.sort_items
+    %}
+    {% assign current_extra_sort_type =  is_extra_sort_type %}
+
+    {% assign model_current_section_main = model_current_section %}
+    {% assign current_extra_sort_type_main = current_extra_sort_type %}
+
+    {% assign display_with_subsections = true %}
+    {% if nb_subsections_at_dist == 0 %}
+      {% assign display_with_subsections = false %}
+      {%comment%}
+        <!-- if false, only detail and subsection items to display; they could be mix, or separate-->
+      {%endcomment%}
+    {% endif %}
+
+
+
+    {% include coll_ext/config/select-design_model_page.html
+      model=include.model_parent.design_model_page
+      currentdist=0
+      type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+    %}
+    {% assign design_subsections_dist0 = design_model_ref %}
+    {% include UI/_common/list-items/article.html
+      current_type_ui=design_subsections_dist0.type
+      part_before=true
+      design_model=design_subsections_dist0.custom
+      extra_config=include.model_parent.config_article_list
+      name_id=name_id_todo
+      page_ref_url=main_subsection.url
+      hide_page_current=model_current_section_main.hide-page
+      flag_display_header=true
+      header=main_subsection.title
+      header_background_color=main_subsection.border-color
+    %}
+    <article>
+
+
+    {%comment%}
+      <!--  display details items of the main page/section, before subsections, or not -->
+    {%endcomment%}
+
+    {% unless model_parent.subsections_first_on_child != null and model_parent.subsections_first_on_child != false %}
+      {% include coll_ext/section-display_list-items/with-child-subsections/display_detail_items_on_subsection.html
+        bornedeb=deb_index_items
+        nb_items=nb_items_at_dist
+        tab_items=items_display_subsection_part
+        display_with_subsections=display_with_subsections
+        current_dist=dist_subsection
+        subsection_ref_url=main_subsection.url
+        header=main_subsection.title
+        model_parent=model_parent
+        model_current_section=model_current_section_main
+        current_extra_sort_type=current_extra_sort_type_main
+      %}
+    {% endunless %}
+
+
+
+    {%comment%}
+      <!--  extract and display info subsections -->
+    {%endcomment%}
+    {% if nb_subsections_at_dist > 0 %}
+      {% include coll_ext/section-display_list-items/with-child-subsections/subsections_loop.html
+        bornedeb=deb_index_subsections
+        nb_subsections=nb_subsections_at_dist
+        dist_subsection=dist_subsection
+        index_ref=current_subsection
+        nb_loop_iter=0
+        subsection_ref_url=main_subsection.url
+        header=main_subsection.title
+        model_parent=model_parent
+        model_current_section=model_current_section
+        current_extra_sort_type=current_extra_sort_type
+      %}
+    {% endif %}
+
+
+
+
+    {%comment%}
+      <!--  display details items of the main page/section, after subsections, or not -->
+    {%endcomment%}
+    {% if model_parent.subsections_first_on_child != null and model_parent.subsections_first_on_child != false %}
+      {% include coll_ext/section-display_list-items/with-child-subsections/display_detail_items_on_subsection.html
+        bornedeb=deb_index_items
+        nb_items=nb_items_at_dist
+        tab_items=items_display_subsection_part
+        display_with_subsections=display_with_subsections
+        current_dist=dist_subsection
+        subsection_ref_url=main_subsection.url
+        header=main_subsection.title
+        model_parent=model_parent
+        model_current_section=model_current_section_main
+        current_extra_sort_type=current_extra_sort_type_main
+      %}
+    {% endif %}
+
+
+    </article>
+
+    {% include coll_ext/config/select-design_model_page.html
+      model=include.model_parent.design_model_page
+      currentdist=0
+      type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+    %}
+    {% assign design_subsections_dist0 = design_model_ref %}
+    {% include UI/_common/list-items/article.html
+      current_type_ui=design_subsections_dist0.type
+      part_before=false
+      design_model=null
+      extra_config=null
+      name_id=null
+      page_ref_url=null
+      hide_page_current=null
+      flag_display_header=null
+      header=null
+    %}
+
+  {% endif %}
+
+
+
+  {% assign index_info_subsection_ref = index_info_subsection_ref | plus: period_info_subsection %}
+  {% assign index_info_items_ref = index_info_items_ref | plus: period_info_subsection %}
+
+
+{% endfor %}
+
+
+
+{% include coll_ext/config/select-design_model_page.html
+  model=include.model_parent.design_model_page
+  currentdist=0
+  type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+%}
+{% assign design_subsections_dist0 = design_model_ref %}
+{% include UI/_common/list-items/container.html
+  part_before=false
+  current_type_ui=design_subsections_dist0.type
+  type_items=site.data.coll_ext.design.config.param.name_ref.subsections
+  currentdist=0
+  nb_items=nb_sub_dist0
+  page_ref_url=page_ref_url
+  hide_page_current=null
+  design_model=design_subsections_dist0.custom
+  extra_config=include.model_parent.config_container_list
+  flag_display_header=null
+  header=null
+  list_items_sub=null
+%}

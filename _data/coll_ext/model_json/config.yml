@@ -1,0 +1,5 @@
+filter_path_pages: '_pages/'
+filter_path_pages_ext: '.md'
+
+# must correspond to the one define in /assets-js/config-module.js
+add_delim_categorie: '$'

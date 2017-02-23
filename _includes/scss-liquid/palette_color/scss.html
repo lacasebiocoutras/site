@@ -1,0 +1,33 @@
+{%comment%}
+<!--
+  param in :
+    palette_color
+
+  var global :
+
+-->
+{%endcomment%}
+
+
+{% assign deb_sass_var = '$' %}
+{% assign mid_sass_var = ': ' %}
+{% assign fin_sass_var = ';' %}
+
+{% for color in  include.palette_color %}
+
+  {% assign name_color = color.name %}
+  {% assign code_color = color.code %}
+  {% assign type_code_color = color.type %}
+
+  {% if type_code_color == site.data.scss_liquid.palette-color.config.type_code_raw  %}
+    {% assign var_sass = deb_sass_var | append: name_color | append: mid_sass_var | append: code_color | append: fin_sass_var  %}
+  {% elsif type_code_color == site.data.scss_liquid.palette-color.config.type_code_scss %}
+    {% assign var_sass = deb_sass_var | append: name_color | append: mid_sass_var | append: deb_sass_var | append: code_color | append: fin_sass_var  %}
+  {% endif %}
+
+
+
+  {{var_sass}}
+
+{% endfor %}
+

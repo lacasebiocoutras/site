@@ -1,0 +1,24 @@
+---
+layout: null
+---
+
+ { "list" : [
+    {"url":"selection-produits/index.html",
+    "name":"search-selection-produits.json",
+    "design": {
+      "list_items":"list-items-no-bg",
+      "class_showall":".catSearchShowAll",
+      "class_search":".catSearch",
+      "class_term_search":".termSearch",
+      "active":"active",
+      "id_search_box":"#search_box" 
+    }
+    }
+  ],
+  "config" :
+  {
+    "class_invisible_item": "{{site.data.coll_ext.config.display_list-items.config.class_invisible }}",
+    "add_delim_categorie_search": "{{site.data.coll_ext.model_json.config.add_delim_categorie}}"
+   }
+
+}

@@ -1,0 +1,36 @@
+list-model-dist:
+  - dist: 0
+    design:
+      type_detail_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-default'
+        detail_model:
+          type: 'miniature'
+          custom: 'detail-default'
+      type_subsection_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-sub-default'
+        detail_model:
+          type: ''
+          custom: ''
+
+  # note : dist = 1 and dist > 1, if last dist defined in list-model-dist
+  - dist: 1
+    design:
+      type_detail_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-default'
+        detail_model:
+          type: 'miniature'
+          custom: 'detail-default'
+      type_subsection_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-sub-default'
+        detail_model:
+          type: ''
+          custom: ''
+

@@ -1,0 +1,26 @@
+{%comment%}
+<!--
+  param in :
+    include.url_part_item
+    include.url
+  var global:
+    extension_section
+  param out :
+    url_section_item
+    title_section_item
+-->
+{%endcomment%}
+
+{% assign extension_section = site.collections_ext.path_extension_section %}
+
+{% assign url_section_item = include.url | remove_first: include.url_part_item | append: extension_section  %}
+
+{%comment%}<!-- extract title of this section -->{%endcomment%}
+{% assign items_tmp = site.documents %}
+{% for item_tmp in items_tmp %}
+  {% if item_tmp.url == url_section_item %}
+    {% assign title_section_item =  item_tmp.title%}
+    {% break %}
+  {% endif %}
+{% endfor %}
+

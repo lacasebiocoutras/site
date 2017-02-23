@@ -1,0 +1,327 @@
+{%comment%}
+<!--
+  param in :
+    include
+      dist_to_force
+
+
+  var globale
+    delim
+    raw_items
+    extension_section
+
+
+  param out:
+
+
+ -->
+{%endcomment%}
+
+{% assign dist_to_force = -1 %}
+{% if include.dist_to_force != null %}
+  {% assign dist_to_force = include.dist_to_force | minus: 1 %}
+{% endif %}
+
+
+{% assign period_info_subsection = site.data.coll_ext.config.display_list-items.config.period_info_subsection | plus: 0 %}
+{% assign offset_index_subsection = site.data.coll_ext.config.display_list-items.config.offset_index_subsection | plus: 0 %}
+{% assign offset_dist_subsection = site.data.coll_ext.config.display_list-items.config.offset_dist_subsection | plus: 0 %}
+{% assign offset_nbitems_subsection = site.data.coll_ext.config.display_list-items.config.offset_nbitems_subsection | plus: 0 %}
+{% assign offset_tab_offset_subsection = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_subsection | plus: 0 %}
+
+
+{% assign period_info_items_section = site.data.coll_ext.config.display_list-items.config.period_info_items_section | plus: 0 %}
+{% assign offset_index_items_section = site.data.coll_ext.config.display_list-items.config.offset_index_items_section | plus: 0 %}
+{% assign offset_dist_items_section = site.data.coll_ext.config.display_list-items.config.offset_dist_items_section | plus: 0 %}
+{% assign offset_nbitems_items_section = site.data.coll_ext.config.display_list-items.config.offset_nbitems_items_section | plus: 0 %}
+{% assign offset_tab_offset_items_section = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_items_section | plus: 0 %}
+
+
+
+
+{% if info_section_subsection != delim %}
+  {% assign info_section_subsection_part = info_section_subsection | remove_first: delim | split: delim  %}
+  {% assign info_section_subsection_size = info_section_subsection_part.size %}
+{% endif%}
+{% if section_display_subsection != delim %}
+  {% assign section_display_subsection_part = section_display_subsection | remove_first: delim | split: delim %}
+  {% assign section_display_subsection_size = section_display_subsection_part.size %}
+{% endif%}
+{% if info_items_subsection != delim %}
+  {% assign info_items_subsection_part = info_items_subsection | remove_first: delim | split: delim %}
+  {% assign info_items_subsection_size = info_items_subsection_part.size %}
+{% endif%}
+{% if items_display_subsection != delim %}
+  {% assign items_display_subsection_part = items_display_subsection | remove_first: delim | split: delim %}
+  {% assign items_display_subsection_size = items_display_subsection_part.size %}
+{% endif%}
+
+
+
+
+
+
+{% assign info_section_subsection_force = info_section_subsection %}
+{% assign info_items_subsection_force = info_items_subsection %}
+{% assign section_display_subsection_force = section_display_subsection %}
+{% assign items_display_subsection_force = items_display_subsection %}
+
+{% assign iter_display_subsections_gl = 0 %}
+{% assign iter_display_items_gl = 0 %}
+
+
+{% assign offset_period_sub = period_info_subsection | minus : 1 %}
+{% assign offset_period_items_sub = period_info_items_section | minus : 1 %}
+
+{% assign nb_max_subsection = info_section_subsection_size | divided_by: period_info_subsection %}
+{% comment %}{% assign nb_max_items_subsection = info_items_subsection_size | divided_by: period_info_subsection %}{% endcomment %}
+
+{% assign nb_max_subsection_updated = nb_max_subsection  %}
+
+
+{% assign index_sub_ref = 0  %}
+{% assign index_items_sub_ref = 0  %}
+
+{% for iter_subsections in (1..nb_max_subsection)  %}
+
+
+  {% comment %}<!-- info current subsection -->{% endcomment %}
+  {% assign index_tmp = index_sub_ref | plus: offset_index_subsection %}
+  {% assign index_subsection = info_section_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_sub_ref | plus: offset_dist_subsection %}
+  {% assign dist_subsection = info_section_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_sub_ref | plus: offset_nbitems_subsection %}
+  {% assign nbitems_subsection = info_section_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_sub_ref | plus: offset_tab_offset_subsection %}
+  {% assign tab_offset_subsection = info_section_subsection_part[index_tmp] | plus: 0 %}
+
+  {% comment %}<!-- info current items on subsection -->{% endcomment %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_index_items_section %}
+  {% assign index_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_dist_items_section %}
+  {% assign dist_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_nbitems_items_section %}
+  {% assign nbitems_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+  {% assign index_tmp = index_items_sub_ref | plus: offset_tab_offset_items_section %}
+  {% assign tab_offset_items_sub = info_items_subsection_part[index_tmp] | plus: 0 %}
+
+  {% if dist_subsection > dist_to_force %} {% endif %}
+
+  {% if nbitems_subsection == 0 and nbitems_items_sub == 0 and dist_subsection > dist_to_force %}
+
+
+    {% assign iter_search_value = -1 %}
+    {% include coll_ext/utils/array/index_of_value_in_array_int.html
+      array_part=section_display_subsection_part
+      search_value=index_subsection
+      nbElt=section_display_subsection_size
+      period_array_nbElt=1
+      offsetDeb=0
+    %}
+    {% assign index_subsection_search = iter_search_value | minus: 0 %}
+
+    {% comment %}
+      <!-- parse info_section_subsection to find the section parent, and decremente nbitems_subsection, and update the offset of all-->
+    {% endcomment %}
+    {% assign update_tab_section = false %}
+    {% if index_subsection_search > -1 %}
+
+      {% assign index_sub_find_parent = 0  %}
+      {% for iter_find_parent in (1..nb_max_subsection) %}
+        {% comment %}<!-- info current subsection -->{% endcomment %}
+        {% assign index_tmp = index_sub_find_parent | plus: offset_index_subsection %}
+        {% assign index_subsection_find_parent = info_section_subsection_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_find_parent | plus: offset_dist_subsection %}
+        {% assign dist_subsection_find_parent = info_section_subsection_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_find_parent | plus: offset_nbitems_subsection %}
+        {% assign nbitems_subsection_find_parent = info_section_subsection_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_find_parent | plus: offset_tab_offset_subsection %}
+        {% assign tab_offset_subsection_find_parent = info_section_subsection_part[index_tmp] | plus: 0 %}
+
+        {% assign borneMin = tab_offset_subsection_find_parent | minus: 1 %}
+        {% assign borneMax = tab_offset_subsection_find_parent | plus: nbitems_subsection_find_parent %}
+        {% if index_subsection_search > borneMin and index_subsection_search < borneMax %}
+          {% assign update_tab_section = true %}
+          {% break %}
+        {% endif %}
+        {% assign index_sub_find_parent = index_sub_find_parent | plus: period_info_subsection %}
+      {% endfor %}
+    {% endif %}
+
+
+    {% if update_tab_section == true %}
+
+      {% if info_section_subsection_force != delim %}
+        {% assign info_section_subsection_force_part = info_section_subsection_force | remove_first: delim | split: delim  %}
+        {% assign info_section_subsection_force_size = info_section_subsection_force_part.size %}
+      {% endif %}
+      {% if section_display_subsection_force != delim %}
+        {% assign section_display_subsection_force_part = section_display_subsection_force | remove_first: delim | split: delim %}
+        {% assign section_display_subsection_force_size = section_display_subsection_force_part.size %}
+      {% endif %}
+      {% if info_items_subsection_force != delim %}
+        {% assign info_items_subsection_force_part = info_items_subsection_force | remove_first: delim | split: delim %}
+        {% assign info_items_subsection_force_size = info_items_subsection_force_part.size %}
+      {% endif %}
+      {% if items_display_subsection_force != delim %}
+        {% assign items_display_subsection_force_part = items_display_subsection_force | remove_first: delim | split: delim %}
+        {% assign items_display_subsection_force_size = items_display_subsection_force_part.size %}
+      {% endif %}
+
+
+
+      {% comment %}
+        <!-- update section_display_subsection_force -->
+      {% endcomment %}
+
+      {% assign subsections_current_ref = delim | append : index_subsection | append: delim %}
+      {% assign section_display_subsection_force = section_display_subsection_force | replace: subsections_current_ref, delim  %}
+
+
+      {% comment %}
+        <!-- update info subsections-->
+      {% endcomment %}
+
+      {% assign iter_search_value = -1 %}
+      {% include coll_ext/utils/array/index_of_value_in_array_int.html
+        array_part=info_section_subsection_force_part
+        search_value=index_subsection_find_parent
+        nbElt=info_section_subsection_force_size
+        period_array_nbElt=period_info_subsection
+        offsetDeb=offset_index_subsection
+      %}
+      {% assign index_info_subsections_search = iter_search_value | minus: offset_index_subsection %}
+
+      {% comment %}<!-- update nbitems direct parent subsection in  list info -->{% endcomment %}
+      {% assign index_tmp = index_info_subsections_search | plus: offset_index_subsection %}
+      {% assign index_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+      {% assign index_tmp = index_info_subsections_search | plus: offset_dist_subsection %}
+      {% assign dist_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+      {% assign index_tmp = index_info_subsections_search | plus: offset_nbitems_subsection %}
+      {% assign nbitems_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+      {% assign index_tmp = index_info_subsections_search | plus: offset_tab_offset_subsection %}
+      {% assign tab_offset_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+      {% comment %}<!-- update nbitems direct parent subsection in  list info -->{% endcomment %}
+      {% assign nbitems_subsection_force_updated = nbitems_subsection_force | minus: 1 %}
+      {% assign subsections_current_ref = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force | append: delim %}
+      {% assign subsections_current_updated = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force_updated | append: delim %}
+      {% assign info_section_subsection_force = info_section_subsection_force | replace: subsections_current_ref,subsections_current_updated %}
+
+
+
+      {% comment %}<!-- update tab_offset for next subsections in list info -->{% endcomment %}
+      {% assign iter_deb_force = index_info_subsections_search | divided_by: period_info_subsection | plus: 1 %}
+      {% assign nb_max_subsection_force = info_section_subsection_force_size | divided_by: period_info_subsection %}
+      {% assign index_sub_force = index_info_subsections_search  %}
+      {% for iter_subsection_force in (iter_deb_force..nb_max_subsection_force) %}
+        {% assign index_tmp = index_sub_force | plus: offset_index_subsection %}
+        {% assign index_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_force | plus: offset_dist_subsection %}
+        {% assign dist_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_force | plus: offset_nbitems_subsection %}
+        {% assign nbitems_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+        {% assign index_tmp = index_sub_force | plus: offset_tab_offset_subsection %}
+        {% assign tab_offset_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+
+        {% assign tab_offset_subsection_force_updated = tab_offset_subsection_force | minus: 1 %}
+
+        {% assign subsections_current_ref = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force | append: delim | append : tab_offset_subsection_force | append: delim %}
+        {% assign subsections_current_updated = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force | append: delim | append : tab_offset_subsection_force_updated | append: delim %}
+        {% comment %}<!-- update taboffset in next subsections in  list info -->{% endcomment %}
+        {% assign info_section_subsection_force = info_section_subsection_force | replace: subsections_current_ref,subsections_current_updated %}
+        {% assign index_sub_force = index_sub_force | plus: period_info_subsection %}
+      {% endfor %}
+
+
+
+    {% endif %} {% comment %}<!-- end : if update_tab_section == true -->{% endcomment %}
+
+
+
+    {% comment %}
+      <!-- remove index_subsection info from info_section_subsection_force, info_items_subsection_force_part  -->
+    {% endcomment %}
+    {% if info_section_subsection_force != delim %}
+      {% assign info_section_subsection_force_part = info_section_subsection_force | remove_first: delim | split: delim  %}
+      {% assign info_section_subsection_force_size = info_section_subsection_force_part.size %}
+    {% endif %}
+    {% if info_items_subsection_force != delim %}
+      {% assign info_items_subsection_force_part = info_items_subsection_force | remove_first: delim | split: delim %}
+      {% assign info_items_subsection_force_size = info_items_subsection_force_part.size %}
+    {% endif %}
+
+
+    {% assign iter_search_value = -1 %}
+    {% include coll_ext/utils/array/index_of_value_in_array_int.html
+      array_part=info_section_subsection_force_part
+      search_value=index_subsection
+      nbElt=info_section_subsection_force_size
+      period_array_nbElt=period_info_subsection
+      offsetDeb=offset_index_subsection
+    %}
+    {% assign index_info_subsections_search = iter_search_value | minus: offset_index_subsection %}
+
+    {% assign iter_search_value = -1 %}
+    {% include coll_ext/utils/array/index_of_value_in_array_int.html
+      array_part=info_items_subsection_force_part
+      search_value=index_subsection
+      nbElt=info_items_subsection_force_size
+      period_array_nbElt=period_info_items_section
+      offsetDeb=offset_index_items_section
+    %}
+    {% assign index_info_item_subsection_search = iter_search_value | minus: offset_index_items_section %}
+
+
+    {% assign index_tmp = index_info_subsections_search | plus: offset_index_subsection %}
+    {% assign index_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_subsections_search | plus: offset_dist_subsection %}
+    {% assign dist_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_subsections_search | plus: offset_nbitems_subsection %}
+    {% assign nbitems_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_subsections_search | plus: offset_tab_offset_subsection %}
+    {% assign tab_offset_subsection_force = info_section_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign subsections_current_ref = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force | append: delim | append : tab_offset_subsection_force | append: delim %}
+    {% assign info_section_subsection_force = info_section_subsection_force | replace: subsections_current_ref,delim %}
+
+    {% assign index_tmp = index_info_item_subsection_search | plus: offset_index_items_section %}
+    {% assign index_subsection_force = info_items_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_item_subsection_search | plus: offset_dist_items_section %}
+    {% assign dist_subsection_force = info_items_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_item_subsection_search | plus: offset_nbitems_items_section %}
+    {% assign nbitems_subsection_force = info_items_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign index_tmp = index_info_item_subsection_search | plus: offset_tab_offset_items_section %}
+    {% assign tab_offset_subsection_force = info_items_subsection_force_part[index_tmp] | plus: 0 %}
+    {% assign subsections_current_ref = delim | append : index_subsection_force | append: delim | append : dist_subsection_force | append: delim | append : nbitems_subsection_force | append: delim | append : tab_offset_subsection_force | append: delim %}
+    {% assign info_items_subsection_force = info_items_subsection_force | replace: subsections_current_ref,delim %}
+
+  {% endif %} {% comment %}<!-- end : if nbitems_subsection == 0 and nbitems_items_sub == 0  -->{% endcomment %}
+
+
+  {% assign index_sub_ref = index_sub_ref | plus: period_info_subsection %}
+  {% assign index_items_sub_ref = index_items_sub_ref | plus: period_info_items_section %}
+
+
+{% endfor %}
+
+
+{% comment %}<!-- output -->{% endcomment %}
+{% assign info_section_subsection = info_section_subsection_force  %}
+{% assign section_display_subsection = section_display_subsection_force  %}
+{% assign info_items_subsection = info_items_subsection_force  %}
+{% assign items_display_subsection = items_display_subsection_force  %}
+
+{% comment %}
+<div><p>info_section_subsection_force : {{info_section_subsection_force}}</p></div>
+<div><p>section_display_subsection_force : {{section_display_subsection_force}}</p></div>
+<div><p>info_items_subsection_force : {{info_items_subsection_force}}</p></div>
+<div><p>items_display_subsection_force : {{items_display_subsection_force}}</p></div>
+<div><p>--------------ref ------------</p></div>
+<div>
+  <p>info_section_subsection : {{info_section_subsection}}</p>
+  <p>section_display_subsection: {{section_display_subsection}}</p>
+  <p>info_items_subsection : {{info_items_subsection}}</p>
+  <p>items_display_subsection: {{items_display_subsection}}</p>
+  <p>items_display_current_section : {{items_display_current_section}}</p>
+</div>
+{% endcomment %}
+

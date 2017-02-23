@@ -1,0 +1,204 @@
+{%comment%}
+<!--
+  param in :
+    include
+      page_ref_url
+      page_ref_model
+
+  var global :
+    common-param :
+
+  param out :
+
+-->
+{%endcomment%}
+
+
+{% comment %}
+  <!-- get current page design_model_page, always find in array, no test (search_value > -1)   -->
+{% endcomment %}
+
+{% assign iter_search_value = -1 %}
+{% include coll_ext/utils/array/index_of_value_in_array_string.html
+  array_part=array_model_front_matter
+  search_value=include.page_ref_model
+  nbElt=nb_model_front_matter
+  period_array_nbElt=1
+  offsetDeb=0
+%}
+
+{% comment %}<!-- warning, take period into account-->{% endcomment %}
+{% assign iter_search_value = iter_search_value | times: period_detail_model_front_matter  %}
+
+{% assign index_tmp = iter_search_value | plus: offset_design_front_matter %}
+{% assign current_page_design_model = array_detail_model_front_matter[index_tmp] %}
+
+{% assign index_tmp = iter_search_value | plus: offset_mix_0_front_matter %}
+{% assign current_page_mix_dist_0 = array_detail_model_front_matter[index_tmp]  %}
+
+{% assign index_tmp = iter_search_value | plus: offset_mix_sup_front_matter %}
+{% assign current_page_mix_dist_sup = array_detail_model_front_matter[index_tmp]  %}
+
+{% assign current_page_url = include.page_ref_url %}
+
+
+{% assign index_design_model = 0  %}
+{% for iter_design_model in (0..iter_max_design_model)  %}
+
+  {% assign index_tmp = index_design_model | plus: offset_name_design_model %}
+  {% assign name_design_model = array_detail_design_model[index_tmp] %}
+
+
+  {% if current_page_design_model == name_design_model %}
+
+      {% assign index_tmp = index_design_model | plus: offset_dist_design_model %}
+      {% assign dist_design_model = array_detail_design_model[index_tmp] | plus: 0 %}
+      {% assign index_tmp = index_design_model | plus: offset_type_design_model %}
+      {% assign type_design_model = array_detail_design_model[index_tmp] %}
+      {% assign index_tmp = index_design_molidel | plus: offset_custom_design_model %}
+      {% assign custom_design_model = array_detail_design_model[index_tmp] %}
+
+      {% comment %}
+        <!-- test presence subsections, info_section_subsection from extract_items_to_display.html-->
+      {% endcomment %}
+      {% if type_design_model contains subsections_name_ref and info_section_subsection != delim %}
+        {% if dist_design_model == 0 %}
+
+          {% assign dist_design_model_sub = dist_design_model | plus: 1 %}
+
+          {% assign times_search_value = 0 %}
+          {% include coll_ext/utils/array/times_value_in_list.html
+            search_value=dist_design_model_sub
+            list=info_section_subsection
+            period=period_info_subsection
+            offsetDeb=offset_dist_sub
+            delim=delim
+          %}
+          {% if times_search_value > 0 %}
+            {% assign info_add_css = info_add_css
+              | append: dist_design_model | append: delim
+              | append: current_page_url | append: delim
+              | append: subsections_name_ref | append: delim
+              | append: times_search_value | append: delim
+              | append: custom_design_model | append: delim %}
+          {% endif %}
+
+        {% else %}
+          {% comment %}<-- add info css for each subsections at given dist -->{% endcomment %}
+          {% assign info_add_css_part = empty_string  %}
+          {% include scss-liquid/collection_ext/info_css/dist_sup_common.html
+            items_name_ref=subsections_name_ref
+            custom_design_ref=custom_design_model
+            search_value=dist_design_model
+            list=info_section_subsection
+            period=period_info_subsection
+            offsetDeb=offset_dist_sub
+            offsetNeighbours_nbitems=offset_nbitems_sub
+            offsetNeighbours_index=offset_index_sub
+          %}
+          {% if info_add_css_part != empty_string %}
+            {% assign info_add_css = info_add_css | append: info_add_css_part %}
+          {% endif %}
+        {% endif %}
+
+      {% endif %}
+
+
+      {% comment %}
+        <!-- test presence mix_items -->
+        <!-- Note : need to regenerate partialy if add items -->
+      {% endcomment %}
+      {% if type_design_model contains mix_items_name_ref %}
+
+        {% comment %}<!-- note : compare with 'true', du passage array -->{% endcomment %}
+        {% if dist_design_model == 0 and current_page_mix_dist_0 == 'true' %}
+
+          {% assign array_items_temp = items_display_current_section | remove_first: delim | split: delim %}
+          {% assign  nb_items_temp= array_items_temp.size %}
+
+          {% assign info_add_css = info_add_css
+            | append: dist_design_model | append: delim
+            | append: current_page_url | append: delim
+            | append: mix_items_name_ref | append: delim
+            | append: nb_items_temp | append: delim
+            | append: custom_design_model | append: delim  %}
+        {% endif %}
+
+        {% if dist_design_model > 0 and current_page_mix_dist_sup == 'true' %}
+          {% comment %}<-- add info css for each mix items on child subsections, at given dist -->{% endcomment %}
+          {% assign info_add_css_part = empty_string  %}
+          {% include scss-liquid/collection_ext/info_css/dist_sup_common.html
+            items_name_ref=mix_items_name_ref
+            custom_design_ref=custom_design_model
+            search_value=dist_design_model
+            list=info_items_subsection
+            period=period_info_items_section
+            offsetDeb=offset_dist_items
+            offsetNeighbours_nbitems=offset_nbitems_items
+            offsetNeighbours_index=offset_index_items
+          %}
+          {% if info_add_css_part != empty_string %}
+            {% assign info_add_css = info_add_css | append: info_add_css_part %}
+          {% endif %}
+        {% endif %}
+
+      {% endif %}
+
+
+
+      {% comment %}
+        <!-- test presence detail_items / subsections items -->
+        <!-- Note : need to regenerate partialy if add items -->
+      {% endcomment %}
+      {% if type_design_model contains detail_items_name_ref or type_design_model contains subsection_items_name_ref  %}
+
+        {% comment %}<!-- note : here test != true, mix_item is test == true -->{% endcomment %}
+        {% if dist_design_model == 0 and current_page_mix_dist_0 != 'true' %}
+
+          {% assign info_add_css_part = empty_string  %}
+          {% include scss-liquid/collection_ext/info_css/given_dist_detail-sub-items.html
+            type_design_model=type_design_model
+            custom_design_ref=custom_design_model
+            detail_name_ref=detail_items_name_ref
+            sub_name_ref=subsection_items_name_ref
+            url_ref=current_page_url
+            search_value=dist_design_model
+            list=items_display_current_section
+          %}
+          {% if info_add_css_part != empty_string %}
+            {% assign info_add_css = info_add_css | append: info_add_css_part %}
+          {% endif %}
+
+        {% endif %}
+
+        {% if dist_design_model > 0 and current_page_mix_dist_sup != 'true' %}
+          {% comment %}<-- add info css for each mix items on child subsections, at given dist -->{% endcomment %}
+
+          {% assign info_add_css_part = empty_string  %}
+          {% include scss-liquid/collection_ext/info_css/dist_sup_detail-sub-items.html
+            type_design_model=type_design_model
+            custom_design_ref=custom_design_model
+            detail_name_ref=detail_items_name_ref
+            sub_name_ref=subsection_items_name_ref
+            search_value=dist_design_model
+            list_items=items_display_subsection
+            list_subsections=info_items_subsection
+            period=period_info_subsection
+            offsetDeb=offset_dist_sub
+            offsetNeighbours_nbitems=offset_nbitems_sub
+            offsetNeighbours_index=offset_index_sub
+            offsetNeighbours_offset=offset_tab_offset_sub
+          %}
+          {% if info_add_css_part != empty_string %}
+            {% assign info_add_css = info_add_css | append: info_add_css_part %}
+          {% endif %}
+
+        {% endif %}
+
+      {% endif %}
+
+  {% endif %}
+
+  {% assign index_design_model = index_design_model | plus: period_loop_design_model %}
+
+{% endfor %}

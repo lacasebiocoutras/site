@@ -1,0 +1,128 @@
+{%comment%}
+<!--
+param in :
+  include
+    type_design_model
+    custom_design_ref
+    detail_name_ref
+    sub_name_ref
+    search_value=dist_design_model
+    list_items=items_display_subsection
+    list_subsections=info_section_subsection
+    period=period_info_subsection
+    offsetDeb=offset_dist_sub
+    offsetNeighbours_nbitems=offset_nbitems_sub
+    offsetNeighbours_index=offset_index_sub
+    offsetNeighbours_offset=offset_tab_offset_sub
+
+
+  var global
+    raw_items
+    delim
+    empty_string
+
+
+param out :
+  info_add_css_part
+-->
+{%endcomment%}
+
+
+{% include coll_ext/utils/array/extract_neighbours_search-from-list.html
+  search_value=include.search_value
+  list=include.list_subsections
+  period=include.period
+  offsetDeb=include.offsetDeb
+  offsetNeighbours=include.offsetNeighbours_nbitems
+  delim=delim
+%}
+{% assign list_nb_items_sub_tmp = list_elts %}
+{% assign array_nb_items_sub_tmp = list_nb_items_sub_tmp | remove_first: delim | split: delim %}
+{% assign array_nb_items_size_sub_tmp = array_nb_items_sub_tmp.size | minus: 1  %}
+
+
+{% include coll_ext/utils/array/extract_neighbours_search-from-list.html
+  search_value=include.search_value
+  list=include.list_subsections
+  period=include.period
+  offsetDeb=include.offsetDeb
+  offsetNeighbours=include.offsetNeighbours_index
+  delim=delim
+%}
+{% assign list_index_sub_tmp = list_elts %}
+{% assign array_index_sub_tmp = list_index_sub_tmp | remove_first: delim | split: delim %}
+
+
+{% include coll_ext/utils/array/extract_neighbours_search-from-list.html
+  search_value=include.search_value
+  list=include.list_subsections
+  period=include.period
+  offsetDeb=include.offsetDeb
+  offsetNeighbours=include.offsetNeighbours_offset
+  delim=delim
+%}
+{% assign list_offset_sub_tmp = list_elts %}
+{% assign array_offset_sub_tmp = list_offset_sub_tmp | remove_first: delim | split: delim %}
+
+
+
+{% assign array_items_sub_tmp = include.list_items | remove_first: delim | split: delim %}
+
+
+
+{% assign info_add_css_part_sub_tmp = empty_string  %}
+
+
+{% for i_sub_tmp in (0..array_nb_items_size_tmp)  %}
+
+  {% assign index_sub_tmp = i_sub_tmp | plus: 0 %}
+
+  {% assign nb_items_sub_tmp = array_nb_items_sub_tmp[index_sub_tmp] | plus: 0 %}
+  {% assign offset_sub_tmp = array_offset_sub_tmp[index_sub_tmp] | plus: 0 %}
+  {% assign index_item_sub_tmp = array_index_sub_tmp[index_sub_tmp] | plus: 0 %}
+
+
+  {% if nb_items_sub_tmp > 0  %}
+
+    {% comment %}<!-- all items at a given dist, detail + subsection items -->{% endcomment %}
+    {% assign beg_dist_sub_temp = offset_sub_tmp | plus: 0 %}
+    {% assign end_dist_sub_temp = beg_dist_sub_temp | plus: nb_items_sub_tmp | minus: 1 %}
+
+
+    {% assign list_items_dist_sub_tmp = delim %}
+    {% for i_dist_sub_temp in (beg_dist_sub_temp..end_dist_sub_temp) %}
+
+      {% assign index_dist_sub_temp = i_dist_sub_temp | plus: 0 %}
+      {% assign index_item_dist_sub_temp = array_items_sub_tmp[index_dist_sub_temp] %}
+
+      {% assign list_items_dist_sub_tmp = list_items_dist_sub_tmp
+        | append: index_item_dist_sub_temp | append: delim  %}
+
+    {% endfor %}
+
+    {% assign item_url_sub_tmp =  raw_items[index_item_sub_tmp].url %}
+
+
+    {% assign info_add_css_part = empty_string  %}
+    {% include scss-liquid/collection_ext/info_css/given_dist_detail-sub-items.html
+      type_design_model=include.type_design_model
+      custom_design_ref=include.custom_design_ref
+      detail_name_ref=include.detail_name_ref
+      sub_name_ref=include.sub_name_ref
+      url_ref=item_url_sub_tmp
+      search_value=include.search_value
+      list=list_items_dist_sub_tmp
+    %}
+    {% if info_add_css_part != empty_string %}
+      {% assign info_add_css_part_sub_tmp = info_add_css_part_sub_tmp | append: info_add_css_part %}
+    {% endif %}
+
+
+  {% endif %}
+
+{% endfor %}
+
+{% assign info_add_css_part = empty_string  %}
+{% if info_add_css_part_sub_tmp != empty_string %}
+  {% assign info_add_css_part = info_add_css_part_sub_tmp %}
+{% endif %}

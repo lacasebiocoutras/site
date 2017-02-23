@@ -1,0 +1,209 @@
+{%comment%}
+<!--
+param in :
+  include.input_slider
+  include.list_image
+  include.list_description_image
+  include.list_link
+  include.list_description_link
+  include.header
+
+variable globale
+
+param out:
+
+
+-->
+<!-- from https://github.com/dangvanthanh/carousel.sass -->
+
+<!-- http://hugogiraudel.com/2014/07/16/automating-css-animations-with-sass/
+      http://www.sassmeister.com/gist/b657072d11c527f3a016 -->
+
+<!--
+  add js :
+  todo: affichage point nav apres f5, a masquer; animation radio buton
+    optim affichage radio : http://codepen.io/rgfx/pen/aixDn
+ -->
+{%endcomment%}
+
+
+{% assign container_slider_pict = 'picture'  %}
+
+{% assign delim_id = site.data.scss_liquid.optim.config.param.delim_id %}
+
+{% comment %}
+  <!-- info current slider -->
+{% endcomment %}
+
+{% assign input_slider = null %}
+{% for slider in site.data.picture.slider.list  %}
+  {% if slider.id == include.input_slider %}
+    {% assign input_slider = slider %}
+  {% endif %}
+{% endfor %}
+
+{% assign config_slide = null %}
+{% for config in site.data.scss_liquid.UI.slider.config.list_type  %}
+  {% if config.type == input_slider.type %}
+    {% assign config_slide = config %}
+  {% endif %}
+{% endfor %}
+
+
+
+
+{% assign container_slider = input_slider.container | remplace: ' ',delim_id  %}
+{% assign type_slider = input_slider.type | remplace: ' ',delim_id %}
+{% assign id_slider = input_slider.id | remplace: ' ',delim_id %}
+
+
+{% comment %}
+  <!-- default use case, info list image from /_data/picture/slider/list.yml -->
+{% endcomment %}
+{% assign list_img_slider = input_slider.list_img %}
+{% assign dim_slider = list_img_slider.size  %}
+{% comment %}
+  <!-- specifi, list from  collection files .md metadata-->
+{% endcomment %}
+{% assign add_list_from_collection = false %}
+{% if include.list_image != null and include.list_image != delim  %}
+  {% assign add_list_from_collection = true %}
+  {% assign array_image_slider = include.list_image | remove_first: delim | split: delim  %}
+  {% assign array_description_img_slider = include.list_description_image | remove_first: delim | split: delim  %}
+  {% assign array_link_slider = include.list_link | remove_first: delim | split: delim  %}
+  {% assign array_description_link_slider = include.list_description_link | remove_first: delim | split: delim  %}
+
+  {% assign array_image_slider_size = array_image_slider.size | minus: 1 %}
+  {% assign dim_slider = array_image_slider.size  %}
+{% endif %}
+
+
+
+{% comment %}
+  <!-- specific slider infinite -->
+{% endcomment %}
+{% if type_slider == site.data.scss_liquid.UI.slider.config.type.infinite %}
+  {% assign dim_slider = 0  %}
+{% endif %}
+
+
+
+{% comment %}
+  <!--optim css : html part, add global var-->
+{% endcomment %}
+{% include scss-liquid/optim/list-class.html
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+  delim_array=site.data.coll_ext.config.common.delimitator.array
+%}
+
+{% comment %}
+  <!-- compress extra class, id pr css, html -->
+{% endcomment %}
+{% include scss-liquid/optim/extra.html name_extra=container_slider
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign container_slider_display = extra_compress %}
+
+{% include scss-liquid/optim/extra.html name_extra=type_slider
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign type_slider_display = extra_compress %}
+
+{% assign display_header_container = null %}
+{% if include.header %}
+  {% assign display_header_container = true %}
+{% endif %}
+
+
+{% include UI/slider/container/display.html
+  before=true
+  container_slider_display=container_slider_display
+  container_slider_ref=container_slider
+  type_slider=type_slider_display
+  id_slider=id_slider
+  nb_items=dim_slider
+  share-container-betw-car=config_slide.share-container-betw-car
+  style_prev_next=config_slide.style_prev_next
+  delim_id=delim_id
+  page_ref_url=null
+  display_header=display_header_container
+  add_url_to_header=null
+  header=include.header
+  list_items_sub=null
+%}
+
+
+
+
+{% if add_list_from_collection == false %} 
+
+  {% for item in list_img_slider %}
+    {% if forloop.first %}
+      {% assign current_style = config_slide.style_item_first %}
+    {% else %}
+      {% assign current_style = config_slide.style_item_next %}
+    {% endif %}
+    {% include UI/slider/article/display.html before=true current_style=current_style %}
+    <article> 
+
+      {% include picture/slider-standard-article.html 
+        image=item.image
+        description_image=item.description-image
+        link=item.link
+        description_link=item.description-link
+      %}    
+    </article>
+    {% include UI/slider/article/display.html before=false current_style=null %}
+  {% endfor %}
+
+{% else %}
+
+  {% for iter_array in (0..array_image_slider_size) %}
+    {% assign image_tmp = array_image_slider[iter_array]  %}
+    {% assign description_img_tmp = array_description_img_slider[iter_array]  %}
+    {% assign link_tmp = array_link_slider[iter_array] %} 
+    {% assign description_link_tmp = array_description_link_slider[iter_array] %}    
+
+    {% if forloop.first %}
+      {% assign current_style = config_slide.style_item_first %}
+    {% else %}
+      {% assign current_style = config_slide.style_item_next %}
+    {% endif %}
+
+    {% include UI/slider/article/display.html before=true current_style=current_style %}
+    <article> 
+      {% include picture/slider-standard-article.html 
+        image=image_tmp
+        description_image=description_img_tmp
+        link=link_tmp
+        description_link=description_link_tmp
+      %}    
+    </article>
+    {% include UI/slider/article/display.html before=false current_style=null %}
+  {% endfor %}
+
+ {% endif %} 
+
+
+
+
+
+{% include UI/slider/container/display.html
+  before=false
+  container_slider_display=container_slider_display
+  container_slider_ref=container_slider
+  type_slider=type_slider_display
+  id_slider=id_slider
+  nb_items=dim_slider
+  share-container-betw-car=config_slide.share-container-betw-car
+  style_prev_next=config_slide.style_prev_next
+  delim_id=delim_id
+  page_ref_url=null
+  display_header=null
+  add_url_to_header=null
+  header=null
+  list_items_sub=null
+%}

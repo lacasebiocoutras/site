@@ -1,0 +1,94 @@
+.Site-header-home {   
+
+  .js-toggle-main-menu {
+  	display: none;
+  }
+  @include breakpoint($break-sm-max) {        
+    .main-menu {
+      display: none;
+    }
+    .js-toggle-main-menu {
+      display: block;
+    }
+  }
+
+  .logo-home-image {
+    width: 100%;
+    // max-width: 1600px;  
+  }
+
+  @include breakpoint($header-logo-width) {
+    width: $header-logo-width;
+    margin-left:auto;
+    margin-right: auto;
+  }
+
+
+
+  
+}
+
+.main-menu {
+  list-style: none;
+  margin: 0; 
+  padding: $spacing-h/2;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
+  a:active,
+  a:hover {
+    text-decoration: none;
+  }
+
+  @include breakpoint($break-sm-max){
+    flex-flow: column wrap;
+    background-color: $primary-color-light;
+  }
+
+  @include breakpoint($break-xlg) {
+    width: $break-xlg;
+    margin-left:auto;
+    margin-right: auto;
+  }
+}
+ 
+.menu-item {
+  position: relative;
+  display: inline-block;
+  margin-right: $spacing-h/2;   
+  padding: 0.2em;//$spacing-v/2 $spacing-h; // 10px 10px 10px 10px; 
+  text-decoration:none; 
+
+  @include breakpoint($break-sm-max){
+    margin-right: 0;
+  }
+ 
+  h1,h5 {
+    margin: 0.2em;
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 1em;
+    font-family: "PT Serif", serif;
+  }
+    
+	
+	&:hover {
+		color: $secondary-text-color; 
+		background-color: $primary-color-light; 
+		background-image: linear-gradient(to bottom, $primary-color-light, darken($primary-color-light, 20%));//#f9fc50);
+	} 
+}
+
+.nav-active {
+	color: $secondary-text-color;
+	// border:px solid #f8fb1e;
+	background-color: $primary-color-light; 
+	background-image: linear-gradient(to bottom, $primary-color-light, darken($primary-color-light, 20%));// #f9fc50);
+}
+
+.nav-not-active {
+	color: $secondary-color;
+	background-color: $primary-color-light;	
+	background-image: linear-gradient(to bottom, lighten($primary-color-light,10%), $primary-color-light);
+}

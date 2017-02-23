@@ -1,0 +1,17 @@
+list-model-dist:
+  - dist: 0
+    design:
+      type_detail_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-default'
+        detail_model:
+          type: 'link_to_url'
+          custom:
+      type_subsection_item:
+        container_model:
+          type: 'miniature'
+          custom: 'container-sub-default'
+        detail_model:
+          type: ''
+          custom: ''

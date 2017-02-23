@@ -1,0 +1,157 @@
+/*
+  note :
+   https://www.w3.org/TR/css3-transitions/#animatable-properties
+   http://tympanus.net/codrops/2011/10/19/blur-menu-with-css3-transitions/
+*/
+
+/*
+   fadeIn : utilisation , animation: fadeIn 1.5s;
+
+
+   ========================================================================== */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// @keyframes fadeOut {
+//   0% {
+//     opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// }
+// @include animationCustom(slidy, 0.5s,ease-in,1);
+ @keyframes slidy {
+  0%  { left: 100%; }
+  100% { left: 0%; }
+}
+
+
+// @keyframes slidyNoCheck {
+//   0%  { left: 100% ; }
+//   100% { left: 0% ; }
+// }
+
+// @keyframes slidycheck {
+//   0%  { left: 0 ; }
+//   100% { left: 100% ; }
+// }
+
+// @keyframes carouselAnim {
+//   0%, 17.5% {
+//     transform: translateX(0%);
+//     filter: blur(0);
+//   }
+//   19.0625% {
+//     filter: blur(2px);
+//   }
+//   20.625%, 38.125% {
+//     transform: translateX(-20%);
+//     filter: blur(0);
+//   }
+//   39.6875% {
+//     filter: blur(2px);
+//   }
+//   41.25%, 58.75% {
+//     transform: translateX(-40%);
+//     filter: blur(0);
+//   }
+//   60.3125% {
+//     filter: blur(2px);
+//   }
+//   61.875%, 79.375% {
+//     transform: translateX(-60%);
+//     filter: blur(0);
+//   }
+//   80.9375% {
+//     filter: blur(2px);
+//   }
+//   82.5%, 100% {
+//     transform: translateX(-80%);
+//     filter: blur(0);
+//   }
+// }
+
+
+// slick lib
+
+.animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+
+
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animated.slideDown {
+  animation-name: slideDown;
+}
+
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.animated.slideUp {
+  animation-name: slideUp;
+}
+
+
+
+// @keyframes slideDown {
+//   0% {
+//     transform: translateY(-100%);
+//   }
+//   100% {
+//     opacity: translateY(0);
+//   }
+// }
+
+
+
+// @keyframes slideUp {
+//   0% {
+//     transform: translateY(0);
+//   }
+//   100% {
+//     opacity: translateY(-100%);
+//   }
+// }
+
+// .animated {
+//   animation-duration: 0.5s;
+//   animation-fill-mode: both;
+// }
+
+//  .slideDown {
+//   animation-name: slideDown;
+// }
+
+//  .slideUp {
+//   animation-name: slideUp;
+// }
+
+

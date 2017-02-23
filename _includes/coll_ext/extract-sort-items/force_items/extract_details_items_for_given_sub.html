@@ -1,0 +1,59 @@
+{%comment%}
+<!--
+  param in :
+    include
+      index_ref_sub
+
+
+  var globale
+    delim
+    info_items_subsection_part
+    nb_max_items_subsection
+    period_info_items_section
+    offset_index_items_section, ..
+
+  param out:
+    list_items_sub
+    list_index_sub
+
+ -->
+{%endcomment%}
+
+
+{% assign iter_search_value = -1 %}
+{% include coll_ext/utils/array/index_of_value_in_array_int.html
+  array_part=info_items_subsection_part
+  search_value=include.index_ref_sub
+  nbElt=nb_max_items_subsection
+  period_array_nbElt=period_info_items_section
+  offsetDeb=offset_index_items_section
+%}
+
+{% assign index_ref_sub_comp = include.index_ref_sub | prepend: delim | append: delim %}
+
+{% unless list_index_sub contains index_ref_sub_comp %}
+
+  {% assign list_index_sub = list_index_sub | append: include.index_ref_sub | append: delim %}
+
+  {% assign child_index_items_sub = iter_search_value | plus: offset_nbitems_items_section %}
+  {% assign child_nbitems_items_sub = info_items_subsection_part[child_index_items_sub] | plus: 0 %}
+
+
+  {% if child_nbitems_items_sub > 0 %}
+
+    {% assign child_index_items_sub = iter_search_value | plus: offset_tab_offset_items_section %}
+    {% assign child_tab_offset_items_sub = info_items_subsection_part[child_index_items_sub] | plus: 0 %}
+
+    {% assign iter_beg_items_sub = child_tab_offset_items_sub | plus: 0 %}
+    {% assign iter_end_items_sub = iter_beg_items_sub | plus: child_nbitems_items_sub | minus: 1  %}
+
+    {% for iter_items_sub in (iter_beg_items_sub..iter_end_items_sub) %}
+      {% assign valTmp = items_display_subsection_part[iter_items_sub] | append: delim  %}
+      {% assign list_items_sub = list_items_sub | append: valTmp %}
+    {% endfor %}
+
+  {% endif %}
+
+{% endunless %}
+
+

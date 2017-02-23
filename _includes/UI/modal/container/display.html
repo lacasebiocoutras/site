@@ -1,0 +1,61 @@
+{%comment%}
+<!--
+  param in :
+    include
+      before
+      id_close
+      id_target_modal
+      class_modal
+      title
+
+
+
+      design_model
+      page_ref_url
+      display_header
+      add_url_to_header
+      header
+
+
+
+  param out : display html
+
+
+
+
+-->
+{%endcomment%}
+
+
+{% if include.before == true %}
+
+
+  {% assign id_target_modal = include.id_target_modal %}
+  {% assign id_close = include.id_close %}
+
+
+  <div id="{{id_target_modal}}" class="{{include.class_modal}} ">
+    <div>
+      <header>
+        <a href="{{id_close}}" title="Fermer la fenêtre" class="droite">X</a>
+         <h4>{{include.title}} </h4>
+       </header>
+
+
+
+{% else %}
+
+
+       <footer class="cf">
+        {% comment %}<input type="button" value="retour" onclick="history.back(-1)" />{% endcomment %}
+        {% comment %}<a href="#X" class="btn droite" role="button" title="visiter la page">Fermer</a>{% endcomment %}
+        <a onclick="history.back(-1)" href="{{id_close}}" class="btn droite" role="button">retour</a>
+
+       </footer>
+    </div>
+  </div>
+
+
+{% endif %}
+
+

@@ -1,0 +1,79 @@
+{%comment%}
+<!--
+input :
+  include :
+    url_ref_parent=url_ref_section
+    dist_ref=2
+    tab_index=array_index_item_part
+    tab_dist=array_dist_children_item_part
+    max_dist_children
+
+  var globale :
+    delim
+    raw_items
+    extension_section
+
+output :
+  items_display_loop
+  section_display_loop
+-->
+{%endcomment%}
+
+
+{% assign url_ref_parent_loop = include.url_ref_parent %}
+{% assign dist_ref_loop = include.dist_ref | plus: 0 %}
+{% assign tab_index_loop = include.tab_index %}
+{% assign tab_dist_loop = include.tab_dist %}
+
+
+{% assign items_display_loop = delim %}
+{% assign section_display_loop = delim %}
+
+{%comment%}
+{% assign all_items_display_loop = delim %}
+{%endcomment%}
+
+{% assign nbindex_loop = tab_index_loop.size | minus: 1 %}
+{% for i in (0..nbindex_loop) %}
+
+  {% assign dist_loop = tab_dist_loop[i] | plus: 0  %}
+  {% if dist_loop == dist_ref_loop %}
+
+    {% assign index_loop = tab_index_loop[i] | plus: 0  %}
+    {% assign item_subloop_tmp = raw_items[index_loop] %}
+
+    {% assign display_item_subloop_tmp = false %}
+    {% if item_subloop_tmp.url contains url_ref_parent_loop %}
+      {% assign display_item_subloop_tmp = true %}
+
+
+      {%comment%}
+      {% assign all_items_display_loop = all_items_display_loop | append: item_subloop_tmp | append: delim %}
+      {%endcomment%}
+
+
+      {% if item_subloop_tmp.url contains extension_section %}
+
+        {% include coll_ext/config/model-subsections.html modelSubsection=item_subloop_tmp.model %}
+        {% if model_subsection.display_items_on_parent != null and model_subsection.display_items_on_parent != false and dist_loop <= include.max_dist_children %}
+          {% assign display_item_subloop_tmp = false %}
+          {% assign section_display_loop = section_display_loop | append: index_loop | append: delim %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+    {% if display_item_subloop_tmp == true %}
+      {% assign items_display_loop = items_display_loop | append: index_loop | append: delim %}
+    {% endif%}
+  {% endif %}
+{% endfor %}
+
+
+
+
+{%comment%}
+  <!-- case not items on subsections child, subsections -->
+
+{% if section_display_loop == delim %}
+  {% assign items_display_loop = all_items_display_loop %}
+{% endif %}
+{%endcomment%}

@@ -1,0 +1,28 @@
+{%comment%}
+<!--
+  param in :
+    include.modelSubsection
+
+-->
+{%endcomment%}
+
+{% assign give_model_subsection = site.data.coll_ext.config.display-design.config.default_master_model_selected %}
+
+{% assign modelSection = include.modelSubsection %}
+
+
+{% if modelSection != null %}
+  {% for model_tmp in site.data.coll_ext.master_model %}
+    {% if model_tmp[1].model == modelSection %}
+      {% assign give_model_subsection = model_tmp[1].model %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% for model_tmp in site.data.coll_ext.master_model %}
+  {% if model_tmp[1].model == give_model_subsection %}
+    {% assign model_subsection = model_tmp[1] %}
+    {% break %}
+  {% endif %}
+{% endfor %}

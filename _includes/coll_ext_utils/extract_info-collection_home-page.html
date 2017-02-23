@@ -1,0 +1,101 @@
+{% comment %} recup content from collection nos_informations/page-acceuil{% endcomment %}
+{% include coll_ext/config/common-param.html %}
+
+{% assign list_car_image_acceuil = delim %}
+{% assign list_car_description_img_acceuil = delim %}
+{% assign list_car_link_acceuil = delim %}
+{% assign list_car_description_link_acceuil = delim %}
+{% assign item_logo_acceuil = '' %}
+
+{% for collection in site.collections %}
+  {% if collection.label == 'nos-informations' %}
+    {% assign raw_items_navig_acceuil = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign items_tmp = raw_items_navig_acceuil | sort: 'order' %}
+
+{% assign cpt_images_acceuil = 0 %}
+
+{% for item_tmp in items_tmp %}
+
+  {% if item_tmp.path contains '/page-acceuil/messages-acceuil/bienvenue.md' %} 
+    {% if item_tmp.order < 100 %}
+      {% assign textBienvenue = item_tmp.content %} 
+    {% endif %}
+  {% endif %}
+
+  {% if item_tmp.path contains '/page-acceuil/messages-acceuil/horaires.md' %} 
+    {% if item_tmp.order < 100 %}
+      {% assign textHoraires = item_tmp.content %} 
+    {% endif %}
+  {% endif %}
+
+  {% if item_tmp.path contains '/page-acceuil/messages-acceuil/contact.md' %} 
+    {% if item_tmp.order < 100 %}
+      {% assign textContact = item_tmp.content %}
+      {% comment %}add baseurl to url beginning with /, local{% endcomment %}
+      {% assign href_text = 'href="' %}      
+      {% assign href_replace = href_text | append: site.baseurl | append: '/' %}      
+      {% comment %}append: '/' : filter url with http {% endcomment %}
+      {% assign href_text = href_text | append: '/' %} 
+      {% assign textContact = textContact | replace: href_text, href_replace  %}
+      
+      {% comment %}add target="blank" to url beginning with http {% endcomment %}
+      {% assign href_text = 'href="http' %}
+      {% assign href_replace = 'target="blank" ' | append: href_text %}
+      {% assign textContact = textContact | replace: href_text, href_replace %}
+    {% endif %}
+  {% endif %}
+
+  {% if item_tmp.path contains '/page-acceuil/messages-acceuil/message-important.md' %} 
+    {% if item_tmp.order < 100 %}
+      {% assign textMessageImportant = item_tmp.content %} 
+    {% endif %}    
+  {% endif %} 
+  {% if item_tmp.path contains '/page-acceuil/carousel/' %} 
+    {% if item_tmp.path contains '/index.md'  %}
+      {% if item_tmp.description %}
+        {% assign heading_description = item_tmp.description %}        
+      {% endif %}
+    {% else %}
+      {% if item_tmp.order < 100 %}
+        {% assign list_car_image_acceuil = list_car_image_acceuil | append : item_tmp.image | append: delim %}
+        {% assign list_car_description_img_acceuil = list_car_description_img_acceuil | append : item_tmp.description-image | append: delim %}
+        {% assign list_car_link_acceuil = list_car_link_acceuil | append : item_tmp.link | append: delim %}
+        {% assign list_car_description_link_acceuil = list_car_description_link_acceuil | append : item_tmp.description-link | append: delim %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {% if item_tmp.path contains '/page-acceuil/image-logo-acceuil/' %} 
+    {% unless item_tmp.path contains '/index.md'  %}
+      {% if item_tmp.order < 100 %}
+        {% comment %} une seule image attendue ! {% endcomment %}
+        {% if item_logo_acceuil == '' %}
+          {% assign item_logo_acceuil = item_tmp %}   
+        {% endif %}
+      {% endif %}        
+    {% endunless %}
+  {% endif %}
+
+  {% if item_tmp.path contains '/page-acceuil/images-acceuil/' %} 
+    {% unless item_tmp.path contains '/index.md'  %}
+      {% if item_tmp.order < 100 %}
+        {% comment %} 2 images attendues ! {% endcomment %}
+        {% if cpt_images_acceuil == 0 %}
+          {% assign item_image_acceuil1 = item_tmp %}
+          {% assign cpt_images_acceuil = cpt_images_acceuil | plus: 1 %}
+        {% elsif cpt_images_acceuil == 1 %}
+          {% assign item_image_acceuil2 = item_tmp %}
+          {% assign cpt_images_acceuil = cpt_images_acceuil | plus: 1 %}
+        {% comment %}{% elsif cpt_images_acceuil == 2 %}
+          {% assign item_image_acceuil3 = item_tmp %}
+          {% assign cpt_images_acceuil = cpt_images_acceuil | plus: 1 %}{% endcomment %}
+        {% endif %}
+      {% endif %}
+          
+    {% endunless %}
+  {% endif %}
+
+{% endfor %}

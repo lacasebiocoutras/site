@@ -1,0 +1,20 @@
+{%comment%}
+<!--
+  param in :
+    include.url
+  var global:
+    extension_item
+    extension_section
+ param out : name_id
+-->
+{%endcomment%}
+{% assign extension_item = site.collections_ext.path_extension_item %}
+{% assign extension_section = site.collections_ext.path_extension_section %}
+{% assign url_item_tmp = include.url | remove_first: extension_section | remove_first: extension_item  %}
+{% assign url_item_part_tmp = url_item_tmp | split: '/' %}
+{% assign url_item_size_tmp = url_item_part_tmp.size | minus: 1  %}
+{% assign name_id = url_item_part_tmp[url_item_size_tmp] %}
+{% if url_item_size_tmp > 1 %}
+  {% assign size_tmp = url_item_size_tmp | minus : 1 %}
+  {% assign name_id = name_id | prepend : '-' | prepend : url_item_part_tmp[size_tmp] | strip  %}
+{% endif %}

@@ -1,0 +1,99 @@
+{%comment%}
+<!--
+  param in :
+    include
+      nb_loop_iter
+      index_ref
+      borne_beg
+      borne_end
+
+
+  var globale
+    delim
+    list_sub_dist_sup
+
+  param out:
+    list_items_sub
+    list_index_sub
+
+ -->
+{%endcomment%}
+
+
+{% if include.nb_loop_iter == 0 %}
+  {% assign list_items_sub = delim %}
+{% endif %}
+
+{%comment%}
+  <!-- to encapsulate loop, reassign at the end -->
+{%endcomment%}
+{% assign iter_loop_ref_input = iter_loop %}
+{% assign borne_beg_loop_ref_input = borne_beg_loop %}
+{% assign borne_end_loop_ref_input = borne_end_loop %}
+
+{% assign borne_beg_loop = include.borne_beg | plus: 0  %}
+{% assign borne_end_loop = include.borne_end | plus: 0  %}
+
+
+{% comment %}
+  <!-- extract details_items info on current sub child  -->
+{% endcomment %}
+{% include coll_ext/extract-sort-items/force_items/extract_details_items_for_given_sub.html
+  index_ref_sub=include.index_ref
+%}
+
+
+
+
+{% for iter_loop in (borne_beg_loop..borne_end_loop)  %}
+
+  {% assign items_main_loop_sub = section_display_subsection_part[iter_loop] | plus: 0 %}
+
+  {% comment %}
+    <!-- extract details_items info on sub child, update list_items_sub, list_index_sub  -->
+  {% endcomment %}
+  {% include coll_ext/extract-sort-items/force_items/extract_details_items_for_given_sub.html
+    index_ref_sub=items_main_loop_sub
+  %}
+
+  {% comment %}
+    <!-- subsections info  -->
+  {% endcomment %}
+  {% assign iter_search_value = -1 %}
+  {% include coll_ext/utils/array/index_of_value_in_array_int.html
+    array_part=info_section_subsection_part
+    search_value=items_main_loop_sub
+    nbElt=nb_max_subsection
+    period_array_nbElt=period_info_subsection
+    offsetDeb=offset_index_subsection
+  %}
+  {% comment %}<!-- presence sub on child -->{% endcomment %}
+  {% assign child_index_sub = iter_search_value | plus: offset_index_subsection %}
+  {% assign child_index_subsection = info_section_subsection_part[child_index_sub] | plus: 0 %}
+
+  {% assign child_index_sub = iter_search_value | plus: offset_nbitems_subsection %}
+  {% assign child_nbitems_subsection = info_section_subsection_part[child_index_sub] | plus: 0 %}
+
+  {% assign child_index_sub = iter_search_value | plus: offset_tab_offset_subsection %}
+  {% assign child_tab_offset_subsection = info_section_subsection_part[child_index_sub] | plus: 0 %}
+
+
+  {% if child_nbitems_subsection > 0 %}
+    {% comment %}<!-- on loop child subsections -->{% endcomment %}
+    {% assign nb_loop_iter_inc= include.nb_loop_iter | plus: 1 %}
+    {% assign child_borne_beg_loop = child_tab_offset_subsection %}
+    {% assign child_borne_end_loop = child_borne_beg_loop | plus: child_nbitems_subsection | minus: 1 %}
+    {% include coll_ext/extract-sort-items/force_items/loop_dist_subsections.html
+      nb_loop_iter=nb_loop_iter_inc
+      index_ref=child_index_subsection
+      borne_beg=child_borne_beg_loop
+      borne_end=child_borne_end_loop
+    %}
+  {% endif %}
+
+{% endfor %}
+
+
+{% assign iter_loop = iter_loop_ref_input %}
+{% assign borne_beg_loop = borne_beg_loop_ref_input %}
+{% assign borne_end_loop = borne_end_loop_ref_input %}

@@ -1,0 +1,132 @@
+html {
+    // background-attachment: fixed;
+    // background-color: $secondary-color-light;
+    // background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    // background-size: 50px 50px;
+  // report lib/slidebars.scss
+
+  // http://www.alsacreations.com/astuce/lire/1216-arriere-plan-background-extensible.html
+  // margin:0;
+  // padding:0;
+  // background: url(image/bg.jpg) no-repeat center fixed;
+  // -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  // background-size: cover; /* version standardisée */
+
+}
+
+/*@media (--high-dppx) {
+  html {
+    font-weight: 300;
+  }
+}*/
+
+body {
+  font-size: 0.9em;
+  //ajust responsive
+  @include breakpoint($break-ssm-max){font-size: 0.7em;}
+
+  font-family: $serif ; //$base-font-family;
+  -webkit-font-smoothing: antialiased;
+
+  &.overflow--hidden {
+    /* when primary navigation is visible, the content in the background won't scroll */
+    overflow: hidden;
+  }
+  // overflow-y:scroll;
+
+  // overflow: hidden; //body don't scroll
+
+
+}
+
+
+p {
+  font-size: 1em;
+  line-height: 1.25em;
+  // margin-bottom: 1.5em;
+  font-weight: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+  font-weight: normal;
+  line-height: 1em;
+  // margin-bottom: .5em;
+}
+
+h1 {
+  font-size: 1.5em;
+  line-height: 2em;
+  // margin-bottom: .5em;
+  // letter-spacing: -.015em;
+  // margin: .25em 0 .75em;
+
+}
+
+h2 {
+  font-size: 1.3em;
+  line-height: 1.7em;
+  // margin-top: .6em;
+  // margin-bottom: .6em;
+  // font-weight: 600;
+  // font-family: KievitWebPro-Bold;
+  // margin: 0 0 calc(1.5em/1.333);
+}
+
+h3 {
+  font-size: 1em;
+  line-height: 1.45em;
+  // line-height: 1em;
+  // margin-top: 1em;
+  // margin-bottom: .4em;
+  // text-align: left;
+  // font-weight: 600;
+  // margin: 0 0 1.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+  // line-height: 1.5em;
+
+}
+h5 {
+    font-size: 1.125em;
+    // line-height: 1.6em;
+    // margin-bottom: 1.5em;
+    // text-align: left;
+}
+h6 {
+    font-size: 1em;
+    // font-weight: bold;
+    // line-height: 1.5em;
+    // margin-bottom: .4em;
+    // color: #818c97;
+    // text-align: left;
+    // margin-left: .5em;
+    // margin-top: 1em !important;
+}
+
+/* Links */
+a {
+    text-decoration: none;    
+    &:hover {
+        color: inherit; //$primary-color;
+        text-decoration: none;
+    }
+
+    // &:focus,&:visited {}
+}
+
+.invisible {
+  display:none;
+}
+
+.invItem {
+  display:none;
+}
+
+.warningItem {
+  border: $spacing-h/2 solid $warning-color;
+}
+

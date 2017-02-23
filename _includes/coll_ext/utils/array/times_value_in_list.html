@@ -1,0 +1,36 @@
+{%comment%}<!--
+param in :
+  include
+    search_value
+    list
+    period
+    offsetDeb
+    delim
+
+
+param out :
+  times_search_value
+-->{%endcomment%}
+
+{% assign times_search_value = 0 %}
+
+
+{% assign array_tmp = include.list | remove_first: delim | split: delim  %}
+{% assign array_size_tmp = array_tmp.size %}
+{% assign period_tmp = include.period | plus:0 %}
+{% assign nb_elt_tmp = array_size_tmp | divided_by: period_tmp | minus: 1 %}
+{% assign iter_array = include.offsetDeb | plus: 0 %}
+
+{% assign search_value_tmp = include.search_value | append: ''  %}
+
+{% for i_tmp in (0..nb_elt_tmp) %}
+
+ {% assign val_tmp = array_tmp[iter_array]   %}
+
+ {% if val_tmp == search_value_tmp %}
+    {% assign times_search_value = times_search_value | plus: 1 %}
+  {% endif %}
+
+ {% assign iter_array = iter_array | plus: period_tmp %}
+{% endfor %}
+

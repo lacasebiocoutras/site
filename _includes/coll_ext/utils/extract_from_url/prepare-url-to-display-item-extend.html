@@ -1,0 +1,39 @@
+{%comment%}
+<!--
+  param in :
+    include
+      item_url
+      add_url_section_in_container
+      last_part_url_curren_item
+
+
+  var global :
+    config/common-param
+    raw_items
+
+  param out
+    url_section_item_display
+    title_section_item_display
+
+-->
+{%endcomment%}
+
+{%comment%}
+  <!-- output -->
+{%endcomment%}
+
+
+{% assign url_section_item_display = null %}
+{% assign title_section_item_display = null %}
+
+{%comment%}
+  <!-- info url and title of the section containing the current item -->
+{%endcomment%}
+{% if include.add_url_section_in_container == true  %}
+  {% include coll_ext/utils/extract_from_url/url_section.html
+    url=include.item_url
+    url_part_item=include.last_part_url_curren_item
+  %}
+  {% assign url_section_item_display = url_section_item %}
+  {% assign title_section_item_display = title_section_item %}
+{% endif %}

@@ -1,0 +1,118 @@
+
+
+{% assign subsections_name_ref = site.data.coll_ext.design.config.param.name_ref.subsections %}
+{% assign detail_items_name_ref = site.data.coll_ext.design.config.param.name_ref.detail_items %}
+{% assign subsection_items_name_ref = site.data.coll_ext.design.config.param.name_ref.subsection_items %}
+{% assign mix_items_name_ref = site.data.coll_ext.design.config.param.name_ref.mix_items %}
+
+{% assign period_info_subsection = site.data.coll_ext.config.display_list-items.config.period_info_subsection | plus: 0 %}
+{% assign offset_index_sub = site.data.coll_ext.config.display_list-items.config.offset_index_subsection | plus: 0 %}
+{% assign offset_dist_sub = site.data.coll_ext.config.display_list-items.config.offset_dist_subsection | plus: 0 %}
+{% assign offset_nbitems_sub = site.data.coll_ext.config.display_list-items.config.offset_nbitems_subsection | plus: 0 %}
+{% assign offset_tab_offset_sub = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_subsection | plus: 0 %}
+
+
+{% assign period_info_items_section = site.data.coll_ext.config.display_list-items.config.period_info_items_section | plus: 0 %}
+{% assign offset_index_items = site.data.coll_ext.config.display_list-items.config.offset_index_items_section | plus: 0 %}
+{% assign offset_dist_items = site.data.coll_ext.config.display_list-items.config.offset_dist_items_section | plus: 0 %}
+{% assign offset_nbitems_items = site.data.coll_ext.config.display_list-items.config.offset_nbitems_items_section | plus: 0 %}
+{% assign offset_tab_offset_items = site.data.coll_ext.config.display_list-items.config.offset_tab_offset_items_section | plus: 0 %}
+
+
+{% assign period_loop_design_model = 4 %}
+
+{% assign offset_name_design_model = 0 %}
+{% assign offset_dist_design_model = 1 %}
+{% assign offset_type_design_model = 2 %}
+{% assign offset_custom_design_model = 3 %}
+
+
+{% assign period_detail_model_front_matter = 3 %}
+
+{% assign offset_design_front_matter = 0 %}
+{% assign offset_mix_0_front_matter = 1 %}
+{% assign offset_mix_sup_front_matter = 2 %}
+
+
+{% comment %}<!-- parse models in site.data.coll_ext.design.list-model_page, detect if design_model.type = type_design_ref  -->{% endcomment %}
+
+{% assign list_design_model = delim %}
+{% assign list_detail_design_model = delim %}
+{% assign array_detail_design_model = delim %}
+{% assign nb_design_model_type = 0 %}
+{% assign iter_max_design_model = -1  %}
+
+{% for model_tmp in site.data.coll_ext.design.list-model_page %}
+
+  {% for dist_tmp in model_tmp[1].list-model-dist %}
+
+    {% for type_tmp in dist_tmp.list-model-type %}
+
+      {% assign type_design_tmp = type_tmp.design_model.type  %}
+
+      {% if type_design_ref == type_design_tmp %}
+
+        {% assign compar = model_tmp[1].model | prepend: delim | append: delim %}
+
+        {% unless list_design_model contains compar %}
+          {% assign list_design_model = list_design_model | append: model_tmp[1].model | append: delim  %}
+        {% endunless %}
+
+        {% assign list_detail_design_model = list_detail_design_model
+          | append: model_tmp[1].model | append: delim | append: dist_tmp.dist | append: delim | append: type_tmp.type | | append: delim | append: type_tmp.design_model.custom | append: delim %}
+
+      {% endif %}
+
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+
+
+{% assign array_detail_design_model = list_detail_design_model | remove_first: delim | split: delim %}
+{% assign nb_design_model_type = array_detail_design_model.size | divided_by: period_loop_design_model  %}
+{% assign iter_max_design_model = nb_design_model_type | minus: 1  %}
+
+
+
+
+{% comment %}<!-- parse models in site.data.coll_ext.master_model, detect if design_model_page.with type_design_ref defined inside  -->{% endcomment %}
+
+{% assign list_model_front_matter = delim %}
+{% assign array_model_front_matter = delim %}
+{% assign array_detail_model_front_matter = delim %}
+{% assign nb_model_front_matter = 0 %}
+
+{% assign list_tmp = delim  %}
+{% for model_tmp in site.data.coll_ext.master_model %}
+
+  {% assign design_model_tmp = model_tmp[1].design_model_page | prepend: delim | append: delim %}
+
+  {% if list_design_model contains design_model_tmp %}
+
+    {% assign list_model_front_matter = list_model_front_matter | append: model_tmp[1].model | append: delim  %}
+
+    {% assign current_page_mix_dist_0 = model_tmp[1].mix_details_subsections_items %}
+    {% if current_page_mix_dist_0 != true %}
+      {% assign current_page_mix_dist_0 = false  %}
+    {% endif %}
+    {% assign current_page_mix_dist_sup = model_tmp[1].mix_details_subsections_items_on_child %}
+    {% if current_page_mix_dist_sup != true %}
+      {% assign current_page_mix_dist_sup = false  %}
+    {% endif %}
+    {% comment %}<!-- note: to be testing with 'true' -->{% endcomment %}
+
+
+     {% assign list_tmp = list_tmp
+      | append: model_tmp[1].design_model_page | append: delim
+      | append: current_page_mix_dist_0 | append: delim
+      | append: current_page_mix_dist_sup | append: delim %}
+
+  {% endif %}
+{% endfor %}
+
+{% assign array_model_front_matter = list_model_front_matter | remove_first: delim | split: delim %}
+{% assign array_detail_model_front_matter = list_tmp | remove_first: delim | split: delim %}
+{% assign nb_model_front_matter = array_model_front_matter.size %}
+
+
+

@@ -1,0 +1,6 @@
+config:
+  default_master_model_selected: 'default'
+  default_model_selected: 'default-list_flex'
+  default_type_mix_items_selected: 'mix_items'
+
+  default_detail_items_selected: 'miniature-default'

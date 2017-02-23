@@ -1,0 +1,70 @@
+{%comment%}
+<div>
+<p>info_section_subsection : {{info_section_subsection}}</p>
+<p>section_display_subsection: {{section_display_subsection}}</p>
+<p>info_items_subsection : {{info_items_subsection}}</p>
+<p>items_display_subsection: {{items_display_subsection}}</p>
+</div>
+{%endcomment%}
+
+
+
+
+{% assign period_info_subsection = site.data.coll_ext.config.display_list-items.config.period_info_subsection | plus: 0 %}
+{% assign offset_period_items = period_info_subsection | minus : 1 %}
+{% assign no_child = site.data.coll_ext.config.display_list-items.config.no_child | plus: 0 %}
+
+
+{%comment%}
+  <!-- extract info from array in input -->
+{%endcomment%}
+
+{% if info_section_subsection != delim %}
+  {% assign info_section_subsection_part = info_section_subsection | remove_first: delim | split: delim  %}
+  {% assign info_section_subsection_size = info_section_subsection_part.size %}
+{% endif%}
+{% if section_display_subsection != delim %}
+  {% assign section_display_subsection_part = section_display_subsection | remove_first: delim | split: delim %}
+  {% assign section_display_subsection_size = section_display_subsection_part.size %}
+{% endif%}
+{% if info_items_subsection != delim %}
+  {% assign info_items_subsection_part = info_items_subsection | remove_first: delim | split: delim %}
+  {% assign info_items_subsection_size = info_items_subsection_part.size %}
+{% endif%}
+{% if items_display_subsection != delim %}
+  {% assign items_display_subsection_part = items_display_subsection | remove_first: delim | split: delim %}
+  {% assign items_display_subsection_size = items_display_subsection_part.size %}
+{% endif%}
+
+
+{% assign nb_max_subsection = info_section_subsection_size | divided_by: period_info_subsection %}
+{% assign index_info_subsection_ref = 0 %}
+{% assign index_info_items_ref = offset_period_items | minus: 1 %}
+
+
+{% assign dist_ref_main_subsection = info_items_subsection_part[1] | plus: 0 %}
+
+
+{% comment %}<!-- det nb_sub_dist0, specific subsections, dist0-->{% endcomment %}
+{% assign nb_sub_dist0 = 0  %}
+{% assign list_items_sub_dist0 = delim  %}
+{% assign index_info_subsection_ref_tmp = 0  %}
+
+{% for i_sub in (1..nb_max_subsection) %}
+  {% assign index_info_subsection = index_info_subsection_ref_tmp %}
+
+  {% assign index_item_subsection = info_section_subsection_part[index_info_subsection] %}
+
+  {% assign index_info_subsection = index_info_subsection | plus: 1 %}
+  {% assign dist_subsection = info_section_subsection_part[index_info_subsection] | plus: 0 %}
+
+  {% if dist_subsection ==  dist_ref_main_subsection %}
+    {% assign nb_sub_dist0 = nb_sub_dist0 | plus: 1  %}
+
+    {% assign list_items_sub_dist0 = list_items_sub_dist0 | append: index_item_subsection | append: delim  %}
+
+  {% endif %}
+
+  {% assign index_info_subsection_ref_tmp = index_info_subsection_ref_tmp | plus: period_info_subsection %}
+{% endfor %}
+

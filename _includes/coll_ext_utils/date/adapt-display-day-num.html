@@ -1,0 +1,20 @@
+{%comment%}<!--
+param in :
+  include.day_tofilter
+  include.separator
+param out:
+  new_day
+ -->{%endcomment%}
+
+{% assign new_day = include.day_tofilter %}
+{% if include.separator == ' ' %}
+  {% if site.lang == 'fr' %}
+    {% if include.day_tofilter == '1' %}
+      {% assign new_day = '1er' %}
+    {% endif %}
+  {% else %}
+     {% if include.day_tofilter == '1' %}
+      {% assign new_day = '1st' %}
+    {% endif %}
+  {% endif %}
+{% endif %}

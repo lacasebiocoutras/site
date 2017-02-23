@@ -1,0 +1,4 @@
+type_code_raw: 'raw'
+type_code_scss: 'scss'
+
+default_color: 'inherit'

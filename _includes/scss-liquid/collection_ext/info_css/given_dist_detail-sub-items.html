@@ -1,0 +1,60 @@
+{%comment%}
+<!--
+param in :
+  include
+    type_design_model
+    custom_design_ref
+    detail_name_ref
+    sub_name_ref
+    url_ref
+    search_value
+    list
+
+var global
+  raw_items  ::  lists-extension-from-list-items.html
+  delim
+  empty_string
+
+
+
+param out :
+  info_add_css_part
+-->
+{%endcomment%}
+
+{% assign info_add_css_part = empty_string  %}
+
+
+{% assign list_detail_items = delim %}
+{% assign list_section_items = delim %}
+{% include coll_ext/utils/extract_from_url/lists-extension-from-list-items.html
+  list_items=include.list
+%}
+
+{% assign array_detail_items_tmp = list_detail_items | remove_first: delim | split: delim %}
+{% assign nb_detail_items_temp= array_detail_items_tmp.size %}
+
+{% assign array_section_items_tmp = list_section_items | remove_first: delim | split: delim %}
+{% assign nb_section_items_temp= array_section_items_tmp.size %}
+
+
+{% if nb_detail_items_temp > 0 and include.type_design_model contains include.detail_name_ref %}
+
+
+
+  {% assign info_add_css_part = info_add_css_part
+    | append: include.search_value | append: delim
+    | append: include.url_ref | append: delim
+    | append: include.detail_name_ref | append: delim
+    | append: nb_detail_items_temp | append: delim
+    | append: include.custom_design_ref | append: delim %}
+{% endif %}
+
+{% if nb_section_items_temp > 0 and include.type_design_model contains include.sub_name_ref %}
+  {% assign info_add_css_part = info_add_css_part
+    | append: include.search_value | append: delim
+    | append: include.url_ref | append: delim
+    | append: include.sub_name_ref | append: delim
+    | append: nb_section_items_temp | append: delim
+    | append: include.custom_design_ref | append: delim %}
+{% endif %}

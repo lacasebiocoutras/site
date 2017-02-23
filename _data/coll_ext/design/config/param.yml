@@ -1,0 +1,14 @@
+# type UI
+type_link_to_url: 'link_to_url'
+type_list_flex: 'list_flex'
+type_miniature: 'miniature'
+type_modal: 'modal'
+type_slider: 'slider'
+
+#note : name_ref form '"xxx"', because in array '["xxx","yyy"]'
+name_ref:
+  subsections: '"subsections"'
+  detail_items: '"detail_items"'
+  subsection_items: '"subsection_items"'
+  mix_items: '"mix_items"'
+

@@ -1,0 +1,93 @@
+config:
+  # limit max of param 'order' for an item to be display
+  sort_max_order_display: 99
+  # if type_date_ref : 'date-publication' modify, neccessary to adapt /date_publi_filter/convert-date-publi-unix.html
+  type_date_ref: 'date-publication'
+  # by default sort all children of a give page/section
+  sort_level_children : 99
+  # period_unix, by default one_day, see time.yml
+  period_unix: 86400
+  # note : sort is based on a period, to optimize time of compil.
+  # by default, one_day, filtering the hours (in relation with  date-publication of the form: 12 dec 2016, default customer format);
+  # depending the need, it can extend to hout
+  # todo : case hour, adapt convert-date-fr-en2en_unix.html  with hour if present
+
+  #if no sort_items defined as meta in yml section, default custom filter :
+  default_sort: 'order'
+  #extra sort date-evenement, with dates, past or not; first pass with default_sort, and re-sort before display
+  # filters_force_to_default: ['date-evenement', 'date-promotion']
+
+  filter_path_pages: '_pages/'
+  filter_path_pages_ext: '.md'
+
+  extra_date_evenement: 'date-evenement'
+  extra_date_promotion: 'date-promotion'
+
+
+list-type-sort:
+  #define std sort filter
+  - type: 'date-publication'
+    sort_type_filter: 'date-publication'
+    # revfilter, with date, date-publication default: true : from newer to older
+    # rev_filter, with order, title, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_revfilter: true
+    sort_type_subfilter: 'order'
+    # rev_subfilter, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_rev_subfilter: false
+
+  - type: 'date-publication-limit-max-order-10'
+    sort_type_filter: 'date-publication'
+    # revfilter, with date, date-publication default: true : from newer to older
+    # rev_filter, with order, title, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_revfilter: true
+    sort_type_subfilter: 'order'
+    # rev_subfilter, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_rev_subfilter: false
+    sort_max_order: 10
+
+  - type: 'order'
+    sort_type_filter: 'order'
+    # revfilter, with date, date-publication default: true : from newer to older
+    # rev_filter, with order, title, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    # if same order, differentiate with name of the file 1 to 99..,A to Z, a to z
+    sort_revfilter: false
+    sort_type_subfilter: 'date-publication'
+    # rev_subfilter, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_rev_subfilter: true
+
+  - type: 'order-limit-max-order-10'
+    sort_type_filter: 'order'
+    # revfilter, with date, date-publication default: true : from newer to older
+    # rev_filter, with order, title, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    # if same order, differentiate with name of the file 1 to 99..,A to Z, a to z
+    sort_revfilter: false
+    sort_type_subfilter: 'date-publication'
+    # rev_subfilter, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_rev_subfilter: true
+    sort_max_order: 10
+
+  - type: 'title'
+    sort_type_filter: 'title'
+    # revfilter, with date, date-publication default: true : from newer to older
+    # rev_filter, with order, title, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    # if same order, differentiate with name of the file 1 to 99..,A to Z, a to z
+    sort_revfilter: false
+    sort_type_subfilter: 'date-publication'
+    # rev_subfilter, default : false : 1 to 99..,A to Z, a to z; true : z to a,Z to A, 99.. to 1
+    sort_rev_subfilter: true
+
+  # extra sort based on a std filter
+  - type: 'date-promotion'
+    extra_sort_type: true
+    based_on_type: 'date-publication'
+
+  - type: 'date-evenement'
+    extra_sort_type: true
+    based_on_type: 'order'
+
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+{%comment%}
+<!--
+  param in:
+    include.array_index
+    include.array_dist_children
+    include.array_is_section
+    include.array_time_tosort
+    include.array_time_uniq
+    include.sort_filter
+    include.sort_subfilter
+    include.sort_rev_subfilter
+    include.output_temp
+
+  var global:
+    raw_items
+
+  param out :
+    array_index_out
+    array_dist_children_out
+    array_is_section_out
+
+-->
+{%endcomment%}
+
+{%comment%}
+  <!-- output -->
+{%endcomment%}
+{% assign array_index_out = delim %}
+{% assign array_dist_children_out =  delim %}
+{% assign array_is_section_out =  delim %}
+
+
+
+{% if include.array_index != delim %}
+  {% assign array_index_all = include.array_index | remove_first: delim | split: delim %}
+  {% assign array_dist_children_all = include.array_dist_children | remove_first: delim | split: delim %}
+  {% assign array_is_section_all = include.array_is_section | remove_first: delim | split: delim %}
+  {% assign array_time_tosort_all = include.array_time_tosort | remove_first: delim | split: delim %}
+  {% assign array_index_all_size = array_index_all.size | minus: 1 %}
+{% endif %}
+
+
+{%comment%}
+  <!--
+    recup first value of the sort_filter in array_index_all
+    case/when type sort_filter, today no other way (use where.. ko).
+    implemented for order and title; if new param, need to be add
+  -->
+{%endcomment%}
+{% include coll_ext/sort_collections/date_publi_filter/case-when-sort-filter-order.html
+  iter=0
+  sort_filter=include.sort_filter
+  array_index=array_index_all
+%}
+{% assign val_sort_ref = val_sort %}
+{% assign val_sort_ref_current = val_sort_ref %}
+
+
+
+{% assign array_index_tmp = delim %}
+{% assign array_dist_children_tmp =  delim %}
+{% assign array_is_section_tmp =  delim %}
+
+{% assign array_time_tosort_tmp = delim %}
+
+{% assign array_index_item_tmp = delim %}
+{% assign array_dist_children_item_tmp =  delim %}
+{% assign array_is_section_item_tmp =  delim %}
+
+{% for i in (0..array_index_all_size) %}
+
+  {% include coll_ext/sort_collections/date_publi_filter/case-when-sort-filter-order.html
+    iter=i
+    sort_filter=include.sort_filter
+    array_index=array_index_all
+  %}
+  {% assign val_sort_current = val_sort %}
+
+  {% if val_sort_current == val_sort_ref_current %}
+
+    {% assign array_index_tmp = array_index_tmp | append: array_index_all[i] | append: delim %}
+    {% assign array_dist_children_tmp = array_dist_children_tmp | append: array_dist_children_all[i] | append: delim %}
+    {% assign array_is_section_tmp = array_is_section_tmp | append: array_is_section_all[i] | append: delim %}
+
+    {% assign array_time_tosort_tmp = array_time_tosort_tmp | append: array_time_tosort_all[i] | append: delim %}
+
+  {% else %}
+
+    {% assign val_sort_ref_current = val_sort_current %}
+
+    {% include coll_ext/sort_collections/date_publi_filter/sort-index-date-publi-on-subfilter.html %}
+
+    {% assign array_index_tmp = array_index_tmp | append: array_index_all[i] | append: delim %}
+    {% assign array_dist_children_tmp = array_dist_children_tmp | append: array_dist_children_all[i] | append: delim %}
+    {% assign array_is_section_tmp = array_is_section_tmp | append: array_is_section_all[i] | append: delim %}
+
+    {% assign array_time_tosort_tmp = array_time_tosort_tmp | append: array_time_tosort_all[i] | append: delim %}
+
+  {% endif %}
+{% endfor %}
+
+{%comment%}
+<!-- last iter if needed -->
+{%endcomment%}
+{% include coll_ext/sort_collections/date_publi_filter/sort-index-date-publi-on-subfilter.html %}
+
+
+

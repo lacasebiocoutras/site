@@ -1,0 +1,32 @@
+{%comment%}
+<!--
+  param in :
+    include
+      name_collection
+      path_list
+  param out : 
+    nb_items_list_collection
+  var global :
+
+-->
+{%endcomment%}
+
+
+{% assign nb_items_list_collection = 0 %}
+
+{% for collection in site.collections %}
+  {% if collection.label == include.name_collection %}
+    {% assign raw_items_collection = collection.docs %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign items_tmp = raw_items_collection | sort: 'order' %}
+
+{% for item_tmp in items_tmp %}  
+  {% if item_tmp.path contains include.path_list %} 
+    {% unless item_tmp.path contains '/index.md'  %}
+      {% assign nb_items_list_collection = nb_items_list_collection | plus: 1 %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+

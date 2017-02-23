@@ -1,0 +1,30 @@
+{%comment%}
+<!--
+  param in :
+    include
+      current_class
+      add_to_class
+      empty_string
+      one_space
+
+  param out :
+    updating_class : (current_class + add_to_class)
+
+
+-->
+{%endcomment%}
+
+{% assign updating_class = '' %}
+{% if include.current_class != null %}
+  {% assign updating_class = include.current_class %}
+{% endif %}
+
+
+{% if include.add_to_class != null %}
+
+  {% if updating_class != include.empty_string %}
+    {% assign updating_class = updating_class | append: include.one_space %}
+  {% endif %}
+
+  {% assign updating_class = updating_class | append: include.add_to_class  %}
+{% endif %}

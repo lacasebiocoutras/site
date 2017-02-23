@@ -1,0 +1,117 @@
+{%comment%}
+<!--
+  param in :
+  type_design_ref = 'slider'
+
+  var global :
+    site.documents
+    site.data.coll_ext.design
+    include/collection_ext
+
+  param_out :
+    info_add_css_out
+
+-->
+
+<!--
+  parse all collections, to find items with meta model slider.
+  if detect, determine nb-sub = nb_items slider
+
+-->
+
+{%endcomment%}
+
+{% assign type_design_ref = include.type_design_ref  %}
+
+
+
+
+{% include coll_ext/config/common-param.html %}
+
+{% comment %}<!-- first step, assign var, array from data model collection_ext design -->{% endcomment %}
+{% include scss-liquid/collection_ext/info_css/part1_assign_template-standard.html %}
+{% comment %}
+<div><p>list_design_model : {{list_design_model}}</p></div>
+<div><p> {{list_detail_design_model}} </p></div>
+<div><p>list_model_front_matter : {{list_model_front_matter}}</p></div>
+{% endcomment %}
+
+{% assign info_add_css_out = delim %}
+
+
+{% for current_page in site.documents  %}
+
+  {% assign compar = current_page.model | prepend: delim | append: delim %}
+
+  {% if list_model_front_matter contains compar %}
+
+    {% assign page_ref_url = current_page.url %}
+    {% assign collection_name = current_page.path | split: delim_url %}
+    {% assign collection_name = collection_name[0] | remove_first: undersc_string %}
+
+    {% assign page_ref_model = current_page.model %}
+    {% assign page_ref_sort_items = current_page.sort_items %}
+
+
+    {% include coll_ext/extract-sort-items/extract_items_to_display.html
+      collection_name=collection_name
+      page_ref_url=page_ref_url
+      page_ref_model=page_ref_model
+      page_ref_sort_items=page_ref_sort_items
+      page_ref_choose_subsections=null
+      page_ref_filter_subsections=null
+    %}
+
+    {% assign info_add_css = delim %}
+    {% include scss-liquid/collection_ext/info_css/part2_info_css_current_page_template-standard.html
+      page_ref_url=page_ref_url
+      page_ref_model=page_ref_model
+    %}
+    {% if info_add_css != delim  %}
+      {% assign info_add_css = info_add_css | remove_first: delim  %}
+      {% assign info_add_css_out = info_add_css_out | append: info_add_css %}
+    {% endif %}
+
+  {% endif %}
+
+{% endfor %}
+
+{% comment %}
+<!-- specific list items with mode force_display_coll_ext at true -->
+{% endcomment %}
+{% for list in site.data.coll_ext.model_list-detail-items.list-detail-items %}
+
+
+  {% if list.force_display_coll_ext == true %}
+
+    {% include coll_ext_utils/list-detail-items_init_step.html %}
+
+    {% assign compar = page_ref_model | prepend: delim | append: delim %}
+    {% assign compar_original = page_ref_model_original | prepend: delim | append: delim %}
+
+    {% if list_model_front_matter contains compar and compar != compar_original %}
+
+      {% include coll_ext/extract-sort-items/extract_items_to_display.html
+        collection_name=collection_name
+        page_ref_url=page_ref_url
+        page_ref_model=page_ref_model
+        page_ref_sort_items=page_ref_sort_items
+        page_ref_choose_subsections=page_ref_choose_subsections
+        page_ref_filter_subsections=page_ref_filter_subsections
+      %}
+
+      {% assign info_add_css = delim %}
+      {% include scss-liquid/collection_ext/info_css/part2_info_css_current_page_template-standard.html
+        page_ref_url=page_ref_url
+        page_ref_model=page_ref_model
+      %}
+      {% if info_add_css != delim  %}
+        {% assign info_add_css = info_add_css | remove_first: delim  %}
+        {% assign info_add_css_out = info_add_css_out | append: info_add_css %}
+      {% endif %}
+
+    {% endif %}
+
+  {% endif %}
+
+{% endfor %}

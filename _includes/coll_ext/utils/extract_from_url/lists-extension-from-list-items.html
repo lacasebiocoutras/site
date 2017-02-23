@@ -1,0 +1,39 @@
+{%comment%}
+<!--
+  param in :
+    include
+      list_items
+
+  var global:
+    raw_items
+
+
+ param out :
+  list_detail_items
+  list_section_items
+-->
+{%endcomment%}
+
+
+
+
+{% assign extension_section = site.collections_ext.path_extension_section %}
+{% assign delim = site.data.coll_ext.config.common.delimitator.array %}
+
+{% assign array_ext_tmp = include.list_items | remove_first: delim | split: delim  %}
+{% assign array_size_ext_tmp = array_ext_tmp.size | minus: 1 %}
+
+{% assign list_detail_items =delim %}
+{% assign list_section_items = delim %}
+
+{% for i_ext_tmp in (0..array_size_ext_tmp) %}
+  {% assign index_item_ext_tmp = array_ext_tmp[i_ext_tmp] | plus: 0 %}
+
+  {% assign item_ext_tmp = raw_items[index_item_ext_tmp] %}
+  {% if item_ext_tmp.url contains extension_section %}
+    {% assign list_section_items = list_section_items | append: index_item_ext_tmp | append: delim %}
+  {% else %}
+    {% assign list_detail_items = list_detail_items | append: index_item_ext_tmp | append: delim %}
+  {% endif %}
+{% endfor %}
+

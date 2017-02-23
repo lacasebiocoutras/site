@@ -1,0 +1,67 @@
+{%comment%}
+<!--
+  param in :
+    nb_modal_id_gl
+    list_modal_id_gl
+    list_modal_index_item_gl
+    include.delim
+
+  var global
+    raw_items
+
+-->
+<!-- var global used to transmit info detail items at the container modal -->
+{%endcomment%}
+
+<div>
+{% if nb_modal_id_gl > 0 %}
+
+  {% assign array_modal_id_gl = list_modal_id_gl | remove_first: include.delim | split: include.delim %}
+  {% assign array_modal_index_item_gl = list_modal_index_item_gl | remove_first: include.delim | split: include.delim %}
+
+  {% assign iter_max = nb_modal_id_gl | minus: 1  %}
+
+  {% for iter in (0..iter_max)  %}
+    {% assign id_target_modal = array_modal_id_gl[iter] %}
+    {% assign index_item_modal = array_modal_index_item_gl[iter] | plus: 0 %}
+
+    {% assign item_modal = raw_items[index_item_modal]  %}
+
+    {% include UI/modal/container/display.html
+      before=true
+      id_close=site.data.coll_ext.design.UI.modal.config.default_id_close
+      id_target_modal=id_target_modal
+      class_modal=site.data.coll_ext.design.UI.modal.config.default_class_modal
+      title=item_modal.title
+    %}
+
+    {% include UI/modal/article/display.html
+      before=true
+    %}
+    <article>
+
+
+    <p itemprop="text">{{item_modal.content}} </p>
+
+    {% comment %}<!-- todo : add display-items-current-section-to-an-item.html loop -->{% endcomment %}
+
+
+    </article>
+    {% include UI/modal/article/display.html
+      before=false
+    %}
+
+    {% include UI/modal/container/display.html
+      before=false
+      id_close='#X'
+      id_target_modal=null
+      class_modal=null
+      title=null
+    %}
+
+
+  {% endfor %}
+
+{% endif %}
+
+</div>

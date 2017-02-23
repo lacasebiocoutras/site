@@ -1,0 +1,58 @@
+{%comment%}
+<!--
+  param in :
+    include
+      page_ref_url  include.page_ref_url
+      current_dist  0
+      type_items    site.data.coll_ext.design.config.param.name_ref.subsections
+
+
+
+  param out :
+    container_slider_display_coll_ext
+    type_slider_translate_display_coll_ext
+    id_slider_coll_ext
+    config_slide_tr_coll_ext
+-->
+{%endcomment%}
+
+
+{% assign type_slider_translate = site.data.scss_liquid.UI.slider.config.type.translate %}
+
+{% assign config_slide_tr_coll_ext = null %}
+{% for config in site.data.scss_liquid.UI.slider.config.list_type  %}
+  {% if config.type == type_slider_translate %}
+    {% assign config_slide_tr_coll_ext = config %}
+  {% endif %}
+{% endfor %}
+
+
+{% comment %}// extra optim css : container_display, type_slider_display{% endcomment %}
+{% assign container_slider = site.data.scss_liquid.UI.slider.config.container.coll_ext %}
+{% include scss-liquid/optim/extra.html name_extra=container_slider
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign container_slider_display_coll_ext = extra_compress %}
+
+{% include scss-liquid/optim/extra.html name_extra=type_slider_translate
+  optim_class_css=site.data.scss_liquid.optim.css_slider
+  config_optim_css=site.data.scss_liquid.optim.config
+%}
+{% assign type_slider_translate_display_coll_ext = extra_compress %}
+{% comment %}// end optim css{% endcomment %}
+
+
+
+{% comment %}<!-- det id_slider_coll_ext-->{% endcomment %}
+{% assign id_slider = '' %}
+{% include scss-liquid/collection_ext/slider_translate/id_from_info_css.html
+  url_ref=include.page_ref_url
+  dist_item=include.current_dist
+  type_item=include.type_items
+  trunc_url_part=site.data.scss_liquid.coll_ext.config.trunc_url_part
+  delim_id=site.data.scss_liquid.optim.config.param.delim_id
+%}
+{% assign id_slider_coll_ext = id_slider %}
+
+
