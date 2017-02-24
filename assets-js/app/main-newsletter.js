@@ -65,7 +65,7 @@ define(['jquery','bootstrap','jqBootstrapValidation'], function($) {
                              
 
             $.ajax({
-                url: "https://sleepy-retreat-12152.herokuapp.com/v2/entry/id2m/staticman-receipt-lacasebiocoutras/staticman_data/comments",
+                url: "https://sleepy-retreat-12152.herokuapp.com/v2/entry/id2m/staticman-receipt-lacasebiocoutras/master/comments",
                 type: "POST",
                 dataType: 'text',
                 data: {
