@@ -35,7 +35,7 @@ define(['jquery','bootstrap','jqBootstrapValidation'], function($) {
             fields['name']=$("input#name").val();
             fields['email']=$("input#email").val();
             fields['message']=$("textarea#message").val();
-            // fields['subscribe']=subscribe;
+            fields['subscribe']=subscribe;
             options['slug']=slug; 
             options['parent']='newsletter-lcb'; //$("input#parent").val(); 
             options['origin']="https://lacasebiocoutras.github.io/"; //$("input#origin").val(); 
@@ -65,7 +65,7 @@ define(['jquery','bootstrap','jqBootstrapValidation'], function($) {
                              
 
             $.ajax({
-                url: "https://arcane-woodland-50389.herokuapp.com/v2/entry/admien33/d2m.tech/staticman_data/comments",
+                url: "https://sleepy-retreat-12152.herokuapp.com/v2/entry/id2m/staticman-receipt-lacasebiocoutras/staticman_data/comments",
                 type: "POST",
                 dataType: 'text',
                 data: {
