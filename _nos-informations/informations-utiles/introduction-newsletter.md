@@ -2,10 +2,7 @@
 title: Intro Newsletter
 date-publication: 14 février 2017
 order: 1
-description: 
-lire-plus: 
-miniature:
-type-miniature: red-left
+type_editor : SimpleMd
 ---
 
 ### Compléter le formulaire suivant pour vous abonner à notre service. 
