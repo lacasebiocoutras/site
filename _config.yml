@@ -96,6 +96,7 @@ assets:
     - _assets/fonts
     - _assets/scss_liquid
     - _assets/css_lib
+    - _assets/font-awesome
   compress:
     css: true
     js: true

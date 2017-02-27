@@ -46,12 +46,14 @@
     </style>
     <script>
       {% asset_source plugins/loadCSS.min.js %}
-      loadCSS("{% asset_path non-critical.css %}");
+      loadCSS("{% asset_path non-critical.css %}");      
+      loadCSS("{% asset_path css/font-awesome.css %}");
       loadCSS("{% asset_path pict_slider.css %}");
       loadCSS("{% asset_path coll_ext_slider.css %}");
     </script>
     <noscript>
       <link href="{% asset_path non-critical.css %}" rel="stylesheet">
+      <link href="{% asset_path css/font-awesome.css %}" rel="stylesheet">
       <link href="{% asset_path pict_slider.css %}" rel="stylesheet">
       <link href="{% asset_path coll_ext_slider.css %}" rel="stylesheet">
     </noscript>
@@ -64,11 +66,13 @@
     <script>
       {% asset_source plugins/loadCSS.min.js %}
       loadCSS("{% asset_path non-critical.css %}");
+      loadCSS("{% asset_path css/font-awesome.css %}");
       loadCSS("{% asset_path bootstrap.min.css %}");
       loadCSS("{% asset_path newsletter-bootstrap.css %}"); 
     </script>
     <noscript>
       <link href="{% asset_path non-critical.css %}" rel="stylesheet">
+      <link href="{% asset_path css/font-awesome.css %}" rel="stylesheet">
       <link href="{% asset_path bootstrap.min.css %}" rel="stylesheet">
       <link href="{% asset_path newsletter-bootstrap.css %}" rel="stylesheet"> 
     </noscript>
@@ -81,16 +85,21 @@
     <script>
       {% asset_source plugins/loadCSS.min.js %}
       loadCSS("{% asset_path non-critical.css %}");
+      loadCSS("{% asset_path css/font-awesome.css %}");
     </script>
     <noscript>
       <link href="{% asset_path non-critical.css %}" rel="stylesheet">
+      <link href="{% asset_path css/font-awesome.css %}" rel="stylesheet">
     </noscript>
+
   {% endif %}
 
 
 
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-  {% comment %}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">{% endcomment %}
+  {% comment %}
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+  {% endcomment %}
 
   
 
