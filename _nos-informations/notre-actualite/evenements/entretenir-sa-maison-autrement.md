@@ -8,6 +8,6 @@ last_modified : 27 Janvier 2017 12-42-44
 type_editor : SimpleMd
 miniature : notre-actualite/clean-air.jpg
 type-miniature: red-left
-date-evenement : 14 Février 2017
-date-fin-evenement : 11 Mars 2017
+date-evenement : 10 Avril 2017
+date-fin-evenement : 03 Mai 2017
 ---
