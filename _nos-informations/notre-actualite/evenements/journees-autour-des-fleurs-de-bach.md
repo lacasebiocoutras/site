@@ -4,7 +4,6 @@ date-publication : 27 janvier 2017
 description : 
 lire-plus : 
 order : 80
-last_modified : 27 Janvier 2017 12-42-56
 type_editor : SimpleMd
 miniature : notre-actualite/les-fleurs-de-bach-logo.jpg
 type-miniature: red-left

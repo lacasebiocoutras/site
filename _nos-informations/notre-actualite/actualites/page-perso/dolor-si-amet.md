@@ -5,7 +5,6 @@ description :
 lire-plus : 
 order : 1
 type_editor : CkEditor(Word)
-last_modified : 13 Février 2017 12-46-05
 miniature : notre-actualite/lacasebio.png
 type-miniature : red-left
 ---
