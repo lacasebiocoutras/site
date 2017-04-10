@@ -1,6 +1,6 @@
 ---
 title: Fleurs de Bach
-date-publication: 3 janvier 2017
+date-publication: 2017-01-03 12-00-00
 order: 2
 type_editor : CkEditor(Word)
 description: Retrouvez l'ensemble des élixirs Fleur de Bach à ingérer, ou à vaporiser.

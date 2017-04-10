@@ -1,6 +1,6 @@
 ---
 title: Intro Newsletter
-date-publication: 14 février 2017
+date-publication: 2017-02-14 12-00-00
 order: 1
 type_editor : SimpleMd
 ---

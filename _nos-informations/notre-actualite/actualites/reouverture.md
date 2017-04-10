@@ -1,7 +1,7 @@
 ---
 title:  Réouverture de La Case Bio
 order: 99
-date-publication: 1 janv 2016
+date-publication: 2016-01-02 12-00-00
 description: La Case Bio réouvre ses portes à Coutras.
 lire-plus: Un large choix de produits alimentaires...
 miniature: notre-actualite/rayons.jpg

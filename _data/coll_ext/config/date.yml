@@ -1,5 +1,17 @@
 #todo : filter we
 
+config:
+    region_en: 
+        # see option with custom : _includes/coll_ext_utils/date/display-date-utc2en.html
+        # alternate date-part / delim
+        display_item_date_publi: ["%A",", ","%-m-abbrev"," ","%-d-st",", ","%Y"]    
+    region_fr:        
+        # see option with custom : _includes/coll_ext_utils/date/display-date-utc2fr.html
+        # alternate date-part / delim 
+        # display_item_date_publi: ["%w"," ","%-d-er"," ","%-month"," ","%Y",", ","%H",":","%M"]      
+        display_item_date_publi: ["%-d-er"," ","%-month"," ","%Y"]      
+
+
 text_date_event_fr :
   one_day:
     intro: 'Le'

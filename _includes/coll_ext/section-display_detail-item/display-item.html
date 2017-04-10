@@ -242,7 +242,7 @@
     
   {% if item_raw.date-evenement %}
     <li class="Grid-cell u-full">
-      {% include coll_ext_utils/date/display-date-fr.html
+      {% include coll_ext_utils/date/display-date-event-fr.html
         date=item_raw.date-evenement
         date_end=item_raw.date-fin-evenement
       %}
@@ -280,11 +280,30 @@
     {% endif %}{% endcomment %}
 
     <h4 class="title" itemprop="headline">{{item_raw.title}}
-      {% if item_raw.date-evenement == null and item_raw.date-debut-promotion == null %}
-      {% assign date = item_raw.date-publication | strip | replace: ' ','&nbsp;' %}
-      <span> {{date}}</span>
-    {% endif %}
+      {% comment %}add date-publication after title{% endcomment %}
+      {% if item_raw.date-evenement == null and item_raw.date-debut-promotion == null %} 
+        {% assign new_date_convert = '' %}
+        {% if site.lang == 'fr' %}
+          {% assign config_date = site.data.coll_ext.config.date.config.region_fr %}    
+          {% include coll_ext_utils/date/display-date-utc2fr.html 
+            date=item_raw.date-publication 
+            filter=config_date.display_item_date_publi           
+          %} 
+        {% else %}
+          {% comment %} default english{% endcomment %}
+          {% assign config_date = site.data.coll_ext.config.date.config.region_en %}
+          {% include coll_ext_utils/date/display-date-utc2en.html 
+            date=item_raw.date-publication 
+            filter=config_date.display_item_date_publi           
+          %}         
+        {% endif %}        
+        {% assign date_publi_trad = new_date_convert | strip | replace: ' ','&nbsp;' %}       
+        <span> {{date_publi_trad}}</span>
+        
+      {% endif %}
     </h4>
+
+
 
     
 

@@ -1,6 +1,6 @@
 ---
 title: Sélection de produits
-date-publication: 3 juillet 2016
+date-publication: 2016-07-03 12-00-00
 order: 1
 description: Retrouvez notre sélection de produits bio, écologiques,...
 lire-plus:

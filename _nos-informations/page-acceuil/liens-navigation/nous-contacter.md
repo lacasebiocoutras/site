@@ -1,6 +1,6 @@
 ---
 title: Nous contacter
-date-publication: 17 janv 2017
+date-publication: 2017-01-17 12-00-00
 order: 100
 image:
 description-image:

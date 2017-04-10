@@ -46,12 +46,13 @@
   {%endcomment%}
   {% if item_tmp.date-evenement != null %}
 
-    {%comment%}<!-- conversion fr2en -->{%endcomment%}
-    {% include coll_ext_utils/date/convert-date-fr-en2en_unix.html
+    
+    {% include coll_ext_utils/date/convert-date-utc2en_unix.html
       date=item_tmp.date-evenement
     %}
     {% assign date_event = new_date_convert %}
     {% assign date_event_unix = new_date_convert_unix %}
+    
 
     {% assign new_array_index = new_array_index | append : index_array_part | append: delim %}
 

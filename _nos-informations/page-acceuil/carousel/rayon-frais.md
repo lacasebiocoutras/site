@@ -1,6 +1,6 @@
 ---
 title : Rayon frais
-date-publication : 14 Février 2017 
+date-publication : 2017-02-14 12-00-00
 order : 4
 description:
 image : page-acceuil/rayon-frais-1500x900.jpg

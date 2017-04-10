@@ -2,18 +2,16 @@
 define(['jquery', 'moment','config-module'], function($, moment, config) {
 
   //global def display
-  moment.locale('fr'); 
-  var format=['DDMMMMY'];
   var hour_close = 19;
 
-  function validePeriodDate(_date_deb, _date_fin,_format) {
+  function validePeriodDate(_date_deb, _date_fin) {
     
     var dateCompare= moment();
     if (_date_fin.length > 0) {
-      dateCompare = moment(_date_fin, _format);
+      dateCompare = moment(_date_fin);
     }
     else if (_date_deb.length > 0) {
-      dateCompare = moment(_date_deb, _format);
+      dateCompare = moment(_date_deb);
     }
     var compFin = moment(dateCompare).hour(hour_close);
 
@@ -25,18 +23,18 @@ define(['jquery', 'moment','config-module'], function($, moment, config) {
     }
   }
 
-  function isBetweenPeriodDate(_date_deb, _date_fin,_format) {
+  function isBetweenPeriodDate(_date_deb, _date_fin) {
 
     var dateDebut;
     if (_date_deb.length > 0) {
-      dateDebut = moment(_date_deb, _format);
+      dateDebut = moment(_date_deb);
     }
     else {
       dateDebut = moment();
     }
     var dateFin;
     if (_date_fin.length > 0) {
-      dateFin = moment(_date_fin, _format);
+      dateFin = moment(_date_fin);
     }
     else {
       dateFin = dateDebut;
@@ -59,14 +57,14 @@ define(['jquery', 'moment','config-module'], function($, moment, config) {
    /*functions display*/
   
   var displayAnId = function(item) {
-    moment.locale('fr');
+    // moment.locale('fr');
     var name_id='#';
     name_id=name_id.concat(item.name_id);
     //add moment filter
-    if(validePeriodDate(item.date_debut,item.date_fin,format)) {
+    if(validePeriodDate(item.date_debut,item.date_fin)) {
       $(name_id).removeClass(window.config.class_invisible_item);
 
-      if (isBetweenPeriodDate(item.date_debut,item.date_fin,format)) {
+      if (isBetweenPeriodDate(item.date_debut,item.date_fin)) {
         $(name_id).addClass(window.config.class_event_today);
       }
     }

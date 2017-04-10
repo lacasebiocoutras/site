@@ -1,6 +1,6 @@
 ---
 title :  La ruche qui dit oui! à la Case Bio.
-date-publication: 15 mars 2016
+date-publication: 2016-03-15 12-00-00
 description : 
 lire-plus : Chaque semaine, le Vendredi, de 17h à 19h, ...
 order : 99

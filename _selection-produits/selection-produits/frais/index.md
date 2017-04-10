@@ -1,6 +1,6 @@
 ---
 title: Frais
-date-publication: 25 Janvier 2017
+date-publication: 2017-01-25 12-00-00
 order: 2
 description: 
 lire-plus: visitez notre rayon

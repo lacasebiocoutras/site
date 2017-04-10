@@ -1,6 +1,6 @@
 ---
 title: Boissons
-date-publication: 15 janvier 2017
+date-publication: 2017-01-15 12-00-00
 order: 5
 description: 
 lire-plus:

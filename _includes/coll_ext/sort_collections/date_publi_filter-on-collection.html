@@ -188,7 +188,7 @@ param out :
 
       {% if sort_type_filter == type_date_ref or sort_type_subfilter == type_date_ref %}
 
-        {% include coll_ext/sort_collections/date_publi_filter/convert-date-publi-unix.html %}
+        {% include coll_ext/sort_collections/date_publi_filter/convert-date-publi-unix.html %}        
         {% assign diff_date = new_date_convert_unix | minus: nowunix %}
         {% assign date_unix = diff_date | divided_by: period_unix %}
         {% assign date_unix_str = date_unix | append: delim%}

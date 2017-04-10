@@ -1,9 +1,9 @@
 ---
 order: 1
 title:  Sojade chocolat 4x100G
-date-publication: 25 janvier 2017
-date-debut-promotion: 25 janvier 2017
-date-fin-promotion: 23 décembre 2017
+date-publication: 2017-01-25 12-00-00
+date-debut-promotion: 2017-01-25 12-00-00
+date-fin-promotion:
 description: 
 lire-plus: 
 miniature: selection-produits/sojade-choclolat.jpg

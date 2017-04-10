@@ -1,6 +1,6 @@
 ---
 title :  La Bio en Fête
-date-publication: 2 Octobre 2016
+date-publication: 2016-10-01 12-00-00
 description : 
 lire-plus : Accéder à notre brochure en ligne ...
 order : 99

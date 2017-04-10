@@ -1,6 +1,6 @@
 ---
 title: Marché biologique
-date-publication: 16 janvier 2017
+date-publication: 2017-01-16 12-00-00
 order: 1
 type_editor : CkEditor(Word)
 description: A votre disposition un vaste étalage de produits de saison sélectionnés avec soins, en privilégiant la proximité.

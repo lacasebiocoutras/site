@@ -1,6 +1,6 @@
 ---
 title: Evenements & Rencontres
-date-publication: 20 avril 2016
+date-publication: 2016-04-20 12-00-00
 order: 2
 description: La Case Bio vous propose régulièrement des journées de rencontre et d'échanges.
 model: display-on-parent-and-no-personal-page

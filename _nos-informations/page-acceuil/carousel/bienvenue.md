@@ -1,6 +1,6 @@
 ---
 title: Bienvenue
-date-publication: 17 janv 2017
+date-publication: 2017-01-17 12-00-00
 order: 2
 description:
 image: page-acceuil/vue-generale-1500x900.jpg

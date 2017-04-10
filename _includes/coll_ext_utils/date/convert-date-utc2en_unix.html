@@ -1,0 +1,10 @@
+{%comment%}<!--
+param in :
+  include.date, form utc
+param out :
+  new_date_convert  : 1 jannuary 2017
+  new_date_convert_unix : timestamp system
+-->{%endcomment%}
+
+{% capture new_date_convert %}{{include.date | date: '%-d %B %Y'}}{% endcapture %}
+{% capture new_date_convert_unix %}{{include.date | date: '%s'}}{% endcapture %}

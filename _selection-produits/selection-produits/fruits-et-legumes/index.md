@@ -1,6 +1,6 @@
 ---
 title: Fruits et Légumes
-date-publication: 20 janvier 2017
+date-publication: 2017-01-20 12-00-00
 order: 3
 description: 
 lire-plus:

@@ -1,0 +1,96 @@
+{%comment%}<!--
+param in :
+  include.date : format utc ,  2016-05-9 12-00-00
+  include.filter : custom list ["%-d"," ","%-month"," ","%Y"], ["%w"," ","%-d"," ","%-m"," ","%Y"," ","%H",":","%M",":","%S"]
+ 
+param out :
+  new_date_convert, format depending include.filter
+-->{%endcomment%}
+
+{% comment %}http://ruby-doc.org/core-2.4.1/Time.html#method-i-strftime{% endcomment %}
+{% comment %}http://alanwsmith.com/jekyll-liquid-date-formatting-examples{% endcomment %}
+{% comment %} add custom if necessary ! {% endcomment %}
+
+
+
+{% comment %}output formated date : {% endcomment %}
+{% assign new_date_convert = '' %}
+
+
+
+{% assign i_max = include.filter.size | minus: 1 %}
+
+{% for i in (0..i_max) %}
+
+  {% assign date_part = include.filter[i] %} 
+  {% assign is_date_part = false %}
+  
+  {% comment %}discrim date/time part to delim{% endcomment %}
+  {% assign first_char = date_part | slice: 0 %}
+  {% if date_part.size > 1 and first_char == '%' %}
+  	{% assign is_date_part = true %}  	
+  {% endif %}
+
+  {% comment %}add date/time part{% endcomment %}
+  {% if is_date_part %}  
+
+  	{% comment %}day of the week{% endcomment %}
+  	{% if date_part == "%A" or date_part == "%a" %}
+  		{% assign day_week = include.date | date: date_part %}				
+			{% assign new_date_convert = new_date_convert | append: day_week %}	
+		{% endif %}
+
+		{% comment %}day of the month{% endcomment %}
+		{% if date_part == "%-d" or date_part == "%-d-st"  %}
+			{% assign d = include.date | date: "%-d" %}	
+			{% if date_part == "%-d-st" %}
+				{% capture day %}{% case d %}{% when '1' or '21' or '31' %}{{d}}st{% when '2' or '22' %}{{d}}nd{% when '3' or '23' %}{{d}}rd{% else %}{{d}}th{% endcase %}{% endcapture %}
+			{% else %}
+				{% assign day = d %}
+			{% endif %}
+			{% assign new_date_convert = new_date_convert | append: day %}
+		{% endif %}
+
+		{% comment %}month{% endcomment %}
+		{% if date_part == "%-m" or date_part == "%B"  %}
+			{% assign m = include.date | date: date_part %}
+			{% assign new_date_convert = new_date_convert | append: m %}
+		{% elsif date_part == "%-m-abbrev"  %}
+			{% assign m = include.date | date: "%B" %}
+			{% capture month %}{% case m %}{% when 'April' or 'May' or 'June' or 'July' %}{{m}}{% when 'September' %}Sept.{% else %}{{ include.date| date: "%b" }}.{% endcase %}{% endcapture %}
+			{% assign new_date_convert = new_date_convert | append: month %}
+		{% endif %}
+
+		{% comment %}year{% endcomment %}
+		{% if date_part == "%Y" or date_part == "%y"  %}
+			{% assign y = include.date | date: date_part %}			
+			{% assign new_date_convert = new_date_convert | append: y %}
+		{% endif %}
+
+		{% comment %}time{% endcomment %}
+		{% if date_part == "%H"  %}
+			{% assign h = include.date | date: date_part %}			
+			{% assign new_date_convert = new_date_convert | append: h %}
+		{% endif %}
+
+		{% if date_part == "%M"  %}
+			{% assign m = include.date | date: date_part %}			
+			{% assign new_date_convert = new_date_convert | append: m %}
+		{% endif %}
+
+		{% if date_part == "%S"  %}
+			{% assign s = include.date | date: date_part %}			
+			{% assign new_date_convert = new_date_convert | append: s %}
+		{% endif %}
+
+  {% else %}
+
+  	{% comment %}add delim part{% endcomment %}
+  	{% assign new_date_convert = new_date_convert | append: date_part %}
+  {% endif %}
+
+
+
+{% endfor %}
+
+

@@ -8,9 +8,11 @@ param out :
  -->{%endcomment%}
 
 {%comment%}<!-- date_event : date evenement, first day -->{%endcomment%}
-{% include coll_ext_utils/date/convert-date-fr-en2en_unix.html date=include.date %}
+{% include coll_ext_utils/date/convert-date-utc2en_unix.html date=include.date %}
 {% assign date_event = new_date_convert %}
 {% assign date_event_unix = new_date_convert_unix %}
+
+
 {% include coll_ext_utils/date/longdate-en2fr.html date=date_event %}
 {% assign date_event_trad = new_date_convert %}
 {% assign date_event_trad_part = date_event_trad | strip | split: ' '  %}
@@ -35,9 +37,10 @@ param out :
 {% else %}
 
   {%comment%}<!-- date_end_event : last day event -->{%endcomment%}
-  {% include coll_ext_utils/date/convert-date-fr-en2en_unix.html date=include.date_end %}
+  {% include coll_ext_utils/date/convert-date-utc2en_unix.html date=include.date_end %}
   {% assign date_end_event = new_date_convert %}
   {% assign date_end_event_unix = new_date_convert_unix %}
+  
   {% include coll_ext_utils/date/longdate-en2fr.html date=date_end_event %}
   {% assign date_end_event_trad = new_date_convert %}
   {% assign date_end_event_trad_part = date_end_event_trad | split: ' ' %}

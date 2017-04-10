@@ -1,6 +1,6 @@
 ---
 title : Dolor si amet
-date-publication : 13 Février 2017
+date-publication : 2017-02-13 12-00-00
 description : 
 lire-plus : 
 order : 1

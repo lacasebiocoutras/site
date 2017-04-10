@@ -1,6 +1,6 @@
 ---
 title: Contact
-date-publication: 22 janv 2017
+date-publication: 2017-01-22 12-00-00
 order: 1
 ---
 

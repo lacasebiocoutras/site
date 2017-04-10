@@ -1,8 +1,8 @@
 ---
 order: 2
 title:  Huile de coco vierge - 400ML
-date-publication: 15 janvier 2017
-date-debut-promotion: 15 janvier 2017
+date-publication: 2017-01-15 12-00-00
+date-debut-promotion: 2017-01-15 12-00-00
 date-fin-promotion:
 description: 
 lire-plus:

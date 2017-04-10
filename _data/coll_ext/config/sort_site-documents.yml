@@ -10,7 +10,7 @@ config:
   # note : sort is based on a period, to optimize time of compil.
   # by default, one_day, filtering the hours (in relation with  date-publication of the form: 12 dec 2016, default customer format);
   # depending the need, it can extend to hout
-  # todo : case hour, adapt convert-date-fr-en2en_unix.html  with hour if present
+  # todo : case hour, adapt convert-date-utc2en_unix.html  with hour if present
 
   #if no sort_items defined as meta in yml section, default custom filter :
   default_sort: 'order'

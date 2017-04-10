@@ -1,6 +1,6 @@
 ---
 title: Informations utiles
-date-publication: 10 février 2017
+date-publication: 2017-02-10 12-00-00
 order: 1
 description:
 miniature:

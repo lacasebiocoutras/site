@@ -1,9 +1,9 @@
 ---
 order: 5
 title: Vin rouge Merlot - 75Cl
-date-publication: 15 janvier 2017
-date-debut-promotion: 15 janvier 2017
-date-fin-promotion: 25 décembre 2017
+date-publication: 2017-01-15 12-00-00
+date-debut-promotion: 2017-01-15 12-00-00
+date-fin-promotion: 2017-12-15 12-00-00
 description: 
 lire-plus:
 miniature: selection-produits/vin-rouge-merlot.jpg

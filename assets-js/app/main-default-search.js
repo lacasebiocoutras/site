@@ -47,11 +47,10 @@ define(['jquery', 'lunr', 'moment','config-module'], function($, lunr, moment, c
 
 
   //global def display
-  moment.locale('fr');
+  // moment.locale('fr');
   var space = ' ';
   var emptychar='';
   var category=emptychar;
-  var format=['DDMMMMY'];
   var design_class=null;
 
   function escapeString(stringHtml) {
@@ -59,18 +58,18 @@ define(['jquery', 'lunr', 'moment','config-module'], function($, lunr, moment, c
     // /&amp;|&amp;|&amp;/gi
   }
 
-  function validePeriodDate(_date_deb, _date_fin,_format) {
+  function validePeriodDate(_date_deb, _date_fin) {
 
     var dateDebut;
     if (_date_deb.length > 0) {
-      dateDebut = moment(_date_deb, _format);
+      dateDebut = moment(_date_deb);
     }
     else {
       dateDebut = moment();
     }
     var dateFin;
     if (_date_fin.length > 0) {
-      dateFin = moment(_date_fin, _format);
+      dateFin = moment(_date_fin);
     }
     else {
       dateFin = moment();
@@ -111,7 +110,7 @@ define(['jquery', 'lunr', 'moment','config-module'], function($, lunr, moment, c
         var name_id='#';
         name_id=name_id.concat(value.name_id);
         //add moment filter
-        if(validePeriodDate(value.date_debut,value.date_fin,format)) {
+        if(validePeriodDate(value.date_debut,value.date_fin)) {
           $(name_id).removeClass(window.config.class_invisible_item);
         }
         else {
@@ -129,7 +128,7 @@ define(['jquery', 'lunr', 'moment','config-module'], function($, lunr, moment, c
     var name_id='#';
     name_id=name_id.concat(item.name_id);
     //add moment filter
-    if(validePeriodDate(item.date_debut,item.date_fin,format)) {
+    if(validePeriodDate(item.date_debut,item.date_fin)) {
       $(name_id).removeClass(window.config.class_invisible_item);
     }
     else {
@@ -161,7 +160,7 @@ define(['jquery', 'lunr', 'moment','config-module'], function($, lunr, moment, c
         });
         name_id=pref_name_id.concat(raw_name_id);
         //add moment filter        
-        if(!validePeriodDate(raw_item.date_debut,raw_item.date_fin,format)) {
+        if(!validePeriodDate(raw_item.date_debut,raw_item.date_fin)) {
           filter_item=true;
         }
         if (filter_item === true) {

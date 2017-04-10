@@ -1,6 +1,6 @@
 ---
 title: page acceuil
-date-publication: 18 janv 2017
+date-publication: 2017-01-18 12-00-00
 order: 1
 description:
 miniature:
