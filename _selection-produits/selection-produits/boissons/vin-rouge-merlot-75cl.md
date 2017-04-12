@@ -13,6 +13,7 @@ label:
 tags: 
 border-color: "#f26507"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 IGP OC 100% MErlot rouge 2015, médialle de Bronze au concours Challenge Millésime bio 2016.

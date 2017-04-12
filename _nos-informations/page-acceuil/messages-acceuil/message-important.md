@@ -2,6 +2,7 @@
 title: Message important entête
 date-publication: 2017-01-22 12-00-00
 order: 1
+type_editor: SimpleMd
 ---
 
 

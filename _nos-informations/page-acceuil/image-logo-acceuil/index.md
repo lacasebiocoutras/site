@@ -5,5 +5,6 @@ order: 1
 description: logo en haut de la page d'acceuil du site.
 sort_items : order
 miniature:
+type_child_editor : NoEditor
 ---
 

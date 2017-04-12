@@ -6,6 +6,7 @@ lire-plus : Accéder à notre brochure en ligne ...
 order : 99
 miniature : notre-actualite/labioenfete-oct-2016-w960.jpg
 type-miniature: red-left
+type_editor: SimpleMd
 ---
 
 

@@ -5,6 +5,7 @@ order: 1
 description:
 miniature:
 sort_items : order
+type_child_editor: SimpleMd
 ---
 
 {% comment %}

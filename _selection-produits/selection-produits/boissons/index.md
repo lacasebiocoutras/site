@@ -9,6 +9,7 @@ type-miniature: red-left
 model: display-on-parent-and-no-personal-page
 border-color: "#f26507"
 background-color: "#e4e8d7"
+type_child_editor : SimpleMd
 ---
 
 

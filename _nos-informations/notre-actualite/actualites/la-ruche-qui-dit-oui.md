@@ -6,6 +6,7 @@ lire-plus : Chaque semaine, le Vendredi, de 17h à 19h, ...
 order : 99
 miniature : notre-actualite/rqdo.jpg
 type-miniature: red-left
+type_editor: SimpleMd
 ---
 
 

@@ -13,6 +13,7 @@ label:
 tags:
 border-color: "#3564f2"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 Découvrez dans cette galette l'alliance des céréales complètes et du caractère de l'emmental, du chèvre et du gorgonzola. 

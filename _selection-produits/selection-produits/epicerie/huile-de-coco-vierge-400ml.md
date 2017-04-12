@@ -13,6 +13,7 @@ label:
 tags:
 border-color: "#3dd81e"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 Huile de coco bio 100% naturelle : elle n'est ni hydrogénée, ni décolorée.

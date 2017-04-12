@@ -13,6 +13,7 @@ label:
 tags:
 border-color: "#3564f2"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 

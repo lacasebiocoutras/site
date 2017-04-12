@@ -5,6 +5,7 @@ order: 1
 sort_items : order
 description: 
 miniature: 
+type_child_editor : NoEditor
 ---
 
 

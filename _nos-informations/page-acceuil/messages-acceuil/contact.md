@@ -2,6 +2,7 @@
 title: Contact
 date-publication: 2017-01-22 12-00-00
 order: 1
+type_editor: SimpleMd
 ---
 
 - ## [<i class="fa fa-phone-square" aria-hidden="true"></i> 05 57 69 03 65](tel:0557690365)

@@ -13,6 +13,7 @@ label:
 tags:
 border-color: "#3dd81e"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 ## Sans huile de palme.

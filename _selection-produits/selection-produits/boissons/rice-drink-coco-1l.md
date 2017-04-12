@@ -13,6 +13,7 @@ label:
 tags:
 border-color: "#f26507"
 background-color: "#e4e8d7"
+type_editor: SimpleMd
 ---
 
 Harmonie parfaite entre la douceur du riz et le goût de la noix de coco. 

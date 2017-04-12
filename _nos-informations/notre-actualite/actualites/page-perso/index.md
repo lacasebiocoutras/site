@@ -8,6 +8,7 @@ miniature: lacasebio.png
 type-miniature: red-left
 model: display-on-parent-and-no-personal-page-detail-page
 sort_items : date-publication
+type_child_editor : CkEditor(Word)
 ---
 
 

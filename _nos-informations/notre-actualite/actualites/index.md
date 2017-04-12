@@ -5,6 +5,7 @@ order: 1
 description: Retrouvez toute notre actualité
 model: display-on-parent-and-no-personal-page
 sort_items : date-publication
+type_child_editor : SimpleMd
 ---
 
 
